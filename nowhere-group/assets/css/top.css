@@ -1,0 +1,222 @@
+/* ==========================================================
+   Nowhere Group トップページ
+   - PC（901px以上）: 1440px 幅のデザインを画面幅に合わせて拡大縮小（--page-zoom）
+   - スマホ（900px以下）: 拡大縮小をやめ、1列のレイアウトに組み替える
+   ========================================================== */
+html{background:#F5F1E4;scroll-behavior:smooth}
+body{margin:0;background:#F5F1E4;font-family:'Zen Kaku Gothic New',sans-serif;color:#1A1A1A;font-weight:500}
+a{color:#1A1A1A}
+a:hover{color:#C94A1A}
+img{display:block}
+h1,h2,h3,p{margin:0}
+.page{width:1440px;height:5780px;position:relative;overflow:hidden;margin:0 auto;background:#F5F1E4;zoom:var(--page-zoom,1)}
+/* 画面が狭いとき、固定ヘッダー（拡大縮小しない）と見出しが重ならないよう中身を下げる */
+@media (max-width:1200px){.page{padding-top:calc(60px / var(--page-zoom,1))}}
+
+.bg-img{position:absolute;left:0;width:1440px;object-fit:cover;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 var(--ft,0px),#000 calc(100% - var(--fb,0px)),transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 var(--ft,0px),#000 calc(100% - var(--fb,0px)),transparent 100%)}
+/* 文章ブロックはイラスト（HTML上で後ろに置いている）より前面に出す */
+.hero-text,.co-text,.sv-head,.sv-cards,.sv-cta,.nw-head,.nw-cards,.ft-inner{z-index:1}
+.bg-img{z-index:0}
+.pill{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 28px;border:1.5px solid #1A1A1A;border-radius:999px;background:#FFFFFF;color:#1A1A1A;text-decoration:none;font-size:14px;font-weight:700;transition:transform .3s cubic-bezier(.2,.7,.2,1),background .3s,color .3s}
+.pill:hover{transform:translateY(-3px);color:#1A1A1A}
+.pill-lg{min-height:52px;padding:0 34px;border-width:2px;font-size:15px}
+.pill-xl{min-height:56px;padding:0 40px;border-width:2px;font-size:16px}
+.pill-ghost{background:transparent;border-color:#1A1A1A}
+.pill-white{border-color:#FFFFFF;background:transparent;color:#FFFFFF}
+.pill-white:hover{color:#FFFFFF}
+.en{font-family:'Outfit','Zen Kaku Gothic New',sans-serif;font-weight:600}
+.spin{display:inline-block;animation:spin 14s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- 左の固定タブ ---------- */
+.side-tab{position:absolute;left:0;top:620px;z-index:20;display:flex;flex-direction:column;gap:14px}
+.side-tab a{display:flex;align-items:center;justify-content:center;width:70px;background:#FFFFFF;border:2px solid #1A1A1A;border-left:none;border-radius:0 16px 16px 0;text-decoration:none;color:#1A1A1A}
+.side-contact{height:200px;font-weight:700;font-size:16px;letter-spacing:.12em;writing-mode:vertical-rl}
+.side-ig{height:70px}
+
+/* ---------- 1. ファーストビュー ---------- */
+.hero{position:relative;height:980px;overflow:hidden}
+.hero .bg-img{top:260px;height:720px}
+.hero-text{position:absolute;left:0;top:110px;width:1440px;display:flex;flex-direction:column;align-items:center;gap:18px}
+.hero-title{font-family:'Bagel Fat One','Zen Kaku Gothic New',sans-serif;font-weight:400;font-size:118px;line-height:1;letter-spacing:.01em;text-align:center;color:#1A1A1A}
+.hero-sub{font-family:'Outfit','Zen Kaku Gothic New',sans-serif;font-weight:600;font-size:18px;line-height:1.7;text-align:center}
+
+/* ---------- 2. Company ---------- */
+.co{position:relative;height:720px;background:#F4EFDE;overflow:hidden}
+.co .bg-img{top:0;height:720px}
+.co-text{position:absolute;left:500px;top:130px;width:440px;display:flex;flex-direction:column;align-items:center;gap:26px;text-align:center}
+.co-text h2{display:flex;align-items:center;gap:12px;font-family:'Outfit',sans-serif;font-weight:600;font-size:40px}
+.co-text p{font-size:17px;line-height:2;font-weight:700}
+.co-catch{margin-top:8px;display:flex;flex-direction:column;gap:6px}
+.co-catch .en{font-size:22px}
+.co-catch span:last-child{font-size:15px}
+
+/* ---------- 3. Service ---------- */
+.sv{position:relative;height:1920px;background:linear-gradient(to bottom,#F4EFDE 0,#9CE4FD 300px);overflow:hidden}
+.sv .bg-img{top:0;height:1920px}
+.sv-head{position:absolute;left:860px;top:120px;width:500px;display:flex;flex-direction:column;align-items:center;gap:18px}
+.sv-head h2{font-family:'Outfit',sans-serif;font-weight:600;font-size:80px;line-height:1.02;text-align:center;letter-spacing:-.01em}
+.sv-head .tilde{color:#C94A1A;font-size:60px}
+.sv-head .star{color:#7A5BD9}
+.sv-head p{font-size:17px;font-weight:700}
+.sv-cards{position:absolute;left:80px;top:640px;width:1280px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+.sv-card{display:flex;flex-direction:column;gap:22px;padding:30px 26px 34px;border-radius:28px;color:#FFFFFF;transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s}
+.sv-card:hover{transform:translateY(-10px) rotate(-.6deg);box-shadow:0 24px 40px rgba(26,26,26,.18)}
+.sv-card h3{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700}
+.sv-thumb{height:180px;border-radius:18px;overflow:hidden}
+.sv-thumb img{width:100%;height:100%;object-fit:cover}
+.sv-card .en{font-size:30px;line-height:1.1}
+.sv-card p{font-size:14px;line-height:1.9;font-weight:700}
+.sv-card .pill{align-self:flex-start;margin-top:auto}
+.c-orange{background:#C94A1A}.c-blue{background:#2F6FD6}.c-purple{background:#7A5BD9}.c-green{background:#1B7F5A}
+.sv-cta{position:absolute;left:270px;top:1270px;width:900px;box-sizing:border-box;padding:24px 36px;background:#FFFFFF;border-radius:28px;display:flex;align-items:center;gap:28px}
+.sv-cta-lbl{display:flex;flex-direction:column;gap:4px;flex-shrink:0}
+.sv-cta-lbl span:first-child{font-size:13px;font-weight:700;color:#5E5E5E}
+.sv-cta-lbl .en{font-size:30px}
+.sv-cta p{flex-grow:1;font-size:14px;line-height:1.8;font-weight:700}
+.sv-cta .pill{flex-shrink:0}
+
+/* ---------- 4. Hotel / Column / News ---------- */
+.nw{position:relative;z-index:2;height:1340px;background:#F3EEDB}
+.wave{position:absolute;left:-80px;width:1600px;display:block;pointer-events:none}
+.wave-top{top:-159px;height:160px}
+.wave-bottom{top:1259px;height:110px}
+.wave .w-back{animation:sway 14s ease-in-out infinite alternate}
+.wave .w-mid{animation:sway 10s ease-in-out infinite alternate-reverse}
+@keyframes sway{from{transform:translateX(-40px)}to{transform:translateX(40px)}}
+.nw-inner{position:absolute;left:0;top:0;width:1440px;height:1260px;background:#252525;overflow:hidden}
+.nw .bg-img{top:0;height:810px}
+.nw-head{position:absolute;left:110px;top:270px;display:flex;align-items:flex-end;gap:60px}
+.nw-head h2{font-family:'Outfit',sans-serif;font-weight:600;font-size:96px;line-height:1;color:#FFFFFF;letter-spacing:-.01em}
+.nw-head .ind1{padding-left:70px}
+.nw-head .ind2{padding-left:40px}
+.nw-head .tilde{color:#F2A7C8}
+.nw-head .star{color:#FFD84A}
+.nw-head p{margin-bottom:18px;font-size:17px;font-weight:700;color:#FFFFFF}
+.nw-cards{position:absolute;left:80px;top:640px;width:1280px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
+.nw-card{height:590px;box-sizing:border-box;padding:40px 34px;background:#F5F1E4;border-radius:30px;display:flex;flex-direction:column;gap:22px;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.nw-card:hover{transform:translateY(-8px)}
+.nw-card h3{display:flex;align-items:center;gap:12px;font-family:'Outfit',sans-serif;font-weight:600;font-size:34px}
+.nw-card .pill{align-self:center;margin-top:auto;padding:0 30px}
+.hotel-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.hotel-grid a{display:flex;flex-direction:column;gap:8px;text-decoration:none;color:#1A1A1A}
+.hotel-grid .ht{height:120px;border-radius:14px;overflow:hidden}
+.hotel-grid img{width:100%;height:100%;object-fit:cover}
+.hotel-grid span{font-size:14px;font-weight:700}
+.li-list{display:flex;flex-direction:column}
+.li-row{display:flex;gap:14px;padding:20px 0;border-bottom:2px dotted #1A1A1A;text-decoration:none;color:#1A1A1A}
+.li-row.li-news{padding:16px 0}
+.li-badge{flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:8px;background:#1A1A1A;color:#FFFFFF;font-family:'Outfit',sans-serif;font-weight:700;font-size:14px}
+.li-body{display:flex;flex-direction:column;gap:6px}
+.li-news .li-body{gap:4px}
+.li-title{font-size:15px;font-weight:700;line-height:1.6}
+.li-news .li-title{font-size:14px}
+.li-date{font-family:'Outfit',sans-serif;font-size:13px;color:#5E5E5E}
+
+/* ---------- 5. フッター ---------- */
+.ft{position:relative;height:820px;background:#F3EEDB;overflow:hidden}
+.ft .bg-img{top:100px;height:720px}
+.ft-inner{position:absolute;left:520px;top:110px;width:400px;display:flex;flex-direction:column;align-items:center;gap:26px}
+.ft-co{font-size:17px;font-weight:700}
+.ft-logo{font-family:'Bagel Fat One',sans-serif;font-size:118px;line-height:.86;text-align:center;color:#1A1A1A}
+.ft-logo small{font-size:88px}
+.ft-msg{margin-top:8px;font-size:15px;font-weight:700}
+.ft-sns{display:flex;gap:16px}
+.ft-sns a{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:#FFFFFF;text-decoration:none;color:#1A1A1A;font-family:'Outfit',sans-serif;font-weight:700;font-size:20px}
+.ft-sns .fb{color:#2F6FD6;font-size:22px}
+.ft-copy{font-family:'Outfit',sans-serif;font-size:13px;font-weight:600}
+.ft-links{display:flex;gap:18px}
+.ft-links a{font-size:13px;font-weight:700;color:#1A1A1A}
+
+/* ---------- 演出（JS有効時のみ） ---------- */
+.js:not(.go) .hero-title,.js:not(.go) .hero-sub,.js:not(.go) .hero-img{opacity:0}
+/* ヘッダーの登場演出はPCのみ。スマホでヘッダーを動かすと、全画面メニュー（position:fixed）がヘッダー内に閉じ込められて崩れるため */
+@media (min-width:901px){
+  .js:not(.go) .hd{opacity:0}
+  .go .hd{animation:navIn .9s .6s cubic-bezier(.2,.7,.2,1) both}
+}
+.go .hero-title .ch{display:inline-block;animation:chIn .9s cubic-bezier(.2,.8,.25,1.15) both;animation-delay:calc(var(--i) * 50ms + .1s)}
+.go .hero-sub{animation:fadeUp 1s .95s cubic-bezier(.2,.7,.2,1) both}
+.go .hero-img{animation:heroIn 1.8s .2s cubic-bezier(.2,.7,.2,1) both}
+.js .rv{opacity:0;transform:translateY(40px);transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
+.js .rv.in{opacity:1;transform:none}
+.js .sv-card.rv.in:hover{transform:translateY(-10px) rotate(-.6deg);transition-delay:0s}
+@keyframes chIn{from{opacity:0;transform:translateY(.6em) rotate(8deg)}to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes heroIn{from{opacity:0;transform:translateY(50px) scale(1.04)}to{opacity:1;transform:none}}
+@keyframes navIn{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js .rv{opacity:1;transform:none;transition:none}
+  .go .hd,.go .hero-title .ch,.go .hero-sub,.go .hero-img,.spin,.wave path{animation:none}
+}
+
+/* ==========================================================
+   スマホ（900px以下）: 1列レイアウト
+   ========================================================== */
+@media (max-width:900px){
+  .page{zoom:1;width:100%;height:auto;padding-top:0;overflow:visible}
+  .bg-img{position:static;width:100%;height:auto;object-fit:contain}
+  .side-tab{display:none}
+  .pill{min-height:48px}
+
+  /* 1. ファーストビュー */
+  .hero{height:auto;padding-top:96px;overflow:hidden}
+  .hero-text{position:static;width:auto;padding:0 20px;gap:14px}
+  .hero-title{font-size:clamp(30px,9.6vw,64px);white-space:nowrap}
+  .hero-sub{font-size:14px;line-height:1.7;padding:0 8px}
+  .hero .bg-img{top:auto;height:auto;margin-top:20px;--ft:0px;--fb:60px;aspect-ratio:4/3;object-fit:cover}
+
+  /* 2. Company */
+  .co{height:auto;padding-top:56px;background:#F4EFDE}
+  .co-text{position:static;width:auto;padding:0 20px;gap:20px}
+  .co-text h2{font-size:34px}
+  .co-text p{font-size:15px;line-height:1.95}
+  .co-text p br{display:none}
+  .co .bg-img{top:auto;height:auto;margin-top:32px;--ft:0px;--fb:0px;aspect-ratio:1774/887;object-fit:cover}
+
+  /* 3. Service */
+  .sv{height:auto;padding:64px 0 72px;background:linear-gradient(to bottom,#F4EFDE 0,#9CE4FD 220px)}
+  .sv .bg-img{position:absolute;left:0;top:0;width:100%;height:auto;--ft:140px;--fb:160px}
+  .sv-head{position:relative;left:auto;top:auto;width:auto;padding:0 20px;gap:12px}
+  .sv-head h2{font-size:clamp(44px,13vw,64px)}
+  .sv-head .tilde{font-size:.75em}
+  .sv-cards{position:relative;left:auto;top:auto;width:auto;margin:36px 16px 0;grid-template-columns:minmax(0,1fr);gap:16px}
+  .sv-card{padding:26px 22px 28px;gap:18px}
+  .sv-thumb{height:170px}
+  .sv-card .en{font-size:26px}
+  .sv-cta{position:relative;left:auto;top:auto;width:auto;margin:20px 16px 0;flex-direction:column;align-items:flex-start;gap:14px;padding:24px 22px}
+  .sv-cta-lbl .en{font-size:26px}
+  .sv-cta .pill{align-self:stretch}
+
+  /* 4. Hotel / Column / News */
+  .nw{height:auto;background:#F3EEDB;padding-bottom:70px}
+  .wave{left:-5%;width:110%}
+  .wave-top{top:-80px;height:80px}
+  .wave-bottom{top:auto;bottom:0;height:70px}
+  .nw-inner{position:relative;left:auto;top:auto;width:100%;height:auto;padding:0 0 56px}
+  .nw .bg-img{position:absolute;inset:0 0 auto;width:100%;height:320px;object-fit:cover;--ft:0px;--fb:80px}
+  .nw-head{position:relative;left:auto;top:auto;flex-direction:column;align-items:flex-start;gap:12px;padding:150px 20px 0}
+  .nw-head h2{font-size:clamp(44px,13vw,64px)}
+  .nw-head .ind1{padding-left:.6em}
+  .nw-head .ind2{padding-left:.3em}
+  .nw-head p{margin:0}
+  .nw-cards{position:relative;left:auto;top:auto;width:auto;margin:36px 16px 0;grid-template-columns:minmax(0,1fr);gap:18px}
+  .nw-card{height:auto;padding:30px 24px;gap:18px}
+  .nw-card h3{font-size:28px}
+  .nw-card .pill{margin-top:6px}
+  .hotel-grid .ht{height:100px}
+
+  /* 5. フッター */
+  .ft{height:auto;padding-top:56px}
+  .ft-inner{position:static;width:auto;padding:0 20px;gap:20px}
+  .ft-logo{font-size:clamp(64px,20vw,96px)}
+  .ft-logo small{font-size:.75em}
+  .ft-msg{text-align:center}
+  .ft .bg-img{top:auto;height:auto;margin-top:32px;--ft:0px;--fb:0px;aspect-ratio:1774/887;object-fit:cover}
+}
+@media (min-width:601px) and (max-width:900px){
+  .sv-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .nw-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .nw-cards .nw-card:first-child{grid-column:1 / -1}
+}

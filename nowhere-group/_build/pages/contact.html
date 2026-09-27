@@ -1,0 +1,43 @@
+<!--meta {"title":"お問い合わせ","description":"Nowhere Group株式会社へのお問い合わせ。宿泊・旅行・観光業界に関わる企画・設計・運営・DX・SNSマーケティング等のご相談はこちらから。","nav":"contact","accent":"c-orange","cta":false,"hero":{"type":"illust","en":"Contact","ja":"お問い合わせ","color":"orange","img":"bg-footer.jpg"},"crumbs":[["Contact",""]]} -->
+<section class="sec">
+<div class="wrap">
+<div style="margin-bottom:clamp(32px,4vw,56px)">
+<p class="lead" style="font-size:clamp(18px,2.2vw,24px);text-align:center">宿泊・旅行・観光業界に関わる企画・設計・運営・DX・<br class="pc-br">SNSマーケティング等の様々な事業を行なっています。<br class="pc-br">お気軽にお問い合わせください。</p>
+</div>
+<!-- 送信先（action）は未設定です。Formspree / Googleフォーム / 自社API 等の URL を action に設定してください。 -->
+<form class="form" data-contact action="#" method="post" novalidate>
+<p class="note"><span class="req" style="margin:0 6px 0 0">必須</span>が付いている項目は必ずご入力ください。</p>
+<div class="field">
+<label for="f-name">お名前<span class="req">必須</span></label>
+<input id="f-name" type="text" name="name" autocomplete="name" placeholder="例）山田 太郎" required>
+</div>
+<div class="field">
+<label for="f-mail">メールアドレス<span class="req">必須</span></label>
+<input id="f-mail" type="email" name="email" autocomplete="email" inputmode="email" placeholder="例）info@example.com" required>
+</div>
+<div class="field">
+<label for="f-tel">電話番号<span class="req">必須</span></label>
+<input id="f-tel" type="tel" name="tel" autocomplete="tel" inputmode="tel" placeholder="例）03-1234-5678" required>
+</div>
+<div class="field">
+<label for="f-type">お問い合わせ種別<span class="req">必須</span></label>
+<select id="f-type" name="type" required>
+<option value="">選択してください</option>
+<option>サービスに関する問い合わせ</option>
+<option>会社に関する問い合わせ</option>
+<option>資料請求・その他問い合わせ</option>
+</select>
+</div>
+<div class="field">
+<label for="f-msg">お問い合わせ内容<span class="req">必須</span></label>
+<textarea id="f-msg" name="message" placeholder="お問い合わせ内容を入力してください" required></textarea>
+</div>
+<div class="hp" aria-hidden="true"><label for="f-hp">このフィールドは空のままにしてください</label><input id="f-hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off"></div>
+<p class="note">お問い合わせは、必要事項を入力の上、お問い合わせください。2〜3営業日以内に担当よりメールにて返信させていただきます。</p>
+<label class="agree"><input type="checkbox" name="agree" required><span><a href="{{root}}privacy/" target="_blank">プライバシーポリシー</a>の内容をご確認の上、チェックをお願いします。</span></label>
+<p class="form-msg" role="status" tabindex="-1"></p>
+<button class="btn btn-dark submit" type="submit">送信する <span class="arr">→</span></button>
+</form>
+<p class="note" style="text-align:center;margin-top:28px">お電話でのお問い合わせ：<a href="tel:0364547875">03-6454-7875</a></p>
+</div>
+</section>

@@ -1,0 +1,44 @@
+/* ==========================================================
+   Nowhere Group 共通ヘッダー（トップ・下層ページ共用）
+   ========================================================== */
+:root{
+  --cream:#F5F1E4;--paper:#FFFFFF;--ink:#1A1A1A;--line:#1A1A1A;--orange:#C94A1A;
+  --f-en:'Outfit','Zen Kaku Gothic New',sans-serif;
+  --f-logo:'Bagel Fat One','Zen Kaku Gothic New',sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+.hd,.hd *{box-sizing:border-box}
+/* ---------- header ---------- */
+.hd{position:fixed;inset:0 0 auto;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 24px;pointer-events:none}
+.hd > *{pointer-events:auto}
+.hd-logo{display:inline-flex;align-items:center;line-height:1;text-decoration:none;color:var(--ink);padding:10px 18px;background:rgba(255,255,255,.78);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1.5px solid var(--line);border-radius:999px}
+.hd-logo img{display:block;height:24px;width:auto}
+.hd-logo:hover{opacity:.8}
+.site-nav{display:flex;align-items:center;gap:2px;padding:4px;background:rgba(255,255,255,.78);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1.5px solid var(--line);border-radius:999px;transition:box-shadow .4s,background .4s}
+.is-scrolled .site-nav,.is-scrolled .hd-logo{background:rgba(255,255,255,.94);box-shadow:0 10px 30px rgba(26,26,26,.12)}
+.site-nav a{position:relative;display:inline-flex;align-items:center;min-height:38px;padding:0 16px;border-radius:999px;text-decoration:none;font-family:var(--f-en);font-weight:600;font-size:14px;color:var(--ink);white-space:nowrap}
+.site-nav a:not(.nav-contact)::after{content:'';position:absolute;left:16px;right:16px;bottom:7px;height:1.5px;background:var(--orange);transform:scaleX(0);transform-origin:right;transition:transform .35s var(--ease)}
+.site-nav a:not(.nav-contact):hover::after,.site-nav a[aria-current]::after{transform:scaleX(1);transform-origin:left}
+.site-nav .nav-contact{padding:0 20px;background:var(--ink);color:#fff;transition:background .3s}
+.site-nav .nav-contact:hover,.site-nav .nav-contact[aria-current]{background:var(--orange);color:#fff}
+.site-nav .ext::before{content:'';width:0}
+.menu-btn{display:none}
+
+@media (max-width:900px){
+  .hd{padding:12px 16px}
+  .hd-logo{padding:10px 14px}
+  .hd-logo img{height:20px}
+  .menu-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border:1.5px solid var(--line);border-radius:999px;background:var(--paper);font-family:var(--f-en);font-weight:600;font-size:14px;cursor:pointer;position:relative;z-index:2}
+  .menu-btn .bars{position:relative;width:18px;height:2px;background:currentColor;transition:background .2s}
+  .menu-btn .bars::before,.menu-btn .bars::after{content:'';position:absolute;left:0;width:18px;height:2px;background:currentColor;transition:transform .3s var(--ease)}
+  .menu-btn .bars::before{top:-6px}.menu-btn .bars::after{top:6px}
+  .menu-open .menu-btn .bars{background:transparent}
+  .menu-open .menu-btn .bars::before{transform:translateY(6px) rotate(45deg)}
+  .menu-open .menu-btn .bars::after{transform:translateY(-6px) rotate(-45deg)}
+  .site-nav{position:fixed;inset:0;flex-direction:column;justify-content:center;gap:10px;padding:96px 24px 40px;border:none;border-radius:0;background:var(--cream);-webkit-backdrop-filter:none;backdrop-filter:none;opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+  .menu-open .site-nav{opacity:1;visibility:visible}
+  .site-nav a{font-size:26px;min-height:56px}
+  .site-nav .nav-contact{margin-top:12px;padding:0 36px}
+  .menu-open{overflow:hidden}
+}
+

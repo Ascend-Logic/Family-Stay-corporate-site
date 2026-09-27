@@ -1,0 +1,43 @@
+<!--meta {"title":"Contact","description":"Contact Nowhere Group Inc. We are engaged in projects across the hotel, travel and tourism industry, including planning, design, operation, DX and SNS marketing.","nav":"contact","accent":"c-orange","cta":false,"hero":{"type":"illust","en":"Contact","ja":"Get in touch","color":"orange","img":"bg-footer.jpg"},"crumbs":[["Contact",""]]} -->
+<section class="sec">
+<div class="wrap">
+<div style="margin-bottom:clamp(32px,4vw,56px)">
+<p class="lead" style="font-size:clamp(18px,2.2vw,24px);text-align:center">We are engaged in various projects related to the hotel, travel and tourism industry, including planning, design, operation, DX, SNS marketing, etc.<br class="pc-br">Please feel free to contact us for more information.</p>
+</div>
+<!-- The form action is not set yet. Set the URL of Formspree / Google Forms / your own API as the form action. -->
+<form class="form" data-contact action="#" method="post" novalidate>
+<p class="note">Fields marked <span class="req" style="margin:0 4px">Required</span> must be filled in.</p>
+<div class="field">
+<label for="f-name">Name<span class="req">Required</span></label>
+<input id="f-name" type="text" name="name" autocomplete="name" placeholder="Your name" required>
+</div>
+<div class="field">
+<label for="f-mail">Email address<span class="req">Required</span></label>
+<input id="f-mail" type="email" name="email" autocomplete="email" inputmode="email" placeholder="info@example.com" required>
+</div>
+<div class="field">
+<label for="f-tel">Phone number<span class="req">Required</span></label>
+<input id="f-tel" type="tel" name="tel" autocomplete="tel" inputmode="tel" placeholder="+81-3-1234-5678" required>
+</div>
+<div class="field">
+<label for="f-type">Inquiry type<span class="req">Required</span></label>
+<select id="f-type" name="type" required>
+<option value="">Please select</option>
+<option>Service inquiries</option>
+<option>Company inquiries</option>
+<option>Other inquiries</option>
+</select>
+</div>
+<div class="field">
+<label for="f-msg">Inquiry details<span class="req">Required</span></label>
+<textarea id="f-msg" name="message" placeholder="Please enter your inquiry" required></textarea>
+</div>
+<div class="hp" aria-hidden="true"><label for="f-hp">Leave this field empty</label><input id="f-hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off"></div>
+<p class="note">Please fill out the form above and we will get back to you by email within 2-3 business days.</p>
+<label class="agree"><input type="checkbox" name="agree" required><span>I have read and agree to the <a href="{{home}}privacy/" target="_blank">Privacy Policy</a>.</span></label>
+<p class="form-msg" role="status" tabindex="-1"></p>
+<button class="btn btn-dark submit" type="submit">Send <span class="arr">→</span></button>
+</form>
+<p class="note" style="text-align:center;margin-top:28px">Phone: <a href="tel:+81364547875">+81-3-6454-7875</a></p>
+</div>
+</section>
