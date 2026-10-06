@@ -24,16 +24,27 @@ document.addEventListener('DOMContentLoaded', function () {
     items.forEach(function (el) { el.classList.add('in'); });
   }
 
-  // ニュースの年フィルター
-  var filter = document.querySelector('.filter');
-  if (filter) {
-    filter.addEventListener('click', function (e) {
-      var b = e.target.closest('button');
-      if (!b) return;
-      filter.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
-      var y = b.getAttribute('data-year');
+  // ニュースのカテゴリ・年フィルター（両方の条件を満たすものだけ表示）
+  var filters = document.querySelectorAll('.filter');
+  if (filters.length) {
+    var state = { cat: 'all', year: 'all' };
+    var apply = function () {
       document.querySelectorAll('[data-year-item]').forEach(function (li) {
-        li.hidden = !(y === 'all' || li.getAttribute('data-year-item') === y);
+        var okYear = state.year === 'all' || li.getAttribute('data-year-item') === state.year;
+        var okCat = state.cat === 'all' || li.getAttribute('data-cat-item') === state.cat;
+        li.hidden = !(okYear && okCat);
+      });
+      var empty = document.querySelector('.filter-empty');
+      if (empty) empty.hidden = !!document.querySelector('[data-year-item]:not([hidden])');
+    };
+    filters.forEach(function (filter) {
+      filter.addEventListener('click', function (e) {
+        var b = e.target.closest('button');
+        if (!b) return;
+        filter.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        if (b.hasAttribute('data-cat')) state.cat = b.getAttribute('data-cat');
+        if (b.hasAttribute('data-year')) state.year = b.getAttribute('data-year');
+        apply();
       });
     });
   }
