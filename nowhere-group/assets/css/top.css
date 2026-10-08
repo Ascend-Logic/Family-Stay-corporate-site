@@ -154,6 +154,8 @@ h1,h2,h3,p{margin:0}
 .tp-card .pill{align-self:flex-start;margin-top:auto}
 .tp-card p + .pill{margin-top:14px}
 .tp-cta{display:flex;justify-content:center;margin-top:44px}
+.tp-logo{display:flex;align-items:center;justify-content:center;height:170px;padding:16px;box-sizing:border-box;border-radius:20px;background:#FFFFFF;border:2px solid #1A1A1A;overflow:hidden}
+.tp-logo img{height:100%;width:auto;max-width:100%;object-fit:contain}
 .tp-chain{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:14px;margin:0;padding:0;list-style:none}
 .tp-chain4{grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
 .tp-chain li{position:relative;display:flex;flex-direction:column;gap:10px;padding:26px 20px 28px;background:#FFFFFF;border:2px solid #1A1A1A;border-radius:24px}

@@ -334,3 +334,5 @@ a.card:hover .thumb img{transform:scale(1.05)}
 .co-logo{display:block;width:100%;max-width:220px;margin-bottom:4px}
 .co-logo img{width:100%;height:auto;display:block}
 .co-logo-page{max-width:260px;margin-bottom:28px}
+.partner-logo{display:flex;align-items:center;justify-content:center;height:150px;padding:14px;box-sizing:border-box;border-radius:18px;background:#fff;border:2px solid var(--line);overflow:hidden}
+.partner-logo img{height:100%;width:auto;max-width:100%;object-fit:contain}

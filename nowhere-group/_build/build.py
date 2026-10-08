@@ -840,6 +840,7 @@ EN_TOP = [
      '<span class="li-title">ZEN &amp; BED Bougetsuan</span><span class="li-date">Temple × Japanese culture</span>'),
     ('<span class="li-title">Azure Palace 伊豆高原</span><span class="li-date">中古別荘 × 大人の遊び場</span>',
      '<span class="li-title">Azure Palace IZUKOGEN</span><span class="li-date">Used villa × Adult playground</span>'),
+    ('alt="地域未来にぎわい工房"', 'alt="Chiiki Mirai Nigiwai Kobo"'),
     ('>パートナー・アライアンス<',
      '>Partners and alliances<'),
     ('<p class="tp-lead">一社ではできないことを、<br>共につくる。</p>',
