@@ -40,8 +40,6 @@ button,input,select,textarea{font:inherit;color:inherit}
 .ph-text{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;max-width:420px}
 .ph-title{display:flex;align-items:center;gap:14px;font-family:var(--f-en);font-weight:600;font-size:clamp(44px,6.4vw,84px);line-height:1;letter-spacing:-.01em}
 .ph-ja{font-size:16px;font-weight:700}
-.ph-text .ph-en{font-family:var(--f-en);font-weight:600;font-size:14px;letter-spacing:.14em;color:var(--accent)}
-.ph-title-ja{font-family:var(--f-ja);font-weight:700;font-size:clamp(30px,4.4vw,56px);line-height:1.3;letter-spacing:.02em}
 .crumbs{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 10px;margin:0;padding:0;list-style:none;font-family:var(--f-en);font-size:13px;font-weight:600;color:var(--sub)}
 .crumbs li+li::before{content:'/';margin-right:10px;color:var(--sub)}
 .crumbs a{text-decoration:none}
@@ -333,21 +331,8 @@ a.card:hover .thumb img{transform:scale(1.05)}
 @media (max-width:600px){.prose.job th{white-space:normal;width:34%}}
 
 /* ==========================================================
-   2026 リニューアル追加コンポーネント（トップ・下層共通）
+   2026 コンテンツ改訂で追加した下層ページ用コンポーネント
    ========================================================== */
-/* 日本語見出し + 英語サブ見出し */
-.sh{display:flex;flex-direction:column;gap:10px;margin-bottom:clamp(28px,4vw,48px)}
-.sh-en{font-family:var(--f-en);font-weight:600;font-size:13px;letter-spacing:.14em;color:var(--accent)}
-.sh h2{font-size:clamp(24px,3.2vw,38px);font-weight:700;line-height:1.5}
-.sh.center{align-items:center;text-align:center}
-.sh.light,.sh.light h2{color:#fff}
-.sh.light .sh-en{color:var(--yellow)}
-.sh h2 small{font-size:.5em;font-weight:500;color:var(--sub)}
-.text.center{text-align:center;margin-bottom:clamp(28px,4vw,48px)}
-.btn-row.center{justify-content:center;margin-top:clamp(28px,4vw,44px)}
-.btn-light{background:#fff;border-color:#fff;color:var(--ink)}
-.btn-light:hover{background:var(--yellow);border-color:var(--yellow);color:var(--ink)}
-@media (max-width:700px){.sh h2 br{display:none}.sh.center h2 br{display:none}}
 
 /* チップ（領域・職種） */
 .chips{display:flex;flex-wrap:wrap;gap:10px;margin:0;padding:0;list-style:none}
