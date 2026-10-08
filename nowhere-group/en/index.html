@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded',function(){
   // 装飾記号をゆっくり回転
   document.querySelectorAll('.page h2 .star').forEach(function(el){el.classList.add('spin');});
   // スクロールで順番にふわっと表示
-  var groups=['.co-text > *','.sv-head > *','.sv-card','.sv-cta','.nw-head h2','.nw-head p','.nw-card','.ft-inner > *'];
+  var groups=['.co-text > *','.sv-head > *','.sv-card','.sv-cta','.nw-head h2','.nw-head p','.nw-card','.ft-inner > *','.tp-head','.tp-lead','.tp-text','.tp-card','.tp-chain > li','.tp-stat','.tp-ceo > *','.tp-recruit > *','.tp-center','.tp-cta'];
   groups.forEach(function(sel){document.querySelectorAll(sel).forEach(function(el,idx){el.classList.add('rv');el.style.setProperty('--d',(Math.min(idx,6)*0.09)+'s');});});
   if('IntersectionObserver' in window){
     var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -10% 0px'});
@@ -73,6 +73,26 @@ document.addEventListener('DOMContentLoaded',function(){
 <img class="bg-img hero-img" src="../images/hero.jpg" alt="Illustration of travelers enjoying hot spring inns, seaside towns, mountains, festivals and local food" style="--ft:60px;--fb:150px" width="1774" height="887">
 </section>
 
+<!-- ===== 1b. 経営理念 ===== -->
+<section id="philosophy" class="tp">
+<div class="tp-head"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#C94A1A" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Philosophy</h2><p>Our philosophy</p></div>
+<div class="tp-grid g2">
+<div class="tp-card">
+<span class="lbl">Group Mission</span>
+<h3>Travel as the starting point for another sky in every heart.</h3>
+<p>Travel brings scenery, people, culture and time you never meet in everyday life.</p>
+<p>Starting from accommodation, we create new experiences and encounters, and build one more cherished place in people's hearts.</p>
+</div>
+<div class="tp-card">
+<span class="lbl">Group Vision</span>
+<h3>By 2030, become the lodging group chosen for travel satisfaction.</h3>
+<p>Building facilities is not all we do.</p>
+<p>Travelers, property owners, local residents and the people who support lodging: we build a lodging business that creates value for each of them, and make Japan's lodging industry richer.</p>
+</div>
+</div>
+<div class="tp-cta"><a href="company/#philosophy" class="pill pill-lg">Our philosophy →</a></div>
+</section>
+
 <!-- ===== 2. COMPANY ===== -->
 <section id="company" class="co">
 <div class="co-text">
@@ -93,7 +113,7 @@ document.addEventListener('DOMContentLoaded',function(){
 <img class="bg-img" src="../images/bg-service.jpg" alt="Illustration of travelers around a rainbow, a seaside town, blueprints, a smartphone and a local market" style="--ft:300px" width="1086" height="1448" loading="lazy">
 <div class="sv-head">
 <h2>Our <span class="star">✺</span><br><span class="tilde">~</span> Service<br>NOWHERE</h2>
-<p>A lodging value chain built by four companies</p>
+<p>Connecting each company's expertise<br>to maximize the value of lodging.</p>
 </div>
 <div class="sv-cards">
 <article class="sv-card c-orange">
@@ -135,6 +155,63 @@ document.addEventListener('DOMContentLoaded',function(){
 </div>
 </section>
 
+<!-- ===== 3b. 宿泊バリューチェーン ===== -->
+<section id="value-chain" class="tp tp-alt">
+<div class="tp-head"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#2F6FD6" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Value Chain</h2><p>The lodging value chain</p></div>
+<p class="tp-lead">From the entrance to the exit of a lodging facility.</p>
+<ol class="tp-chain">
+<li><span class="num">01</span><h3>Find and acquire the property</h3><span class="who">VESTPORT</span><p>Property sourcing / Sales / Leasing / Business succession</p></li>
+<li><span class="num">02</span><h3>Plan the business</h3><span class="who">Nowhere Group</span><p>Market research / Feasibility / Business plan / Business scheme / Concept</p></li>
+<li><span class="num">03</span><h3>Build the facility</h3><span class="who">Nowhere Group × VESTPORT</span><p>Lodging production / Brand and concept design / Space and design / Construction / Licensing support / Opening preparation</p></li>
+<li><span class="num">04</span><h3>Operate the facility</h3><span class="who">Nowhere Group × CLEANX9 × VESTPORT</span><p>Hotel operation / Guest service / Pricing and inventory / Cleaning / On-site operations / Building management / Emergency response</p></li>
+<li><span class="num">05</span><h3>Deliver what the facility needs</h3><span class="who">Nowhere Group / Supply Division</span><p>Furniture / Appliances / Bedding / Equipment / Amenities / Consumables / Cleaning supplies</p></li>
+<li><span class="num">06</span><h3>Reach travelers</h3><span class="who">Family Stay</span><p>Lodging sales / Marketing / AI / OTA / Customer touchpoints</p></li>
+<li><span class="num">07</span><h3>Sell and hand over</h3><span class="who">VESTPORT</span><p>Sale / Business succession / Resale / Exit support</p></li>
+</ol>
+<p class="tp-center">Knowledge from the field,<br>into the next facility.</p>
+</section>
+
+<!-- ===== 3c. 事業紹介 ===== -->
+<section id="business" class="tp">
+<div class="tp-head"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#1B7F5A" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Business</h2><p>Business of Nowhere Group Inc.</p></div>
+<div class="tp-grid g3">
+<div class="tp-card">
+<span class="lbl">Lodging Division</span>
+<h3>Lodging production</h3>
+<p class="catch">Turning a viable lodging business into reality, from the plan.</p>
+<p>We analyze the market, competitors, location and property, then design the target, business plan, concept, space and guest experience. By feeding knowledge from our operation and cleaning teams into facility design, we build properties that balance guest satisfaction, profitability and operational efficiency.</p>
+<a href="service/hotel/#produce" class="pill">Read More</a>
+</div>
+<div class="tp-card">
+<span class="lbl">Lodging Division</span>
+<h3>Hotel operation</h3>
+<p class="catch">Growing the value of a property after opening.</p>
+<p>For hotels, vacation rentals and whole-house rentals, we support daily operation from sales, reservation management and pricing to guest service and on-site operations. We analyze revenue, reviews, guest service and cleaning data to drive continuous improvement.</p>
+<a href="service/hotel/hotel/" class="pill">Read More</a>
+</div>
+<div class="tp-card">
+<span class="lbl">Supply Division</span>
+<h3>Hotel supply service</h3>
+<p class="catch">Delivering everything a lodging facility needs, in one package.</p>
+<p>We use the know-how and procurement network built through developing and operating lodging facilities to supply the products they need, from bulk procurement at opening to replenishment after launch.</p>
+<a href="service/hotel/#supply" class="pill">Read More</a>
+</div>
+</div>
+</section>
+
+<!-- ===== 3d. 強み ===== -->
+<section id="strength" class="tp tp-alt">
+<div class="tp-head"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#7A5BD9" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Strength</h2><p>What makes Nowhere Group different</p></div>
+<p class="tp-lead">Building hotels from the field.</p>
+<ol class="tp-chain tp-chain4">
+<li><span class="num">01</span><h3>Cleaning</h3><p>Knowing how facilities are actually used: wear patterns, traffic flow, consumption of supplies and cleaning time, learned on site.</p></li>
+<li><span class="num">02</span><h3>Operation</h3><p>Knowing what satisfies guests and what troubles them, through inquiries, reviews, incidents and booking trends.</p></li>
+<li><span class="num">03</span><h3>Production</h3><p>Solving the problems that arise on site at the planning and design stage.</p></li>
+<li><span class="num">04</span><h3>Real estate</h3><p>Judging properties by business viability and exit.</p></li>
+</ol>
+<p class="tp-center">We don't build facilities that are hard to clean.<br>We don't build facilities where guests get lost.<br>We don't build facilities that are hard to operate.<br><span class="sub">Because we know the field, we can solve problems at the design stage.</span></p>
+</section>
+
 <!-- ===== 4. Hotel / Column / News ===== -->
 <section id="news" class="nw">
 <svg class="wave wave-top" viewBox="0 0 1600 160" preserveAspectRatio="none" aria-hidden="true">
@@ -145,30 +222,31 @@ document.addEventListener('DOMContentLoaded',function(){
 <div class="nw-inner">
 <img class="bg-img" src="../images/bg-news.jpg" alt="Illustration of lanterns, a festival and a hot spring town at night" style="--ft:70px;--fb:120px" width="1672" height="941" loading="lazy">
 <div class="nw-head">
-<h2>Hotel<br><span class="ind1"><span class="tilde">~</span> Column</span><br><span class="ind2">News</span> <span class="star">✸</span></h2>
-<p>Brands, works, columns and news (columns and news in Japanese)</p>
+<h2>Hotel<br><span class="ind1"><span class="tilde">~</span> Works</span><br><span class="ind2">News</span> <span class="star">✸</span></h2>
+<p>Hotel brands, works and news (news in Japanese)</p>
 </div>
 <div class="nw-cards">
 <div class="nw-card">
-<h3><svg width="28" height="24" viewBox="0 0 30 26" fill="none" stroke="#2F6FD6" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Hotel Results</h3>
+<h3><svg width="28" height="24" viewBox="0 0 30 26" fill="none" stroke="#2F6FD6" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Hotel Brands</h3>
+<p class="nw-lead">Creating places where the stay itself is the purpose of the trip.</p>
 <div class="hotel-grid">
-<a href="service/regional-brand-creation/#brands"><div class="ht"><img src="../images/site/service/hotel/hotel_result_40.jpg" alt="" loading="lazy"></div><span>OMATSURI BASE</span></a>
-<a href="service/regional-brand-creation/#projects"><div class="ht"><img src="../images/site/service/hotel/hotel_result_37.jpg" alt="" loading="lazy"></div><span>Kids' Play Villa</span></a>
-<a href="service/regional-brand-creation/#projects"><div class="ht"><img src="../images/site/service/hotel/hotel_result_31.jpg" alt="" loading="lazy"></div><span>Time Trip OTOWA</span></a>
-<a href="service/regional-brand-creation/#projects"><div class="ht"><img src="../images/site/service/hotel/hotel_result_19.jpg" alt="" loading="lazy"></div><span>ZEN &amp; BED Bougetsuan</span></a>
+<a href="service/regional-brand-creation/#brands"><div class="ht"><img src="../images/site/service/hotel/hotel_result_40.jpg" alt="" loading="lazy"></div><span>OMATSURI BASE</span><small>Experience Japanese festivals 365 days a year.</small></a>
+<a href="service/regional-brand-creation/#brands"><div class="ht"><img src="../images/site/service/hotel/hotel_result_37.jpg" alt="" loading="lazy"></div><span>Family BASE</span><small>A stay that makes families want to come back.</small></a>
+<a href="service/regional-brand-creation/#brands"><div class="ht"><img src="../images/site/service/hotel/hotel_result_9.jpg" alt="" loading="lazy"></div><span>Yuraku</span><small>Coming soon</small></a>
+<a href="service/regional-brand-creation/#brands"><div class="ht"><img src="../images/site/visual/visual_12.jpg" alt="" loading="lazy"></div><span>BOKUBU</span><small>Coming soon</small></a>
 </div>
-<a href="service/regional-brand-creation/" class="pill">View More</a>
+<a href="service/regional-brand-creation/#brands" class="pill">View More</a>
 </div>
 <div class="nw-card">
-<h3><svg width="28" height="24" viewBox="0 0 30 26" fill="none" stroke="#7A5BD9" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Column</h3>
+<h3><svg width="28" height="24" viewBox="0 0 30 26" fill="none" stroke="#7A5BD9" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Works</h3>
+<p class="nw-lead">Giving every lodging facility a reason to stay there.</p>
 <div class="li-list">
-<!-- build:column -->
-<a lang="ja" href="../column/225/" class="li-row li-col"><span class="li-badge">C</span><span class="li-body"><span class="li-title">スモールM&amp;Aってなに？分かりやすく解説！</span><span class="li-date">2024.12.06</span></span></a>
-<a lang="ja" href="../column/213/" class="li-row li-col"><span class="li-badge">C</span><span class="li-body"><span class="li-title">民泊投資で成功するためのポイントと実践的アドバイス</span><span class="li-date">2024.11.03</span></span></a>
-<a lang="ja" href="../column/119/" class="li-row li-col"><span class="li-badge">C</span><span class="li-body"><span class="li-title">安易な別荘購入は危険？別荘のメリット・デメリット</span><span class="li-date">2023.10.22</span></span></a>
-<!-- /build:column -->
+<a href="service/regional-brand-creation/#projects" class="li-row li-col"><span class="li-badge">W</span><span class="li-body"><span class="li-title">Kids' Play Villa</span><span class="li-date">Family × Play</span></span></a>
+<a href="service/regional-brand-creation/#projects" class="li-row li-col"><span class="li-badge">W</span><span class="li-body"><span class="li-title">Time Trip OTOWA</span><span class="li-date">Vacant house × Showa retro</span></span></a>
+<a href="service/regional-brand-creation/#projects" class="li-row li-col"><span class="li-badge">W</span><span class="li-body"><span class="li-title">ZEN &amp; BED Bougetsuan</span><span class="li-date">Temple × Japanese culture</span></span></a>
+<a href="service/regional-brand-creation/#projects" class="li-row li-col"><span class="li-badge">W</span><span class="li-body"><span class="li-title">Azure Palace IZUKOGEN</span><span class="li-date">Used villa × Adult playground</span></span></a>
 </div>
-<a href="../column/" class="pill">View More</a>
+<a href="service/regional-brand-creation/#projects" class="pill">View More</a>
 </div>
 <div class="nw-card">
 <h3><svg width="28" height="24" viewBox="0 0 30 26" fill="none" stroke="#E0689E" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>News</h3>
@@ -188,6 +266,64 @@ document.addEventListener('DOMContentLoaded',function(){
 <path class="w-mid" fill="#8F6A85" d="M0 0V46C150 74 290 80 440 60S700 22 860 38 1120 76 1270 64 1500 32 1600 40V0Z"/>
 <path fill="#252525" d="M0 0V18C160 40 320 46 480 32S760 4 920 14 1180 42 1340 36 1540 14 1600 16V0Z"/>
 </svg>
+</section>
+
+<!-- ===== 4b. パートナー・評価 ===== -->
+<section id="partners" class="tp">
+<div class="tp-head"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#E0689E" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Partners</h2><p>Partners and alliances</p></div>
+<p class="tp-lead">Creating together<br>what no single company can.</p>
+<p class="tp-text">Nowhere Group works with companies and organizations in travel, tourism, regional development and real estate to create new lodging experiences and business opportunities.</p>
+<div class="tp-grid g2">
+<div class="tp-card"><span class="lbl">Official Partner</span><h3>Airbnb Partners</h3><p class="catch">Member of the official Airbnb partner program</p><p>We support lodging operators with the knowledge Nowhere Group has built across planning, development, operation, marketing and revenue improvement.</p></div>
+<div class="tp-card"><span class="lbl">Co-creation</span><h3>Chiiki Mirai Nigiwai Kobo</h3><p class="catch">Turning regional resources into new lodging experiences.</p><p>A JTB-led initiative connecting the culture, food, nature and people of each region with lodging facilities and travel experiences to create new regional value.</p></div>
+</div>
+<div class="tp-head tp-head-sub"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#FFD84A" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Awards</h2><p>Awards and public designations</p></div>
+<p class="tp-lead">Recognition of our work</p>
+<div class="tp-grid g2">
+<div class="tp-card"><span class="lbl">Award</span><h3>BEST OF MINPAKU 2026</h3><p class="catch">Grand Prix</p><p>OMATSURI BASE</p></div>
+<div class="tp-card"><span class="lbl">Designation</span><h3>Tokyo Metropolitan Government</h3><p class="catch">Designated Tokyo tourist information center</p><p>OMATSURI BASE Nakanoshimbashi</p></div>
+</div>
+</section>
+
+<!-- ===== 4c. 数字で見る ===== -->
+<section id="numbers" class="tp tp-alt">
+<div class="tp-head"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#2F6FD6" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Numbers</h2><p>Nowhere Group in numbers</p></div>
+<div class="tp-stats">
+<div class="tp-stat"><strong>100<small>+ facilities</small></strong><span>Lodging facilities produced</span></div>
+<div class="tp-stat"><strong>30<small>+ areas</small></strong><span>Areas</span></div>
+<div class="tp-stat"><strong>50,000<small>+ cleanings</small></strong><span>CLEANX9 total cleanings</span></div>
+<div class="tp-stat"><strong>150<small> facilities</small></strong><span>Facilities supplied</span></div>
+<div class="tp-stat"><strong>4<small> companies</small></strong><span>Group companies</span></div>
+</div>
+</section>
+
+<!-- ===== 4d. 代表メッセージ ===== -->
+<section id="message" class="tp">
+<div class="tp-head"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#C94A1A" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Message</h2><p>Message from the CEO</p></div>
+<div class="tp-ceo">
+<div class="tp-ceo-photo"><img src="../images/site/people/takenaka.jpg" alt="Go Takeuchi, CEO" loading="lazy"></div>
+<div class="tp-ceo-body">
+<h3>Building the future of the lodging industry<br>on knowledge earned in the field.</h3>
+<p>We learned the lodging business from the ground up, through cleaning and operation.</p>
+<p>We bring the issues that arise on site back into planning, and connect real estate, facility development, operation, cleaning and sales.</p>
+<p>Starting from accommodation, we keep creating new value for travelers, regions and operators.</p>
+<p class="name"><small>CEO, Nowhere Group Inc.</small>Go Takeuchi</p>
+<a href="company/#message" class="pill">Read the full message →</a>
+</div>
+</div>
+</section>
+
+<!-- ===== 4e. 採用 ===== -->
+<section id="recruit" class="tp tp-alt">
+<div class="tp-head"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#1B7F5A" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Recruit</h2><p>Careers (Japanese)</p></div>
+<div class="tp-recruit">
+<p class="tp-lead">Let's build a future of lodging<br>that doesn't exist yet.</p>
+<div>
+<p class="tp-text">Not just real estate. Not just hotel operation. Not just cleaning, and not just technology.</p>
+<p class="tp-text">Members with different expertise cross company and department lines to build one lodging business. That is the work of Nowhere Group.</p>
+<a href="../recruit/" class="pill pill-lg">See open positions →</a>
+</div>
+</div>
 </section>
 
 <!-- ===== 5. FOOTER (Contact) ===== -->

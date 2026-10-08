@@ -24,16 +24,16 @@ document.addEventListener('DOMContentLoaded', function () {
     items.forEach(function (el) { el.classList.add('in'); });
   }
 
-  // ニュースの年フィルター
+  // ニュースのカテゴリフィルター
   var filter = document.querySelector('.filter');
   if (filter) {
     filter.addEventListener('click', function (e) {
       var b = e.target.closest('button');
       if (!b) return;
       filter.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
-      var y = b.getAttribute('data-year');
-      document.querySelectorAll('[data-year-item]').forEach(function (li) {
-        li.hidden = !(y === 'all' || li.getAttribute('data-year-item') === y);
+      var y = b.getAttribute('data-cat');
+      document.querySelectorAll('[data-cat-item]').forEach(function (li) {
+        li.hidden = !(y === 'all' || li.getAttribute('data-cat-item') === y);
       });
     });
   }
