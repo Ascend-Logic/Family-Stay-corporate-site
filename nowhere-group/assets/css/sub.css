@@ -228,7 +228,7 @@ a.card:hover .thumb img{transform:scale(1.05)}
 .nlist-rows .go{font-family:var(--f-en);font-size:20px}
 .nlist-rows .noimg{display:flex;align-items:center;justify-content:center;font-family:var(--f-logo);font-size:18px;color:var(--ink);background:var(--yellow)}
 @media (max-width:640px){.nlist-rows a{grid-template-columns:110px minmax(0,1fr);gap:14px}.nlist-rows .go{display:none}.nlist-rows .t{font-size:14px}}
-.tag{display:inline-flex;align-self:flex-start;align-items:center;min-height:26px;padding:0 12px;border-radius:999px;background:var(--ink);color:#fff;font-size:12px;font-weight:700;line-height:1.4}
+.tag{display:inline-flex;align-self:flex-start;align-items:center;min-height:26px;padding:5px 16px;border-radius:999px;background:var(--ink);color:#fff;font-size:12px;font-weight:700;line-height:1.6}
 
 /* ---------- article ---------- */
 .art{max-width:840px;margin:0 auto}
