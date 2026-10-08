@@ -25,7 +25,8 @@ FONTS = ('https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Outfit:w
 NAV = [
     ('company', '私たちについて', 'company/'),
     ('service', '事業紹介', 'service/'),
-    ('column', 'コラム', 'column/'),
+    ('group', 'グループ会社', 'service/#group'),
+    ('brand', 'ブランド・実績', 'service/regional-brand-creation/'),
     ('news', 'お知らせ', 'news/'),
 ]
 RECRUIT = 'https://nowhere-group.notion.site/nowhere-group-work-culture?source=copy_link'
@@ -118,7 +119,8 @@ T = {
         'privacy': 'Privacy Policy', 'x_label': 'X (formerly Twitter)', 'switch': ('JP', '日本語'),
     },
 }
-NAV_EN = [('company', 'About', 'en/company/'), ('service', 'Business', 'en/service/')]
+NAV_EN = [('company', 'About', 'en/company/'), ('service', 'Business', 'en/service/'),
+          ('group', 'Group', 'en/service/#group'), ('brand', 'Brands', 'en/service/regional-brand-creation/')]
 PAGE_DIRS = set()  # build_pages で埋める（言語切替リンクの対応ページ判定用）
 
 
@@ -589,8 +591,8 @@ EN_TOP = [
     ('<link rel="canonical" href="https://nowhere.group/">', '<link rel="canonical" href="https://nowhere.group/en/">'),
     ('aria-label="メインメニュー"', 'aria-label="Main menu"'),
     ('<a class="hd-logo" href="./" aria-label="Nowhere Group トップへ">', '<a class="hd-logo" href="./" aria-label="Nowhere Group home">'),
-    ('<a href="company/">私たちについて</a>\n<a href="service/">事業紹介</a>\n<a href="column/">コラム</a>\n<a href="news/">お知らせ</a>\n<a href="recruit/">採用情報</a>\n',
-     '<a href="company/">About</a>\n<a href="service/">Business</a>\n<a href="recruit/">Recruit</a>\n'),
+    ('<a href="company/">私たちについて</a>\n<a href="service/">事業紹介</a>\n<a href="service/#group">グループ会社</a>\n<a href="service/regional-brand-creation/">ブランド・実績</a>\n<a href="news/">お知らせ</a>\n<a href="recruit/">採用情報</a>\n',
+     '<a href="company/">About</a>\n<a href="service/">Business</a>\n<a href="service/#group">Group</a>\n<a href="service/regional-brand-creation/">Brands</a>\n<a href="recruit/">Recruit</a>\n'),
     ('<a href="en/" lang="en" hreflang="en" aria-label="English">EN</a>',
      '<a href="../" lang="ja" hreflang="ja" aria-label="日本語">JP</a>'),
     ('<a href="contact/" class="nav-contact">お問い合わせ</a>', '<a href="contact/" class="nav-contact">Contact</a>'),
