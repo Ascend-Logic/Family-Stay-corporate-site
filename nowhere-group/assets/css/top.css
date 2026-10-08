@@ -59,7 +59,7 @@ h1,h2,h3,p{margin:0}
 .sv-head .tilde{color:#C94A1A;font-size:60px}
 .sv-head .star{color:#7A5BD9}
 .sv-head p{font-size:17px;font-weight:700}
-.sv-cards{position:absolute;left:80px;top:640px;width:1280px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.sv-cards{position:absolute;left:80px;top:640px;width:1280px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
 .sv-card{display:flex;flex-direction:column;gap:22px;padding:30px 26px 34px;border-radius:28px;color:#FFFFFF;transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s}
 .sv-card:hover{transform:translateY(-10px) rotate(-.6deg);box-shadow:0 24px 40px rgba(26,26,26,.18)}
 .sv-card h3{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700}
