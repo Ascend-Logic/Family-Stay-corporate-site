@@ -329,3 +329,8 @@ a.card:hover .thumb img{transform:scale(1.05)}
 .prose .apply a{color:#fff;text-decoration:none}
 .prose .apply a:hover{color:#fff}
 @media (max-width:600px){.prose.job th{white-space:normal;width:34%}}
+
+/* グループ会社ロゴ */
+.co-logo{display:block;width:100%;max-width:220px;margin-bottom:4px}
+.co-logo img{width:100%;height:auto;display:block}
+.co-logo-page{max-width:260px;margin-bottom:28px}
