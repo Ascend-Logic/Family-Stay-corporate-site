@@ -99,7 +99,7 @@ def hero_html(meta, root, lang='ja'):
 </div>
 {crumbs}
 </div>
-<div class="ph-img"><img src="{root}images/{h['img']}" alt="{esc(h.get('alt', ''))}"></div>
+<div class="ph-img"><img src="{root}images/{h['img']}" alt="{esc(h.get('alt', ''))}"{' style="object-position:' + esc(h['pos']) + '"' if h.get('pos') else ''}></div>
 </div>
 </section>'''
     raise SystemExit(f'unknown hero type: {h["type"]}')

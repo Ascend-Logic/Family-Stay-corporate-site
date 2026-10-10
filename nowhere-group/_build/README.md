@@ -9,6 +9,7 @@ python3 _build/build.py
 ```
 
 - `pages/` … 固定ページの本文。先頭行の `<!--meta {...} -->` にタイトル・説明文・ヒーロー画像などを書く
+  - 写真ヒーロー（`hero.type: photo`）で顔などが切れるときは `hero.pos` に `center top` のように切り抜き位置を書く
 - `news/<id>.html` / `column/<id>.html` … 記事。meta に `date`（2026.06.05 形式）・`title`・`thumb`・`category`
   - ニュースの `category` は `build.py` の `NEWS_CATS`（グループ / Nowhere Group / VESTPORT / CLEANX9 / Family Stay / プレスリリース / メディア掲載 / 受賞・認定）から選ぶ。一覧ページはこのカテゴリで絞り込める
   - ニュースの `short` を入れると、トップの最新ニュース欄ではその短いタイトルを使う
