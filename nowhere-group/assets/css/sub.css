@@ -336,3 +336,5 @@ a.card:hover .thumb img{transform:scale(1.05)}
 .co-logo-page{max-width:260px;margin-bottom:28px}
 .partner-logo{display:flex;align-items:center;justify-content:center;height:150px;padding:14px;box-sizing:border-box;border-radius:18px;background:#fff;border:2px solid var(--line);overflow:hidden}
 .partner-logo img{height:100%;width:auto;max-width:100%;object-fit:contain}
+.sol-img-app{display:flex;gap:16px;justify-content:center;align-items:flex-start;padding:22px;box-sizing:border-box;background:var(--accent)}
+.sol-img-app img{width:auto;height:100%;max-width:calc(50% - 8px);object-fit:cover;object-position:top;border-radius:14px}
