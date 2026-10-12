@@ -39,12 +39,12 @@ CEO_SNS = [  # 代表メッセージに出す代表の SNS。URL を入れたも
 ]
 # 役員紹介（会社別）。name が空のものは表示しない（氏名確定後に入れる）。photo は images/site/people/ のファイル名（なければ空）
 OFFICERS = {
-    'nowhere': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi.jpg')],
-    'vestport': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi.jpg'),
+    'nowhere': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi-sq.jpg')],
+    'vestport': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi-sq.jpg'),
                  ('', 'Takahashi', '執行役員', 'Executive Officer', '')],
-    'cleanx9': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi.jpg'),
+    'cleanx9': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi-sq.jpg'),
                 ('', 'Yagi', '副社長 COO', 'Vice President, COO', '')],
-    'familystay': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi.jpg'),
+    'familystay': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi-sq.jpg'),
                    ('山下 拓朗', 'Takuro Yamashita', '取締役副社長 COO', 'Vice President, COO', 'yamashita.jpg'),
                    ('早乙女 琉真', 'Ryuma Saotome', '取締役 CTO', 'Director, CTO', 'saotome.jpg')],
 }
