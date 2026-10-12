@@ -45,8 +45,8 @@ OFFICERS = {
     'cleanx9': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi.jpg'),
                 ('', 'Yagi', '副社長 COO', 'Vice President, COO', '')],
     'familystay': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi.jpg'),
-                   ('山下 拓朗', 'Takuro Yamashita', '取締役副社長 COO', 'Vice President, COO', ''),
-                   ('早乙女 琉真', 'Ryuma Saotome', '取締役 CTO', 'Director, CTO', '')],
+                   ('山下 拓朗', 'Takuro Yamashita', '取締役副社長 COO', 'Vice President, COO', 'yamashita.jpg'),
+                   ('早乙女 琉真', 'Ryuma Saotome', '取締役 CTO', 'Director, CTO', 'saotome.jpg')],
 }
 COMPANY_NAMES = {'nowhere': ('Nowhere Group株式会社', 'Nowhere Group Inc.'), 'vestport': ('VESTPORT株式会社', 'VESTPORT Inc.'),
                  'cleanx9': ('CLEANX9株式会社', 'CLEANX9 Inc.'), 'familystay': ('株式会社Family Stay', 'Family Stay Inc.')}
