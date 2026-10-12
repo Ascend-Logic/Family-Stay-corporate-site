@@ -362,3 +362,6 @@ a.card:hover .thumb img{transform:scale(1.05)}
 .ft-note{font-size:13px!important}
 .note-card .thumb{aspect-ratio:16/9;border-radius:18px;overflow:hidden}
 .note-card .thumb.noimg{display:flex;align-items:center;justify-content:center;background:var(--yellow);font-family:var(--f-logo);font-size:18px}
+.officer-photo.noimg{position:relative}
+.officer-photo.noimg::before{content:'';position:absolute;left:50%;top:50%;width:38%;height:38%;transform:translate(-50%,-70%);border-radius:50%;background:#D8D0BC}
+.officer-photo.noimg::after{content:'';position:absolute;left:50%;bottom:0;width:72%;height:40%;transform:translateX(-50%);border-radius:50% 50% 0 0;background:#D8D0BC}
