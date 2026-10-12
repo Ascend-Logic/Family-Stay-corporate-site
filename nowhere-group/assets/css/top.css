@@ -79,14 +79,14 @@ h1,h2,h3,p{margin:0}
 .sv-cta .pill{flex-shrink:0}
 
 /* ---------- 4. Hotel / Column / News ---------- */
-.nw{position:relative;z-index:2;height:1340px;background:#F3EEDB}
+.nw{position:relative;z-index:2;height:1440px;background:#F3EEDB}
 .wave{position:absolute;left:-80px;width:1600px;display:block;pointer-events:none}
 .wave-top{top:-159px;height:160px}
-.wave-bottom{top:1259px;height:110px}
+.wave-bottom{top:1359px;height:110px}
 .wave .w-back{animation:sway 14s ease-in-out infinite alternate}
 .wave .w-mid{animation:sway 10s ease-in-out infinite alternate-reverse}
 @keyframes sway{from{transform:translateX(-40px)}to{transform:translateX(40px)}}
-.nw-inner{position:absolute;left:0;top:0;width:1440px;height:1260px;background:#252525;overflow:hidden}
+.nw-inner{position:absolute;left:0;top:0;width:1440px;height:1360px;background:#252525;overflow:hidden}
 .nw .bg-img{top:0;height:810px}
 .nw-head{position:absolute;left:110px;top:270px;display:flex;align-items:flex-end;gap:60px}
 .nw-head h2{font-family:'Outfit',sans-serif;font-weight:600;font-size:96px;line-height:1;color:#FFFFFF;letter-spacing:-.01em}
@@ -96,7 +96,7 @@ h1,h2,h3,p{margin:0}
 .nw-head .star{color:#FFD84A}
 .nw-head p{margin-bottom:18px;font-size:17px;font-weight:700;color:#FFFFFF}
 .nw-cards{position:absolute;left:80px;top:640px;width:1280px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
-.nw-card{height:590px;box-sizing:border-box;padding:40px 34px;background:#F5F1E4;border-radius:30px;display:flex;flex-direction:column;gap:22px;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.nw-card{min-height:590px;box-sizing:border-box;padding:40px 34px;background:#F5F1E4;border-radius:30px;display:flex;flex-direction:column;gap:22px;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
 .nw-card:hover{transform:translateY(-8px)}
 .nw-card h3{display:flex;align-items:center;gap:12px;font-family:'Outfit',sans-serif;font-weight:600;font-size:34px}
 .nw-card .pill{align-self:center;margin-top:auto;padding:0 30px}
