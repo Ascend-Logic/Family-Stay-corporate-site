@@ -365,3 +365,11 @@ a.card:hover .thumb img{transform:scale(1.05)}
 .officer-photo.noimg{position:relative}
 .officer-photo.noimg::before{content:'';position:absolute;left:50%;top:50%;width:38%;height:38%;transform:translate(-50%,-70%);border-radius:50%;background:#D8D0BC}
 .officer-photo.noimg::after{content:'';position:absolute;left:50%;bottom:0;width:72%;height:40%;transform:translateX(-50%);border-radius:50% 50% 0 0;background:#D8D0BC}
+/* 経営陣一覧（1人1枚、兼務は並記） */
+.officers-list{justify-content:flex-start}
+.officer-merged{flex:0 1 calc(25% - 24px)}
+.officer-roles{margin:2px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.officer-roles li{display:flex;flex-direction:column;line-height:1.5}
+.officer-co{font-size:12px;color:var(--sub)}
+.officer-merged .officer-role{font-size:14px;color:var(--ink)}
+@media (max-width:900px){.officer-merged{flex:0 1 calc(50% - 8px)}}

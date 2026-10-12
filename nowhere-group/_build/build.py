@@ -86,6 +86,32 @@ def officers_html(keys, root, lang='ja'):
     return '\n'.join(out)
 
 
+def officers_merged_html(root, lang='ja'):
+    """経営陣一覧: 1人1枚にまとめ、兼務している会社の役職を並記する"""
+    people = {}
+    order = []
+    for key in ('nowhere', 'vestport', 'cleanx9', 'familystay'):
+        for ja, en, role_ja, role_en, photo in OFFICERS.get(key, []):
+            if not ja:
+                continue
+            if ja not in people:
+                people[ja] = {'en': en, 'photo': photo, 'roles': []}
+                order.append(ja)
+            if photo and not people[ja]['photo']:
+                people[ja]['photo'] = photo
+            company = COMPANY_NAMES[key][1 if lang == 'en' else 0]
+            people[ja]['roles'].append((company, role_en if lang == 'en' else role_ja))
+    cards = []
+    for ja in order:
+        pr = people[ja]
+        name = pr['en'] if lang == 'en' else ja
+        img = (f'<span class="officer-photo"><img src="{root}images/site/people/{pr["photo"]}" alt="" loading="lazy"></span>' if pr['photo']
+               else '<span class="officer-photo noimg" aria-hidden="true"></span>')
+        roles = ''.join(f'<li><span class="officer-co">{esc(c)}</span><span class="officer-role">{esc(r)}</span></li>' for c, r in pr['roles'])
+        cards.append(f'<div class="officer officer-merged">{img}<strong class="officer-name">{esc(name)}</strong><ul class="officer-roles">{roles}</ul></div>')
+    return f'<div class="officers officers-list">{"".join(cards)}</div>'
+
+
 def ceo_sns_html(lang='ja'):
     items = [f'<a href="{esc(u)}" target="_blank" rel="noopener">{esc(n)} <span class="arr">↗</span></a>' for n, u in CEO_SNS if u]
     if not items:
@@ -114,7 +140,10 @@ def note_html(root, lang='ja', with_articles=False):
 def fill_tokens(body, root, lang='ja'):
     """ページ本文の {{officers:nowhere,vestport}} / {{ceo_sns}} / {{note}} を置き換える"""
     def off(m):
-        return officers_html([k.strip() for k in m.group(1).split(',')], root, lang)
+        keys = [k.strip() for k in m.group(1).split(',')]
+        if keys == ['all']:
+            return officers_merged_html(root, lang)
+        return officers_html(keys, root, lang)
     body = re.sub(r'\{\{officers:([a-z0-9, ]+)\}\}', off, body)
     body = body.replace('{{ceo_sns}}', ceo_sns_html(lang))
     body = body.replace('{{note}}', note_html(root, lang))
