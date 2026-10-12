@@ -38,6 +38,21 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // 記事のシェアボタン（現在のURLとタイトルから組み立てる）
+  var share = document.querySelector('[data-share]');
+  if (share) {
+    var url = encodeURIComponent(location.href), title = encodeURIComponent(share.getAttribute('data-title') || document.title);
+    var x = share.querySelector('[data-share-x]'), line = share.querySelector('[data-share-line]'), fb = share.querySelector('[data-share-fb]'), copy = share.querySelector('[data-share-copy]');
+    if (x) x.href = 'https://x.com/intent/post?text=' + title + '&url=' + url;
+    if (line) line.href = 'https://social-plugins.line.me/lineit/share?url=' + url;
+    if (fb) fb.href = 'https://www.facebook.com/sharer/sharer.php?u=' + url;
+    if (copy) copy.addEventListener('click', function () {
+      var done = function () { copy.classList.add('copied'); copy.textContent = 'コピーしました'; setTimeout(function () { copy.classList.remove('copied'); copy.textContent = 'リンクをコピー'; }, 2000); };
+      if (navigator.clipboard) { navigator.clipboard.writeText(location.href).then(done); }
+      else { var ta = document.createElement('textarea'); ta.value = location.href; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); done(); }
+    });
+  }
+
   // お問い合わせフォーム（送信先未設定の間は送信しない）
   var form = document.querySelector('form[data-contact]');
   if (form) {

@@ -55,3 +55,11 @@ python3 _build/build.py
 ## 未対応・要設定
 
 - お問い合わせフォームの送信先が未設定（`pages/contact.html` と `pages/en/contact.html` の form の `action`）。現状は送信せずに案内文を表示する
+
+## 役員紹介・代表SNS・note（素材が揃ったら `build.py` の設定を埋める）
+
+- 役員紹介は `build.py` の `OFFICERS`。会社ごとに `(氏名, 英語名, 役職, 英語役職, 写真ファイル名)` を並べる。氏名が空の行は表示されない（伏字のまま載せないため）。写真は `images/site/people/` に置く
+  - 私たちについて（`{{officers:nowhere,vestport,cleanx9,familystay}}`）と各社ページ（`{{officers:cleanx9}}` など）に出る
+- 代表メッセージの SNS リンクは `CEO_SNS`（YouTube / X）。URL を入れたものだけ表示
+- 公式 note は `NOTE_URL`。入れるとお知らせ一覧・下層フッター・採用ページ（`NOTE_ARTICLES` に記事を書くと記事カードも）に出る
+- お知らせの記事ページには X / LINE / Facebook / リンクコピーのシェアボタンが付く（`assets/js/sub.js`）

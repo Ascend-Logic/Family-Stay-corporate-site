@@ -30,7 +30,83 @@ NAV = [
     ('news', 'お知らせ', 'news/'),
 ]
 RECRUIT = 'https://nowhere-group.notion.site/nowhere-group-work-culture?source=copy_link'
-NOTE_URL = ''  # 公式 note の URL。設定するとお知らせ一覧とトップに「公式noteを見る」リンクを出す
+NOTE_URL = ''  # 公式 note の URL。設定するとお知らせ一覧・採用ページ・下層フッターに「公式note」リンクを出す
+NOTE_ARTICLES = [  # 採用ページで紹介する note 記事（URL が決まったら追加）。例: {'title': '…', 'url': 'https://note.com/…', 'date': '2026.10.01', 'thumb': 'images/uploads/…'}
+]
+CEO_SNS = [  # 代表メッセージに出す代表の SNS。URL を入れたものだけ表示
+    ('YouTube', ''),
+    ('X', ''),
+]
+# 役員紹介（会社別）。name が空のものは表示しない（氏名確定後に入れる）。photo は images/site/people/ のファイル名（なければ空）
+OFFICERS = {
+    'nowhere': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi.jpg')],
+    'vestport': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi.jpg'),
+                 ('', 'Takahashi', '執行役員', 'Executive Officer', '')],
+    'cleanx9': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi.jpg'),
+                ('', 'Yagi', '副社長 COO', 'Vice President, COO', '')],
+    'familystay': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi.jpg'),
+                   ('', 'Yamashita', '取締役副社長 COO', 'Vice President, COO', ''),
+                   ('', 'Saotome', '取締役 CTO', 'Director, CTO', '')],
+}
+COMPANY_NAMES = {'nowhere': ('Nowhere Group株式会社', 'Nowhere Group Inc.'), 'vestport': ('VESTPORT株式会社', 'VESTPORT Inc.'),
+                 'cleanx9': ('CLEANX9株式会社', 'CLEANX9 Inc.'), 'familystay': ('株式会社Family Stay', 'Family Stay Inc.')}
+
+
+def officers_html(keys, root, lang='ja'):
+    """役員カード一覧（keys: 会社キーのリスト。複数なら会社ごとに見出しを付ける）"""
+    out = []
+    for key in keys:
+        cards = []
+        for ja, en, role_ja, role_en, photo in OFFICERS.get(key, []):
+            if not ja:
+                continue
+            name, role = (en, role_en) if lang == 'en' else (ja, role_ja)
+            img = (f'<span class="officer-photo"><img src="{root}images/site/people/{photo}" alt="" loading="lazy"></span>' if photo
+                   else '<span class="officer-photo noimg" aria-hidden="true"></span>')
+            cards.append(f'<div class="officer">{img}<span class="officer-role">{esc(role)}</span><strong class="officer-name">{esc(name)}</strong></div>')
+        if not cards:
+            continue
+        head = ''
+        if len(keys) > 1:
+            head = f'<h3 class="officer-company">{esc(COMPANY_NAMES[key][1 if lang == "en" else 0])}</h3>'
+        out.append(f'<div class="officer-group">{head}<div class="officers">{"".join(cards)}</div></div>')
+    return '\n'.join(out)
+
+
+def ceo_sns_html(lang='ja'):
+    items = [f'<a href="{esc(u)}" target="_blank" rel="noopener">{esc(n)} <span class="arr">↗</span></a>' for n, u in CEO_SNS if u]
+    if not items:
+        return ''
+    label = 'Follow the CEO' if lang == 'en' else '代表のSNS'
+    return f'<div class="ceo-sns"><span>{label}</span>{"".join(items)}</div>'
+
+
+def note_html(root, lang='ja', with_articles=False):
+    """note へのリンク（URL 未設定なら空）"""
+    if not NOTE_URL:
+        return ''
+    btn = (f'<div class="btn-row"><a class="btn" href="{NOTE_URL}" target="_blank" rel="noopener">'
+           f'{"Read our note (Japanese)" if lang == "en" else "公式noteを見る"} <span class="arr">↗</span></a></div>')
+    if not with_articles or not NOTE_ARTICLES:
+        return btn
+    cards = []
+    for a in NOTE_ARTICLES:
+        thumb = (f'<span class="thumb"><img src="{root}{a["thumb"]}" alt="" loading="lazy"></span>' if a.get('thumb')
+                 else '<span class="thumb noimg" aria-hidden="true">note</span>')
+        cards.append(f'<a class="card note-card" href="{esc(a["url"])}" target="_blank" rel="noopener">{thumb}'
+                     f'<span class="li-date">{esc(a.get("date", ""))}</span><h3>{esc(a["title"])}</h3><span class="card-more">note で読む ↗</span></a>')
+    return f'<div class="grid g3" data-rv>{"".join(cards)}</div>\n<div style="margin-top:28px">{btn}</div>'
+
+
+def fill_tokens(body, root, lang='ja'):
+    """ページ本文の {{officers:nowhere,vestport}} / {{ceo_sns}} / {{note}} を置き換える"""
+    def off(m):
+        return officers_html([k.strip() for k in m.group(1).split(',')], root, lang)
+    body = re.sub(r'\{\{officers:([a-z0-9, ]+)\}\}', off, body)
+    body = body.replace('{{ceo_sns}}', ceo_sns_html(lang))
+    body = body.replace('{{note}}', note_html(root, lang))
+    body = body.replace('{{note_articles}}', note_html(root, lang, with_articles=True))
+    return body
 NEWS_CATS = ['グループ', 'Nowhere Group', 'VESTPORT', 'CLEANX9', 'Family Stay', 'プレスリリース', 'メディア掲載', '受賞・認定']
 COLORS = {'orange': '#C94A1A', 'blue': '#2F6FD6', 'purple': '#7A5BD9', 'green': '#1B7F5A',
           'pink': '#E0689E', 'yellow': '#FFD84A'}
@@ -195,6 +271,7 @@ def layout(meta, body, root, canonical):
 <li><a href="{root}contact/">お問い合わせ</a></li>
 <li><a href="{root}privacy/">プライバシーポリシー</a></li>
 <li><a href="{root}en/" lang="en">English</a></li>"""
+    body = fill_tokens(body, root, lang)
     body = body.replace('{{root}}', root).replace('{{home}}', home)
     return f"""<!doctype html>
 <html lang="{lang}">
@@ -243,7 +320,7 @@ def layout(meta, body, root, canonical):
 {foot_links}
 </ul>
 <div class="ft-sns">
-<a href="https://x.com/nowheregroup1" aria-label="{t['x_label']}" target="_blank" rel="noopener">X</a>
+{f'<a href="{NOTE_URL}" aria-label="note" target="_blank" rel="noopener" class="ft-note">note</a>' if NOTE_URL else ''}<a href="https://x.com/nowheregroup1" aria-label="{t['x_label']}" target="_blank" rel="noopener">X</a>
 <a href="https://www.facebook.com/nowhere.group" aria-label="Facebook" target="_blank" rel="noopener" style="color:#2F6FD6">f</a>
 <a href="https://www.instagram.com/nowhere_group/" aria-label="Instagram" target="_blank" rel="noopener"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C94A1A" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1" fill="#C94A1A"></circle></svg></a>
 </div>
@@ -322,6 +399,17 @@ def thumb_html(a, root, cls='thumb'):
     return f'<span class="{cls} noimg" aria-hidden="true">NOWHERE</span>'
 
 
+def share_html(title):
+    """X / LINE / Facebook / リンクコピーのシェアボタン（URL は sub.js が現在のページから組み立てる）"""
+    return f'''<div class="share" data-share data-title="{esc(title)}">
+<span class="share-label">この記事をシェア</span>
+<a class="share-btn" data-share-x href="#" target="_blank" rel="noopener" aria-label="Xでシェア">X</a>
+<a class="share-btn" data-share-line href="#" target="_blank" rel="noopener" aria-label="LINEで送る">LINE</a>
+<a class="share-btn" data-share-fb href="#" target="_blank" rel="noopener" aria-label="Facebookでシェア">Facebook</a>
+<button class="share-btn" type="button" data-share-copy aria-label="リンクをコピー">リンクをコピー</button>
+</div>'''
+
+
 def build_articles(kind, label_en, label_ja, color):
     arts = load_articles(kind)
     for i, a in enumerate(arts):
@@ -353,6 +441,7 @@ def build_articles(kind, label_en, label_ja, color):
 <div class="prose">
 {a["body"]}
 </div>
+{share_html(a["title"]) if kind == 'news' else ''}
 <nav class="art-nav" aria-label="記事の移動">{nav}</nav>
 </div>
 </div>
@@ -529,6 +618,15 @@ def build_recruit():
 {chr(10).join(cards)}
 </div>
 </div>""")
+    note_section = ''
+    if NOTE_URL:
+        note_section = f"""<section class="sec" id="note">
+<div class="wrap">
+<div class="sec-head"><h2><span class="num">05</span>note</h2><p>noteで読む、Nowhere Groupの日々</p></div>
+<p class="text" style="margin-bottom:28px">メンバーの仕事や現場の様子、プロジェクトの裏側を公式noteで発信しています。</p>
+{{{{note_articles}}}}
+</div>
+</section>"""
     body = f"""<section class="sec">
 <div class="wrap">
 <div class="outline" data-rv>
@@ -614,6 +712,7 @@ def build_recruit():
 </div>
 </section>
 
+{note_section}
 <section class="sec sec-alt" id="jobs">
 <div class="wrap">
 <div class="sec-head"><h2><span class="num">06</span>Jobs</h2><p>募集職種（会社別）・{len(jobs)}件</p></div>
@@ -638,6 +737,8 @@ def build_recruit():
 <p class="text">採用活動で取得する個人情報の取り扱いについては、<a href="{root}recruit/privacy/">採用プライバシーポリシー</a>をご確認ください。</p>
 </div>
 </section>"""
+    counter = iter(range(1, 20))
+    body = re.sub(r'<span class="num">\d+</span>', lambda m: f'<span class="num">{next(counter):02}</span>', body)
     meta = {'title': '採用情報', 'description': 'Nowhere Groupの採用情報。まだない宿泊の未来を、一緒につくる。私たちが目指す未来、仕事を知る、会社別の募集職種、オープンポジションをまとめています。',
             'nav': 'recruit', 'accent': 'c-orange',
             'hero': {'type': 'illust', 'en': 'Recruit', 'ja': '採用情報', 'color': 'orange', 'img': 'bg-company.jpg'},
