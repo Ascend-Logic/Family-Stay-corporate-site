@@ -11,6 +11,7 @@
 ニュース・コラムの一覧ページと、トップ(index.html)の最新3件もこのスクリプトが更新する。
 英語版は _build/pages/en/ から en/ 以下に生成し、英語トップ(en/index.html)は index.html を元に EN_TOP の対応表で生成する。
 """
+import hashlib
 import html
 import json
 import os
@@ -18,6 +19,18 @@ import re
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(BASE, '_build')
+
+
+def asset_ver():
+    """CSS/JS の内容から短いバージョン文字列を作る（?v= に付けてブラウザキャッシュを確実に更新させる）"""
+    h = hashlib.md5()
+    for rel in ('assets/css/header.css', 'assets/css/sub.css', 'assets/css/top.css', 'assets/js/header.js', 'assets/js/sub.js'):
+        with open(os.path.join(BASE, rel), 'rb') as f:
+            h.update(f.read())
+    return h.hexdigest()[:8]
+
+
+VER = asset_ver()
 SITE = 'Nowhere Group株式会社'
 FONTS = ('https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Outfit:wght@500;600;700'
          '&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap')
@@ -292,10 +305,10 @@ def layout(meta, body, root, canonical):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="{FONTS.replace('&', '&amp;')}" rel="stylesheet">
-<link rel="stylesheet" href="{root}assets/css/header.css">
-<link rel="stylesheet" href="{root}assets/css/sub.css">
-<script src="{root}assets/js/header.js" defer></script>
-<script src="{root}assets/js/sub.js" defer></script>
+<link rel="stylesheet" href="{root}assets/css/header.css?v={VER}">
+<link rel="stylesheet" href="{root}assets/css/sub.css?v={VER}">
+<script src="{root}assets/js/header.js?v={VER}" defer></script>
+<script src="{root}assets/js/sub.js?v={VER}" defer></script>
 </head>
 <body class="{accent} lang-{lang}">
 <a class="skip" href="#main">{t['skip']}</a>
@@ -512,6 +525,7 @@ def update_top(news, columns):
         if not pat.search(src):
             continue  # トップにコラム欄はない（お知らせのみ更新）
         src = pat.sub(lambda m: m.group(1) + '\n'.join(items) + '\n' + m.group(2), src)
+    src = re.sub(r'(assets/(?:css|js)/[a-z]+\.(?:css|js))(\?v=\w+)?', rf'\1?v={VER}', src)
     open(path, 'w', encoding='utf-8').write(src)
 
 
