@@ -39,7 +39,8 @@ python3 _build/build.py
 ## 採用情報（/recruit/）
 
 - 求人は `recruit/<nowhere-01 など>.html` に1件ずつ置く。meta の `order` が一覧の並び順、`company` が `nowhere` / `vestport` / `cleanx9` / `familystay` のどこに載るか（求人がない会社はオープンポジションへの案内を出す）
-- 「仕事を知る」の職種、「人を知る」のインタビュー枠、「働く環境・制度」の項目は `build.py` の `JOB_TYPES` / `PEOPLE` / `ENVIRONMENT`。インタビュー記事はまだないので「準備中」表示
+- 「仕事と人を知る」（お仕事図鑑・社員インタビュー）と「プロジェクトを知る」（宿泊施設プロデュースの裏側）は公式 note の記事カード。`build.py` の `NOTE_WORK` / `NOTE_PEOPLE` / `NOTE_PROJECTS` に記事を足し、見出し画像を `images/uploads/note/<記事キー>.jpg`（幅800px）に保存する
+- 「働く環境・制度」の項目は `build.py` の `ENVIRONMENT`
 - 一覧のカードには meta の `summary`（業務内容）・`place`（就業場所）・`salary`（賃金）を表示する
 - `_open-position.html` と `_privacy.html` はオープンポジションと採用プライバシーポリシーの本文
 - 応募の受付は、これまでどおり Notion の応募フォームを使う（URL は `build.py` の `APPLY_FORM` / `OPEN_FORM`）
@@ -61,5 +62,5 @@ python3 _build/build.py
 - 役員紹介は `build.py` の `OFFICERS`。会社ごとに `(氏名, 英語名, 役職, 英語役職, 写真ファイル名)` を並べる。氏名が空の行は表示されない（伏字のまま載せないため）。写真は `images/site/people/` に置く
   - 私たちについての `{{officers:all}}` で経営陣一覧（1人1枚、兼務は会社ごとの役職を並記）になる。各社ページには出さない
 - 代表メッセージの SNS リンクは `CEO_SNS`（YouTube / X）。URL を入れたものだけ表示
-- 公式 note は `NOTE_URL`。入れるとお知らせ一覧・下層フッター・採用ページ（`NOTE_ARTICLES` に記事を書くと記事カードも）に出る
+- 公式 note は `NOTE_URL`。お知らせ一覧・下層フッター・採用ページに「公式note」リンクが出る
 - お知らせの記事ページには X / LINE / Facebook / リンクコピーのシェアボタンが付く（`assets/js/sub.js`）

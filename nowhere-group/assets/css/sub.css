@@ -373,3 +373,37 @@ a.card:hover .thumb img{transform:scale(1.05)}
 .officer-co{font-size:12px;color:var(--sub)}
 .officer-merged .officer-role{font-size:14px;color:var(--ink)}
 @media (max-width:900px){.officer-merged{flex:0 1 calc(50% - 8px)}}
+/* Family Stay アプリ紹介（service/platform） */
+.fs-app{--fs:#A8453A;--fs-soft:#FBEAE6}
+.fs-label{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--fs);letter-spacing:.04em}
+.fs-label::before{content:'';width:10px;height:10px;border-radius:50%;background:var(--fs)}
+.fs-intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.45fr);gap:clamp(32px,5vw,72px);align-items:center}
+.fs-intro-body{display:flex;flex-direction:column;gap:18px}
+.fs-intro-body .lead{font-size:clamp(24px,3vw,38px)}
+.fs-intro-body .text{font-size:15px;line-height:2}
+.fs-points{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.fs-points li{display:flex;gap:10px;font-size:15px;font-weight:700;line-height:1.7}
+.fs-points li::before{content:'✓';color:var(--fs)}
+/* PC 画面とスマホ画面を横に並べる（下端そろえ） */
+.fs-duo{display:flex;align-items:flex-end;gap:clamp(12px,1.6vw,20px)}
+.fs-duo .fs-pc{flex:1 1 auto;min-width:0}
+.fs-duo .fs-phone{flex:0 0 24%}
+.fs-panel{padding:clamp(20px,3vw,40px);border-radius:32px;background:var(--fs-soft)}
+.fs-pc{display:block;border-radius:14px;overflow:hidden;border:2px solid var(--line);background:#fff;box-shadow:0 18px 44px rgba(40,24,20,.14)}
+.fs-phone{display:block;border-radius:22px;overflow:hidden;border:2px solid var(--line);background:#fff;box-shadow:0 18px 44px rgba(40,24,20,.18)}
+.fs-pc img,.fs-phone img{display:block;width:100%;height:auto}
+.fs-features{display:flex;flex-direction:column;gap:clamp(56px,8vw,112px);margin-top:clamp(64px,9vw,120px)}
+.fs-feature{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:clamp(32px,5vw,72px);align-items:center}
+.fs-feature:nth-child(even){grid-template-columns:minmax(0,1fr) minmax(0,1.45fr)}
+.fs-feature:nth-child(even) .fs-duo{order:2}
+.fs-feature-body{display:flex;flex-direction:column;gap:14px}
+.fs-num{font-family:var(--f-en);font-weight:700;font-size:15px;color:var(--fs);letter-spacing:.08em}
+.fs-feature-body h3{font-size:clamp(22px,2.4vw,30px);font-weight:700;line-height:1.5}
+.fs-feature-body p{font-size:15px;line-height:2}
+.fs-note{margin-top:clamp(40px,5vw,64px);font-size:12px;color:var(--sub)}
+@media (max-width:860px){
+  .fs-intro,.fs-feature,.fs-feature:nth-child(even){grid-template-columns:minmax(0,1fr)}
+  .fs-feature:nth-child(even) .fs-duo{order:0}
+  .fs-phone{border-radius:16px}
+  .fs-pc{border-radius:10px}
+}

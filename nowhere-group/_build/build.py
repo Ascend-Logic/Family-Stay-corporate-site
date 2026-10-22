@@ -30,6 +30,12 @@ def asset_ver():
     return h.hexdigest()[:8]
 
 
+def photo_src(root, photo):
+    """役員写真の URL。差し替え後にブラウザキャッシュが残らないよう、ファイル内容から ?v= を付ける"""
+    with open(os.path.join(BASE, 'images/site/people', photo), 'rb') as f:
+        return f'{root}images/site/people/{photo}?v={hashlib.md5(f.read()).hexdigest()[:8]}'
+
+
 VER = asset_ver()
 SITE = 'Nowhere Group株式会社'
 FONTS = ('https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Outfit:wght@500;600;700'
@@ -43,9 +49,7 @@ NAV = [
     ('news', 'お知らせ', 'news/'),
 ]
 RECRUIT = 'https://nowhere-group.notion.site/nowhere-group-work-culture?source=copy_link'
-NOTE_URL = ''  # 公式 note の URL。設定するとお知らせ一覧・採用ページ・下層フッターに「公式note」リンクを出す
-NOTE_ARTICLES = [  # 採用ページで紹介する note 記事（URL が決まったら追加）。例: {'title': '…', 'url': 'https://note.com/…', 'date': '2026.10.01', 'thumb': 'images/uploads/…'}
-]
+NOTE_URL = 'https://note.com/nowhere_group'  # 公式 note の URL。設定するとお知らせ一覧・採用ページ・下層フッターに「公式note」リンクを出す
 CEO_SNS = [  # 代表メッセージに出す代表の SNS。URL を入れたものだけ表示
     ('YouTube', ''),
     ('X', ''),
@@ -54,7 +58,7 @@ CEO_SNS = [  # 代表メッセージに出す代表の SNS。URL を入れたも
 OFFICERS = {
     'nowhere': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi-sq.jpg')],
     'vestport': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi-sq.jpg'),
-                 ('', 'Takahashi', '執行役員', 'Executive Officer', '')],
+                 ('髙橋 悠太', 'Yuta Takahashi', '執行役員', 'Executive Officer', 'takahashi.jpg')],
     'cleanx9': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi-sq.jpg'),
                 ('', 'Yagi', '副社長 COO', 'Vice President, COO', '')],
     'familystay': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi-sq.jpg'),
@@ -74,7 +78,7 @@ def officers_html(keys, root, lang='ja'):
             if not ja:
                 continue
             name, role = (en, role_en) if lang == 'en' else (ja, role_ja)
-            img = (f'<span class="officer-photo"><img src="{root}images/site/people/{photo}" alt="" loading="lazy"></span>' if photo
+            img = (f'<span class="officer-photo"><img src="{photo_src(root, photo)}" alt="" loading="lazy"></span>' if photo
                    else '<span class="officer-photo noimg" aria-hidden="true"></span>')
             cards.append(f'<div class="officer">{img}<span class="officer-role">{esc(role)}</span><strong class="officer-name">{esc(name)}</strong></div>')
         if not cards:
@@ -105,7 +109,7 @@ def officers_merged_html(root, lang='ja'):
     for ja in order:
         pr = people[ja]
         name = pr['en'] if lang == 'en' else ja
-        img = (f'<span class="officer-photo"><img src="{root}images/site/people/{pr["photo"]}" alt="" loading="lazy"></span>' if pr['photo']
+        img = (f'<span class="officer-photo"><img src="{photo_src(root, pr["photo"])}" alt="" loading="lazy"></span>' if pr['photo']
                else '<span class="officer-photo noimg" aria-hidden="true"></span>')
         roles = ''.join(f'<li><span class="officer-co">{esc(c)}</span><span class="officer-role">{esc(r)}</span></li>' for c, r in pr['roles'])
         cards.append(f'<div class="officer officer-merged">{img}<strong class="officer-name">{esc(name)}</strong><ul class="officer-roles">{roles}</ul></div>')
@@ -120,21 +124,23 @@ def ceo_sns_html(lang='ja'):
     return f'<div class="ceo-sns"><span>{label}</span>{"".join(items)}</div>'
 
 
-def note_html(root, lang='ja', with_articles=False):
+def note_html(root, lang='ja'):
     """note へのリンク（URL 未設定なら空）"""
     if not NOTE_URL:
         return ''
-    btn = (f'<div class="btn-row"><a class="btn" href="{NOTE_URL}" target="_blank" rel="noopener">'
-           f'{"Read our note (Japanese)" if lang == "en" else "公式noteを見る"} <span class="arr">↗</span></a></div>')
-    if not with_articles or not NOTE_ARTICLES:
-        return btn
+    return (f'<div class="btn-row"><a class="btn" href="{NOTE_URL}" target="_blank" rel="noopener">'
+            f'{"Read our note (Japanese)" if lang == "en" else "公式noteを見る"} <span class="arr">↗</span></a></div>')
+
+
+def note_cards(root, articles):
+    """note 記事カード。サムネイルは images/uploads/note/<記事キー>.jpg（note の見出し画像を保存したもの）"""
     cards = []
-    for a in NOTE_ARTICLES:
-        thumb = (f'<span class="thumb"><img src="{root}{a["thumb"]}" alt="" loading="lazy"></span>' if a.get('thumb')
-                 else '<span class="thumb noimg" aria-hidden="true">note</span>')
-        cards.append(f'<a class="card note-card" href="{esc(a["url"])}" target="_blank" rel="noopener">{thumb}'
-                     f'<span class="li-date">{esc(a.get("date", ""))}</span><h3>{esc(a["title"])}</h3><span class="card-more">note で読む ↗</span></a>')
-    return f'<div class="grid g3" data-rv>{"".join(cards)}</div>\n<div style="margin-top:28px">{btn}</div>'
+    for a in articles:
+        cards.append(f'<a class="card note-card" href="{NOTE_URL}/n/{a["key"]}" target="_blank" rel="noopener">'
+                     f'<span class="thumb"><img src="{root}images/uploads/note/{a["key"]}.jpg" alt="" loading="lazy" width="800" height="419"></span>'
+                     f'<div class="row"><span class="tag">{esc(a["label"])}</span><span class="li-date">{esc(a["date"])}</span></div>'
+                     f'<h3>{esc(a["title"])}</h3><span class="card-more">note で読む ↗</span></a>')
+    return f'<div class="grid g3" data-rv>\n{chr(10).join(cards)}\n</div>'
 
 
 def fill_tokens(body, root, lang='ja'):
@@ -147,7 +153,6 @@ def fill_tokens(body, root, lang='ja'):
     body = re.sub(r'\{\{officers:([a-z0-9, ]+)\}\}', off, body)
     body = body.replace('{{ceo_sns}}', ceo_sns_html(lang))
     body = body.replace('{{note}}', note_html(root, lang))
-    body = body.replace('{{note_articles}}', note_html(root, lang, with_articles=True))
     return body
 NEWS_CATS = ['グループ', 'Nowhere Group', 'VESTPORT', 'CLEANX9', 'Family Stay', 'プレスリリース', 'メディア掲載', '受賞・認定']
 COLORS = {'orange': '#C94A1A', 'blue': '#2F6FD6', 'purple': '#7A5BD9', 'green': '#1B7F5A',
@@ -228,14 +233,14 @@ T = {
         'site': SITE, 'tagline': '旅を起点に、人々の心にアナザースカイを創る。', 'skip': '本文へスキップ',
         'logo_label': 'Nowhere Group トップへ', 'menu_label': 'メインメニュー',
         'cta_text': 'グループ各社へのお問い合わせは、こちらで一括して承ります。', 'cta_btn': 'お問い合わせフォーム',
-        'address': '〒164-0013 東京都中野区弥生町2-25-10 弥生町2丁目ビル1F',
+        'address': '〒169-0075 東京都新宿区高田馬場3-12-2 OCビル4階',
         'privacy': 'プライバシーポリシー', 'x_label': 'X（旧Twitter）', 'switch': ('EN', 'English'),
     },
     'en': {
         'site': 'Nowhere Group Inc.', 'tagline': 'Travel as the starting point for another sky in every heart', 'skip': 'Skip to content',
         'logo_label': 'Nowhere Group home', 'menu_label': 'Main menu',
         'cta_text': 'Inquiries for every group company are handled here, in one place.', 'cta_btn': 'Contact Form',
-        'address': 'Yayoicho 2-chome Bldg. 1F, 2-25-10 Yayoicho, Nakano-ku, Tokyo 164-0013, Japan',
+        'address': 'OC Bldg. 4F, 3-12-2 Takadanobaba, Shinjuku-ku, Tokyo 169-0075, Japan',
         'privacy': 'Privacy Policy', 'x_label': 'X (formerly Twitter)', 'switch': ('JP', '日本語'),
     },
 }
@@ -565,9 +570,26 @@ BRANDS = [('nowhere', 'Nowhere Group株式会社', '企画・プロデュース�
           ('vestport', 'VESTPORT株式会社', '不動産・工事・建物管理・資産活用・案件創出'),
           ('cleanx9', 'CLEANX9株式会社', '清掃・現地オペレーション'),
           ('familystay', '株式会社Family Stay', '販売・集客・顧客接点・Travel Tech')]
-JOB_TYPES = ['宿泊プロデュース', '宿泊施設運営', 'グループ営業', '事業企画', '不動産', '工事', '建物管理', '清掃',
-             '現地オペレーション', 'SUPPLY', 'Travel Tech', 'マーケティング', 'コーポレート']
-PEOPLE = ['若手社員', '中途入社', 'マネージャー', '宿泊運営', 'プロデュース', 'CLEANX9現場', 'エンジニア']
+# 採用ページで紹介する公式 note の記事。key は記事 URL（note.com/nowhere_group/n/<key>）の末尾
+# 追加するときは見出し画像を images/uploads/note/<key>.jpg（幅800px）に保存する
+NOTE_WORK = [  # 仕事と人を知る：お仕事図鑑
+    {'key': 'nde1b35067607', 'label': 'お仕事図鑑 #1', 'date': '2026.09.03', 'title': '宿泊施設運営スタッフ編'},
+    {'key': 'n369704bf519b', 'label': 'お仕事図鑑 #2', 'date': '2026.10.17', 'title': '清掃スタッフ編'},
+]
+NOTE_PEOPLE = [  # 仕事と人を知る：社員インタビュー
+    {'key': 'nffae73231a0c', 'label': '社員インタビュー', 'date': '2026.07.31', 'title': '変化と未経験、知らない世界に向き合う面白さ'},
+    {'key': 'nbaa738f44b78', 'label': '社長対談', 'date': '2026.09.26', 'title': '「継続は力」”生意気くらいがちょうどいい”を体現した若き経営幹部'},
+]
+NOTE_PROJECTS = [  # プロジェクトを知る：宿泊施設プロデュースの裏側
+    {'key': 'nb0cd50727c70', 'label': 'OMATSURI BASE', 'date': '2026.03.18', 'title': '【”日本一の民泊”受賞】OMATSURI BASE Nakanoshimbashi 誕生の裏側と戦略'},
+    {'key': 'n6284e3f11d20', 'label': "Kids' Play Villa", 'date': '2026.03.21', 'title': '眠っていた土地を子供達の「住みたい」に。'},
+    {'key': 'na984c8a98200', 'label': 'FUWARI 阿蘇', 'date': '2026.03.28', 'title': '相続案件から生まれた地域再生モデル。'},
+    {'key': 'n435a26d71c44', 'label': 'Azure Palace 伊豆高原', 'date': '2026.03.29', 'title': '中古別荘リノベーションから生まれた新しい価値。'},
+    {'key': 'n396f422f7e86', 'label': 'ZEN＆BED 望月庵', 'date': '2026.03.30', 'title': 'お寺に宿泊、日本の伝統の活かし方。'},
+    {'key': 'n2f5ef9b08ff3', 'label': 'HARELIER 山中湖', 'date': '2026.04.30', 'title': '「帰りたくない」と泣く居心地の良さ'},
+    {'key': 'necd2721fb866', 'label': 'タイムトリップOTOWA', 'date': '2026.05.29', 'title': '制約だらけの空き家が”昭和レトロ代表”に生まれ変わるまで'},
+    {'key': 'ne1e04b169279', 'label': '由楽 焼津', 'date': '2026.06.27', 'title': '立地の常識を覆した、体験価値設計の全記録。'},
+]
 ENVIRONMENT = ['評価制度', 'キャリア', '研修', '福利厚生', '働き方', 'オフィス', 'グループ内キャリア']
 
 
@@ -661,15 +683,6 @@ def build_recruit():
 {chr(10).join(cards)}
 </div>
 </div>""")
-    note_section = ''
-    if NOTE_URL:
-        note_section = f"""<section class="sec" id="note">
-<div class="wrap">
-<div class="sec-head"><h2><span class="num">05</span>note</h2><p>noteで読む、Nowhere Groupの日々</p></div>
-<p class="text" style="margin-bottom:28px">メンバーの仕事や現場の様子、プロジェクトの裏側を公式noteで発信しています。</p>
-{{{{note_articles}}}}
-</div>
-</section>"""
     body = f"""<section class="sec">
 <div class="wrap">
 <div class="outline" data-rv>
@@ -704,48 +717,36 @@ def build_recruit():
 
 <section class="sec sec-alt" id="work">
 <div class="wrap">
-<div class="sec-head"><h2><span class="num">02</span>Work</h2><p>仕事を知る</p></div>
-<p class="text" style="margin-bottom:28px">不動産の仕入れから、企画・プロデュース、工事、運営、清掃、SUPPLY、販売・集客、再流通まで。グループ4社の宿泊バリューチェーンを支える職種です。</p>
-<div class="grid g4" data-rv>
-{chr(10).join(f'<div class="card" style="gap:6px"><span class="tag">{i + 1:02}</span><h3>{esc(t)}</h3></div>' for i, t in enumerate(JOB_TYPES))}
+<div class="sec-head"><h2><span class="num">02</span>Work &amp; People</h2><p>仕事と人を知る</p></div>
+<p class="text" style="margin-bottom:28px">宿泊施設の運営や清掃の現場で、どんな人が、どんな想いで働いているのか。公式noteの「お仕事図鑑」と社員インタビューでご紹介しています。</p>
+<div class="job-group">
+<h3 class="job-brand">お仕事図鑑<small>仕事の中身を、現場のメンバーが紹介</small></h3>
+{note_cards(root, NOTE_WORK)}
 </div>
-<div class="btn-row" style="margin-top:28px"><a class="btn" href="{root}service/">事業紹介を見る <span class="arr">→</span></a></div>
+<div class="job-group">
+<h3 class="job-brand">社員インタビュー<small>メンバーのキャリアと仕事観</small></h3>
+{note_cards(root, NOTE_PEOPLE)}
 </div>
-</section>
-
-<section class="sec" id="people">
-<div class="wrap">
-<div class="sec-head"><h2><span class="num">03</span>People</h2><p>人を知る</p></div>
-<p class="text" style="margin-bottom:28px">現場で働くメンバーのインタビューを、順次掲載していきます。</p>
-<div class="grid g4" data-rv>
-{chr(10).join(f'<div class="card" style="gap:6px"><span class="tag">Interview</span><h3>{esc(t)}</h3><p><small>準備中</small></p></div>' for t in PEOPLE)}
-</div>
+<div style="margin-top:28px">{note_html(root)}</div>
 </div>
 </section>
 
-<section class="sec sec-alt" id="project">
+<section class="sec" id="project">
 <div class="wrap">
-<div class="sec-head"><h2><span class="num">04</span>Project</h2><p>プロジェクトを知る</p></div>
+<div class="sec-head"><h2><span class="num">03</span>Project</h2><p>プロジェクトを知る</p></div>
 <div class="outline" data-rv style="margin-bottom:clamp(28px,4vw,48px)">
-<p class="lead">OMATSURI BASEが<br>できるまで。</p>
+<p class="lead">宿泊施設プロデュースの<br>裏側。</p>
 <div>
-<p class="text">365日、日本のお祭りを体験できる宿「OMATSURI BASE」。企画からプロデュース、運営、清掃、地域連携、マーケティングまで、複数の社員が会社や部署の境界を越えて関わり、一つの宿泊事業をつくり上げました。</p>
-<p class="text" style="margin-top:12px">メンバーそれぞれがどう関わったかを、順次ご紹介していきます。</p>
+<p class="text">空き家、相続した土地、中古別荘、お寺。眠っていた不動産が、選ばれる宿に生まれ変わるまでには、企画からプロデュース、運営、清掃、地域連携まで、会社や部署の境界を越えた多くのメンバーが関わっています。</p>
+<p class="text" style="margin-top:12px">施設ごとのプロデュースの裏側を、公式noteで公開しています。</p>
 </div>
 </div>
-<ol class="nlist" data-rv>
-<li><span class="n">1</span><div><h3>企画</h3><p>市場調査、事業性判断、収支計画、コンセプトづくり。</p></div></li>
-<li><span class="n">2</span><div><h3>プロデュース</h3><p>ブランド・コンセプト設計、空間・デザイン、許認可、開業準備。</p></div></li>
-<li><span class="n">3</span><div><h3>運営</h3><p>OTA・予約管理、ゲスト対応、レベニューマネジメント。</p></div></li>
-<li><span class="n">4</span><div><h3>清掃</h3><p>CLEANX9による清掃・現地オペレーション。</p></div></li>
-<li><span class="n">5</span><div><h3>地域連携</h3><p>商店街、銭湯、神社、地域店舗との連携。</p></div></li>
-<li><span class="n">6</span><div><h3>マーケティング</h3><p>集客、SNS、メディア対応。</p></div></li>
-</ol>
-<div class="btn-row" style="margin-top:28px"><a class="btn" href="{root}service/regional-brand-creation/#brands">OMATSURI BASEを見る <span class="arr">→</span></a></div>
+{note_cards(root, NOTE_PROJECTS)}
+<div class="btn-row" style="margin-top:28px"><a class="btn" href="{root}service/regional-brand-creation/#brands">ブランド・実績を見る <span class="arr">→</span></a></div>
 </div>
 </section>
 
-<section class="sec" id="environment">
+<section class="sec sec-alt" id="environment">
 <div class="wrap">
 <div class="sec-head"><h2><span class="num">05</span>Environment</h2><p>働く環境・制度</p></div>
 <div class="grid g4" data-rv>
@@ -755,8 +756,7 @@ def build_recruit():
 </div>
 </section>
 
-{note_section}
-<section class="sec sec-alt" id="jobs">
+<section class="sec" id="jobs">
 <div class="wrap">
 <div class="sec-head"><h2><span class="num">06</span>Jobs</h2><p>募集職種（会社別）・{len(jobs)}件</p></div>
 {chr(10).join(groups)}
