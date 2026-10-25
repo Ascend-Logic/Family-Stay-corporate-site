@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>お問い合わせ｜Nowhere Group株式会社</title>
-<meta name="description" content="Nowhere Groupへのお問い合わせ。宿泊施設の企画・プロデュース、運営、不動産・物件、清掃、SUPPLY、Family Stay、パートナー・協業、採用、取材・メディアに関するご相談はグループ窓口でまとめて承ります。">
+<meta name="description" content="Nowhere Groupへのお問い合わせ。宿泊施設のプロデュース・運営、不動産・工事・建物管理、清掃、ホテルSUPPLY、事業提携までグループ共通窓口で承ります。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="お問い合わせ｜Nowhere Group株式会社">
-<meta property="og:description" content="Nowhere Groupへのお問い合わせ。宿泊施設の企画・プロデュース、運営、不動産・物件、清掃、SUPPLY、Family Stay、パートナー・協業、採用、取材・メディアに関するご相談はグループ窓口でまとめて承ります。">
+<meta property="og:description" content="Nowhere Groupへのお問い合わせ。宿泊施設のプロデュース・運営、不動産・工事・建物管理、清掃、ホテルSUPPLY、事業提携までグループ共通窓口で承ります。">
 <meta property="og:site_name" content="Nowhere Group株式会社">
 <meta property="og:locale" content="ja_JP">
 <meta property="og:url" content="https://nowhere.group/contact/">
@@ -19,17 +19,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&amp;family=Outfit:wght@500;600;700&amp;family=Zen+Kaku+Gothic+New:wght@500;700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/header.css?v=5038954b">
-<link rel="stylesheet" href="../assets/css/sub.css?v=5038954b">
-<script src="../assets/js/header.js?v=5038954b" defer></script>
-<script src="../assets/js/sub.js?v=5038954b" defer></script>
+<link rel="stylesheet" href="../assets/css/header.css?v=95b6fa1a">
+<link rel="stylesheet" href="../assets/css/sub.css?v=95b6fa1a">
+<script src="../assets/js/header.js?v=95b6fa1a" defer></script>
+<script src="../assets/js/sub.js?v=95b6fa1a" defer></script>
 </head>
 <body class="c-orange lang-ja">
 <a class="skip" href="#main">本文へスキップ</a>
 <header class="hd">
 <a class="hd-logo" href="../" aria-label="Nowhere Group トップへ"><img src="../images/logo/nowhere-group-logo.png" alt="Nowhere Group" width="800" height="157"></a>
 <button class="menu-btn" type="button" aria-expanded="false" aria-controls="gnav"><span class="bars" aria-hidden="true"></span>Menu</button>
-<nav id="gnav" class="site-nav" aria-label="メインメニュー"><a href="../company/">私たちについて</a><a href="../service/">事業紹介</a><a href="../service/#group">グループ会社</a><a href="../service/regional-brand-creation/">ブランド・実績</a><a href="../news/">お知らせ</a><a href="../recruit/">採用情報</a><a href="../en/contact/" lang="en" hreflang="en" aria-label="English">EN</a><a href="../contact/" class="nav-contact" aria-current="page">お問い合わせ</a></nav>
+<nav id="gnav" class="site-nav" aria-label="メインメニュー"><a href="../company/">私たちについて</a><a href="../service/">事業紹介</a><a href="../service/regional-brand-creation/#brands">ブランド・実績</a><a href="../news/">お知らせ</a><a href="../recruit/">採用情報</a><a href="../en/contact/" lang="en" hreflang="en" aria-label="English">EN</a><a href="../contact/" class="nav-contact" aria-current="page">お問い合わせ</a></nav>
 </header>
 <main id="main">
 <section class="ph">
@@ -45,9 +45,13 @@
 <section class="sec">
 <div class="wrap">
 <div style="margin-bottom:clamp(32px,4vw,56px)">
-<p class="lead" style="font-size:clamp(18px,2.2vw,24px);text-align:center">宿泊施設の企画・運営から、不動産、清掃、SUPPLY、<br class="pc-br">販売・集客まで。グループ各社へのお問い合わせは、<br class="pc-br">こちらで一括して承ります。</p>
+<p class="lead" style="font-size:clamp(18px,2.2vw,24px);text-align:center">宿泊施設のプロデュース・運営、不動産・工事・建物管理、清掃、<br class="pc-br">ホテルSUPPLY、事業提携まで。Nowhere Groupへのお問い合わせは、<br class="pc-br">グループ共通窓口で承ります。内容に応じて、各社・担当部署よりご案内します。</p>
 </div>
-<!-- 送信先（action）は未設定です。Formspree / Googleフォーム / 自社API 等の URL を action に設定してください。 -->
+<!--
+  送信先（action）は未設定です。実際に受信できる送信先 URL（Formspree / Google Apps Script / 自社API など）を action に設定してください。
+  英語版 _build/pages/en/contact.html の action も同じ URL にすること。action="#" のままでは送信せず「準備中」と表示します（公開不可の状態）。
+  送信内容: name / email / tel / company / facility / type（種別の値）/ route（社内受付先）/ message / agree / lang
+-->
 <form class="form" data-contact action="#" method="post" novalidate>
 <p class="note"><span class="req" style="margin:0 6px 0 0">必須</span>が付いている項目は必ずご入力ください。</p>
 <div class="field">
@@ -59,32 +63,44 @@
 <input id="f-mail" type="email" name="email" autocomplete="email" inputmode="email" placeholder="例）info@example.com" required>
 </div>
 <div class="field">
-<label for="f-tel">電話番号<span class="req">必須</span></label>
-<input id="f-tel" type="tel" name="tel" autocomplete="tel" inputmode="tel" placeholder="例）03-1234-5678" required>
+<label for="f-tel">電話番号<span class="opt">任意</span></label>
+<input id="f-tel" type="tel" name="tel" autocomplete="tel" inputmode="tel" placeholder="例）03-1234-5678">
+</div>
+<div class="field">
+<label for="f-company">企業名<span class="opt">任意</span></label>
+<input id="f-company" type="text" name="company" autocomplete="organization" placeholder="例）株式会社〇〇">
 </div>
 <div class="field">
 <label for="f-type">お問い合わせ種別<span class="req">必須</span></label>
-<select id="f-type" name="type" required>
+<select id="f-type" name="type" required aria-describedby="f-type-hint">
 <option value="">選択してください</option>
-<option>宿泊施設の企画・プロデュース</option>
-<option>宿泊施設の運営</option>
-<option>不動産・物件について</option>
-<option>清掃について</option>
-<option>SUPPLYについて</option>
-<option>Family Stayについて</option>
-<option>パートナー・協業について</option>
-<option>採用について</option>
-<option>取材・メディアについて</option>
-<option>その他</option>
+<option value="produce" data-route="Nowhere Group 宿泊事業部" data-facility data-hint="宿泊施設の開発・プロデュースに関するご相談として、Nowhere Group 宿泊事業部よりご案内します。">宿泊施設プロデュースについて</option>
+<option value="operation" data-route="Nowhere Group 宿泊事業部" data-facility data-hint="宿泊施設の運営に関するご相談として、Nowhere Group 宿泊事業部よりご案内します。">宿泊施設運営について</option>
+<option value="real-estate" data-route="VESTPORT" data-hint="不動産・工事・建物管理は、VESTPORT株式会社よりご案内します。">不動産・工事・建物管理について</option>
+<option value="cleaning" data-route="CLEANX9" data-hint="清掃に関するお問い合わせは、CLEANX9株式会社よりご案内します。">清掃について</option>
+<option value="supply" data-route="Nowhere Group SUPPLY事業部" data-hint="ホテルSUPPLYに関するお問い合わせは、Nowhere Group SUPPLY事業部よりご案内します。">ホテルSUPPLYについて</option>
+<option value="brand" data-route="グループ事業企画部・営業担当" data-hint="ホテルブランドの共同開発に関するご相談として、グループ事業企画部・営業担当よりご案内します。">ホテルブランド・共同開発について</option>
+<option value="family-stay" data-route="Family Stay 事業開発窓口" data-hint="株式会社Family Stayの家族旅行に特化したOTA・リテールメディアは、現在開発準備中です。事業開発窓口よりご案内します。">Family Stay（OTA・リテールメディア）について</option>
+<option value="partnership" data-route="グループ営業部／社長室" data-hint="グループ共通窓口で受け付け、内容に応じて担当部署へ社内でおつなぎします。">パートナー・事業提携について</option>
+<option value="reservation" data-route="各施設ゲスト専用窓口" data-facility data-hint="ご予約やご滞在中のお問い合わせは、各施設のゲスト専用窓口（予約サイトのメッセージ機能など）が最も早くご案内できます。こちらから送信される場合は、施設名をご入力ください。">宿泊予約・施設利用について</option>
+<option value="recruit" data-route="社長室・採用窓口" data-block data-hint="採用・カジュアル面談については、採用情報ページからお申し込みください。このフォームでは受け付けていません。">採用・カジュアル面談について</option>
+<option value="media" data-route="PR担当" data-hint="グループ共通窓口で受け付け、PR担当へ社内でおつなぎします。">取材・広報について</option>
+<option value="other" data-route="コーポレート本部" data-hint="グループ共通窓口で受け付け、内容に応じて担当部署へ社内でおつなぎします。">その他</option>
 </select>
+<p class="note type-hint" id="f-type-hint" aria-live="polite" hidden></p>
+<p class="type-block" data-block-msg hidden><a class="btn" href="../recruit/">採用情報を見る <span class="arr">→</span></a></p>
+</div>
+<div class="field" data-facility-field hidden>
+<label for="f-facility">施設名<span class="opt">任意</span></label>
+<input id="f-facility" type="text" name="facility" placeholder="例）OMATSURI BASE 中野新橋">
 </div>
 <div class="field">
 <label for="f-msg">お問い合わせ内容<span class="req">必須</span></label>
 <textarea id="f-msg" name="message" placeholder="お問い合わせ内容を入力してください" required></textarea>
 </div>
 <div class="hp" aria-hidden="true"><label for="f-hp">このフィールドは空のままにしてください</label><input id="f-hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off"></div>
-<p class="note">お問い合わせは、必要事項を入力の上、お問い合わせください。2〜3営業日以内に担当よりメールにて返信させていただきます。</p>
-<label class="agree"><input type="checkbox" name="agree" required><span><a href="../privacy/" target="_blank">プライバシーポリシー</a>の内容をご確認の上、チェックをお願いします。</span></label>
+<p class="note">内容を確認のうえ、担当の会社・部署よりメールまたはお電話でご連絡します。</p>
+<label class="agree"><input type="checkbox" name="agree" required><span><a href="../privacy/" target="_blank">プライバシーポリシー</a>の内容をご確認の上、同意いただける場合はチェックしてください。</span></label>
 <p class="form-msg" role="status" tabindex="-1"></p>
 <button class="btn btn-dark submit" type="submit">送信する <span class="arr">→</span></button>
 </form>
@@ -97,16 +113,15 @@
 <div class="wrap">
 <div class="ft-top">
 <div>
-<a class="ft-logo" href="../">NOW<br>HERE<br>GROUP</a>
-<p class="ft-co">Nowhere Group株式会社<br>〒169-0075 東京都新宿区高田馬場3-12-2 OCビル4階<br>TEL 03-6454-7875</p>
+<a class="ft-logo" href="../"><img src="../images/logo/nowhere-group-logo.png" alt="Nowhere Group" width="800" height="157" loading="lazy"></a>
+<p class="ft-co">Nowhere Group株式会社<br>〒169-0075 東京都新宿区高田馬場3丁目12-2 高田馬場OCビル4階<br>TEL 03-6454-7875</p>
 </div>
 <div>
 <ul class="ft-nav">
 <li><a href="../">ホーム</a></li>
 <li><a href="../company/">私たちについて</a></li>
 <li><a href="../service/">事業紹介</a></li>
-<li><a href="../service/#group">グループ会社</a></li>
-<li><a href="../service/regional-brand-creation/">ブランド・実績</a></li>
+<li><a href="../service/regional-brand-creation/#brands">ブランド・実績</a></li>
 <li><a href="../news/">お知らせ</a></li>
 <li><a href="../recruit/">採用情報</a></li>
 <li><a href="../contact/">お問い合わせ</a></li>

@@ -286,7 +286,8 @@ a.card:hover .thumb img{transform:scale(1.05)}
 /* ---------- footer ---------- */
 .ft{background:var(--cream-2);padding:clamp(48px,6vw,72px) 0 32px}
 .ft-top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px;align-items:start}
-.ft-logo{font-family:var(--f-logo);font-size:clamp(44px,6vw,72px);line-height:.9;text-decoration:none;color:var(--ink)}
+.ft-logo{display:inline-block;text-decoration:none}
+.ft-logo img{display:block;width:clamp(200px,24vw,300px);height:auto}
 .ft-co{margin-top:18px;font-size:14px;line-height:1.8}
 .ft-nav{display:grid;grid-template-columns:repeat(2,auto);gap:6px 40px;margin:0;padding:0;list-style:none;font-family:var(--f-en);font-weight:600}
 .ft-nav a{text-decoration:none}
@@ -407,3 +408,90 @@ a.card:hover .thumb img{transform:scale(1.05)}
   .fs-phone{border-radius:16px}
   .fs-pc{border-radius:10px}
 }
+/* ABOUT */
+.about-split{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:clamp(24px,4vw,64px);align-items:start}
+.about-col{display:grid;gap:14px;align-content:start}
+.about-col .tag{justify-self:start}
+.about-col .lead{font-size:clamp(20px,2.4vw,28px)}
+@media (max-width:760px){.about-split{grid-template-columns:minmax(0,1fr)}}
+.phase{padding:clamp(20px,3vw,36px);border:2px solid var(--line);border-radius:30px;background:var(--paper)}
+.phase + .phase{margin-top:22px}
+.phase-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;font-size:clamp(18px,2vw,22px);font-weight:700;margin-bottom:8px}
+.phase-no{font-family:var(--f-en);font-weight:700;color:var(--sub)}
+.phase-em{border-color:var(--accent);box-shadow:6px 6px 0 var(--accent)}
+.phase-em .phase-no{color:var(--accent)}
+.phase-em .phase-head{font-size:clamp(20px,2.4vw,26px)}
+
+/* SERVICE */
+/* 宿泊バリューチェーン（5工程＋ホテルSUPPLY横断バー＋循環） */
+.vc{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.vc-steps{display:contents;margin:0;padding:0;list-style:none}
+.vc-steps li{display:flex;flex-direction:column;gap:8px;padding:20px 18px;background:var(--paper);border:2px solid var(--line);border-radius:22px;grid-row:1}
+.vc-steps li.vc-produce,.vc-steps li.vc-field{border-color:var(--accent)}
+.vc-n{font-family:var(--f-en);font-weight:700;font-size:28px;line-height:1;color:var(--accent)}
+.vc-steps h3{font-size:17px;font-weight:700;line-height:1.5}
+.vc-who{align-self:flex-start;padding:3px 10px;border-radius:999px;background:var(--ink);color:#fff;font-size:11px;font-weight:700;line-height:1.6}
+.vc-steps p{font-size:14px;line-height:1.85}
+.vc-bar{grid-column:3 / 5;grid-row:3;display:flex;flex-wrap:wrap;align-items:center;gap:4px 14px;padding:14px 20px;border-radius:22px;background:var(--paper);border:2px solid var(--line);color:var(--ink);font-size:14px;font-weight:700}
+.vc-bar-lbl{font-size:15px}
+.vc-span{padding:2px 10px;border-radius:999px;background:var(--accent);color:#fff;font-size:12px}
+/* 循環：工程04の真下から工程02の真下へ戻るU字の矢印（両端は各カードの中央。列幅＝(全体−gap×2)/3 の半分だけ内側） */
+.vc-loop{--leg:calc((100% - 28px) / 6);grid-column:2 / 5;grid-row:2;position:relative;margin-top:-14px;padding:46px var(--leg) 4px;text-align:center;font-size:14px;line-height:1.8}
+.vc-loop::before{content:'';position:absolute;left:var(--leg);right:var(--leg);top:0;height:30px;border:2px dashed var(--accent);border-top:0;border-radius:0 0 18px 18px}
+.vc-loop-arrow{position:absolute;left:var(--leg);top:-2px;transform:translateX(-50%);width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:11px solid var(--accent)}
+.vc-loop strong{display:block;color:var(--accent)}
+.vc-note{margin-top:22px;font-size:14px;font-weight:700;color:var(--sub)}
+@media (max-width:1000px){
+  .vc{grid-template-columns:minmax(0,1fr)}
+  .vc-steps li,.vc-bar,.vc-loop{grid-column:auto;grid-row:auto}
+  .vc-loop{margin:0;padding:14px 20px;border:2px dashed var(--accent);border-radius:22px;background:var(--paper);text-align:left}
+  .vc-loop::before,.vc-loop-arrow{display:none}
+}
+
+/* 宿泊施設一覧（写真／施設名／地域名｜施設タイプのみ） */
+.stays{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 18px;margin:0;padding:0;list-style:none}
+@media (max-width:1000px){.stays{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:700px){.stays{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px}}
+.stay,.stay > a{display:flex;flex-direction:column;gap:8px;text-decoration:none;color:var(--ink)}
+.stay .thumb{aspect-ratio:4/3;border-radius:18px}
+.stay .thumb.noimg{display:flex;align-items:center;justify-content:center;font-family:var(--f-en);font-size:13px;font-weight:600;color:var(--sub);border:2px dashed #BDB6A2;background:var(--cream-2)}
+.stay-name{font-size:15px;font-weight:700;line-height:1.5}
+.stay-area{font-size:13px;font-weight:700;color:var(--sub)}
+.stay > a:hover .thumb img{transform:scale(1.05)}
+.stays-note{margin-top:24px;font-size:13px;color:var(--sub)}
+
+/* ブランド（正式ロゴ・営業状態・CTA） */
+.brand-logo{display:flex;align-items:center;justify-content:center;background:var(--logo-bg,var(--cream-2))}
+.brand-logo img{object-fit:contain !important}
+.brand-logo.is-cover img{object-fit:cover !important}
+.brand-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.brand-type{font-size:14px;font-weight:700;color:var(--sub)}
+.brand-status{display:inline-flex;align-items:center;min-height:26px;padding:4px 14px;border-radius:999px;border:2px solid var(--line);font-size:12px;font-weight:700;line-height:1.4;background:var(--paper)}
+.brand-status.is-open{background:var(--green);border-color:var(--green);color:#fff}
+.award-lbl{font-weight:700}
+
+/* CONTACT */
+.form .opt{margin-left:8px;display:inline-flex;align-items:center;padding:0 8px;border-radius:6px;background:var(--cream-2);color:var(--sub);font-size:11px;vertical-align:2px}
+.form .type-hint{margin-top:4px;line-height:1.8}
+.form .type-block{margin-top:4px}
+.form [hidden]{display:none}
+.form .submit:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.form-msg.is-success{background:#E3F2EA;color:#1B7F5A}
+.form-msg.is-error{background:#FBE7E0;color:#A33A12}
+
+/* RECRUIT */
+.job-closed{margin-top:8px;padding:12px 16px;border-radius:12px;background:var(--bg-alt,#F4F1EA);font-weight:700}
+
+/* 経営陣一覧（LINEヤフーの役員紹介に合わせたカード：枠線なし・影・横長写真） */
+.officers-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,2.8vw,40px)}
+.officers-list .officer-merged{flex:none;gap:0;background:#FAFAFA;border-radius:10px;overflow:hidden;box-shadow:0 2px 16px rgba(26,26,26,.08)}
+.officers-list .officer-photo{aspect-ratio:1.9/1;margin:0;border:0;border-radius:0;background:#ECECE8}
+.officers-list .officer-photo img{width:100%;height:100%;object-fit:cover}
+.officer-body{display:flex;flex-direction:column;gap:14px;padding:22px 24px 26px}
+.officers-list .officer-name{font-size:18px;letter-spacing:.06em;word-spacing:.5em}
+.officers-list .officer-roles{gap:8px;margin:0}
+.officers-list .officer-roles li{gap:2px;line-height:1.6}
+.officers-list .officer-co{font-size:12px;color:var(--sub);font-weight:500}
+.officers-list .officer-merged .officer-role{font-size:14px;font-weight:500;color:#333}
+@media (max-width:900px){.officers-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.officer-body{padding:16px 16px 20px}}
+@media (max-width:520px){.officers-list{grid-template-columns:minmax(0,1fr)}}

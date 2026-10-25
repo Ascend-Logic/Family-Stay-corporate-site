@@ -53,23 +53,82 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // お問い合わせフォーム（送信先未設定の間は送信しない）
+  // お問い合わせフォーム
+  // 送信先は form の action（_build/pages/contact.html と en/contact.html）。action が "#" の間は送信せず「準備中」と表示する
   var form = document.querySelector('form[data-contact]');
   if (form) {
+    var en = document.documentElement.lang === 'en';
+    var L = en ? {
+      unset: 'The form is not available yet. Please call us at +81-3-6454-7875.',
+      invalid: 'Please check the highlighted fields.', email: 'Please enter a valid email address.',
+      sending: 'Sending…', ok: 'Thank you. Your inquiry has been sent. The appropriate team will contact you.',
+      fail: 'Sending failed. Please check your connection and try again, or call us at +81-3-6454-7875.', retry: 'Try again'
+    } : {
+      unset: '送信機能は準備中です。お急ぎの場合はお電話（03-6454-7875）でお問い合わせください。',
+      invalid: '入力内容をご確認ください。', email: 'メールアドレスの形式をご確認ください。',
+      sending: '送信中…', ok: 'お問い合わせを送信しました。担当の会社・部署よりご連絡します。',
+      fail: '送信できませんでした。通信環境をご確認のうえ再度お試しいただくか、お電話（03-6454-7875）でお問い合わせください。', retry: 'もう一度送信する'
+    };
+    var msg = form.querySelector('.form-msg');
+    var btn = form.querySelector('.submit');
+    var btnHtml = btn ? btn.innerHTML : '';
+    var sel = form.querySelector('select[name="type"]');
+    var hint = form.querySelector('.type-hint');
+    var blockMsg = form.querySelector('[data-block-msg]');
+    var facility = form.querySelector('[data-facility-field]');
+    var sending = false;
+    var show = function (text, state) {
+      if (!msg) return;
+      msg.textContent = text;
+      msg.className = 'form-msg show' + (state ? ' is-' + state : '');
+      msg.focus();
+    };
+    var current = function () { return sel && sel.selectedIndex > 0 ? sel.options[sel.selectedIndex] : null; };
+    // 種別に合わせて案内文・施設名欄・送信可否を切り替える（採用はこのフォームで受け付けない）
+    var onType = function () {
+      var o = current();
+      if (hint) { hint.textContent = o ? o.getAttribute('data-hint') || '' : ''; hint.hidden = !hint.textContent; }
+      var blocked = !!(o && o.hasAttribute('data-block'));
+      if (blockMsg) blockMsg.hidden = !blocked;
+      if (btn) btn.disabled = blocked || sending;
+      if (facility) facility.hidden = !(o && o.hasAttribute('data-facility'));
+    };
+    if (sel) { sel.addEventListener('change', onType); onType(); }
+
     form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (sending) return;
+      var o = current();
+      if (o && o.hasAttribute('data-block')) return;
+      var email = form.querySelector('input[name="email"]');
+      if (email) email.setCustomValidity(email.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value) ? L.email : '');
+      if (!form.checkValidity()) { form.reportValidity(); show(L.invalid, 'error'); return; }
       var action = form.getAttribute('action');
-      if (!action || action === '#') {
-        e.preventDefault();
-        if (!form.reportValidity()) return;
-        var msg = form.querySelector('.form-msg');
-        if (msg) {
-          msg.textContent = document.documentElement.lang === 'en'
-            ? 'The form is not available yet. Please call us at +81-3-6454-7875.'
-            : '送信機能は準備中です。お急ぎの場合はお電話（03-6454-7875）でお問い合わせください。';
-          msg.classList.add('show');
-          msg.focus();
-        }
-      }
+      if (!action || action === '#') { show(L.unset, 'error'); return; }
+      var hp = form.querySelector('input[name="_gotcha"]');
+      if (hp && hp.value) return; // スパム（ボット）とみなして送らない
+
+      var data = new FormData(form);
+      data.set('route', o ? o.getAttribute('data-route') || '' : '');
+      data.set('type_label', o ? o.textContent : '');
+      data.set('lang', en ? 'en' : 'ja');
+      if (facility && facility.hidden) data.delete('facility');
+      sending = true;
+      if (btn) { btn.disabled = true; btn.textContent = L.sending; }
+      show(L.sending, 'sending');
+      fetch(action, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
+        .then(function (res) {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          form.reset();
+          onType();
+          show(L.ok, 'success');
+          if (btn) btn.innerHTML = btnHtml;
+        })
+        .catch(function () {
+          show(L.fail, 'error');
+          if (btn) btn.innerHTML = L.retry + ' <span class="arr">→</span>';
+        })
+        .then(function () { sending = false; onType(); });
     });
   }
 });

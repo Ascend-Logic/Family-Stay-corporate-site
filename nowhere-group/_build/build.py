@@ -41,26 +41,27 @@ SITE = 'Nowhere Group株式会社'
 FONTS = ('https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Outfit:wght@500;600;700'
          '&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap')
 
+# グローバルメニュー（6項目。日英とも同じ並び。お問い合わせは layout() で右端のボタンとして出す）
 NAV = [
     ('company', '私たちについて', 'company/'),
     ('service', '事業紹介', 'service/'),
-    ('group', 'グループ会社', 'service/#group'),
-    ('brand', 'ブランド・実績', 'service/regional-brand-creation/'),
+    ('brand', 'ブランド・実績', 'service/regional-brand-creation/#brands'),
     ('news', 'お知らせ', 'news/'),
+    ('recruit', '採用情報', 'recruit/'),
 ]
-RECRUIT = 'https://nowhere-group.notion.site/nowhere-group-work-culture?source=copy_link'
-NOTE_URL = 'https://note.com/nowhere_group'  # 公式 note の URL。設定するとお知らせ一覧・採用ページ・下層フッターに「公式note」リンクを出す
-CEO_SNS = [  # 代表メッセージに出す代表の SNS。URL を入れたものだけ表示
-    ('YouTube', ''),
-    ('X', ''),
+NOTE_URL = 'https://note.com/nowhere_group'  # 公式 note の URL。設定すると採用ページ・下層フッターに「公式note」リンクを出す
+CEO_SNS = [  # 代表メッセージに出す代表個人の SNS（私たちについての代表欄とトップの代表欄だけに出す）。URL を入れたものだけ表示
+    ('X', 'https://x.com/nowhere_take_'),
+    ('Instagram', 'https://www.instagram.com/takeuchi_nowhere/'),
+    ('YouTube', 'https://www.youtube.com/@takeuchi-no-kaitaku'),
 ]
 # 役員紹介（会社別）。name が空のものは表示しない（氏名確定後に入れる）。photo は images/site/people/ のファイル名（なければ空）
 OFFICERS = {
     'nowhere': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi-sq.jpg')],
     'vestport': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi-sq.jpg'),
-                 ('髙橋 悠太', 'Yuta Takahashi', '執行役員', 'Executive Officer', 'takahashi.jpg')],
+                 ('髙橋 悠汰', 'Yuta Takahashi', '執行役員', 'Executive Officer', 'takahashi.jpg')],
     'cleanx9': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi-sq.jpg'),
-                ('', 'Yagi', '副社長 COO', 'Vice President, COO', '')],
+                ('八木 洋平', 'Yohei Yagi', '副社長 COO', 'Vice President, COO', 'yagi.jpg')],
     'familystay': [('竹内 剛', 'Go Takeuchi', '代表取締役 CEO', 'CEO', 'takeuchi-sq.jpg'),
                    ('山下 拓朗', 'Takuro Yamashita', '取締役副社長 COO', 'Vice President, COO', 'yamashita.jpg'),
                    ('早乙女 琉真', 'Ryuma Saotome', '取締役 CTO', 'Director, CTO', 'saotome.jpg')],
@@ -90,6 +91,10 @@ def officers_html(keys, root, lang='ja'):
     return '\n'.join(out)
 
 
+# 経営陣カードで兼務先の社名を並べる順（カードの並び順は OFFICERS の会社順のまま）
+ROLE_COMPANY_ORDER = ('nowhere', 'familystay', 'cleanx9', 'vestport')
+
+
 def officers_merged_html(root, lang='ja'):
     """経営陣一覧: 1人1枚にまとめ、兼務している会社の役職を並記する"""
     people = {}
@@ -103,16 +108,23 @@ def officers_merged_html(root, lang='ja'):
                 order.append(ja)
             if photo and not people[ja]['photo']:
                 people[ja]['photo'] = photo
-            company = COMPANY_NAMES[key][1 if lang == 'en' else 0]
-            people[ja]['roles'].append((company, role_en if lang == 'en' else role_ja))
+            people[ja]['roles'].append((key, role_en if lang == 'en' else role_ja))
     cards = []
     for ja in order:
         pr = people[ja]
         name = pr['en'] if lang == 'en' else ja
-        img = (f'<span class="officer-photo"><img src="{photo_src(root, pr["photo"])}" alt="" loading="lazy"></span>' if pr['photo']
+        # カード用の横長写真（_build/tools/officer_wide.swift で作る <名前>-wide.jpg）。なければ正方形の写真を使う
+        photo = pr['photo']
+        if photo and os.path.exists(os.path.join(BASE, 'images/site/people', photo.replace('.jpg', '-wide.jpg'))):
+            photo = photo.replace('.jpg', '-wide.jpg')
+        img = (f'<span class="officer-photo"><img src="{photo_src(root, photo)}" alt="" width="1330" height="700" loading="lazy"></span>' if photo
                else '<span class="officer-photo noimg" aria-hidden="true"></span>')
-        roles = ''.join(f'<li><span class="officer-co">{esc(c)}</span><span class="officer-role">{esc(r)}</span></li>' for c, r in pr['roles'])
-        cards.append(f'<div class="officer officer-merged">{img}<strong class="officer-name">{esc(name)}</strong><ul class="officer-roles">{roles}</ul></div>')
+        # 同じ役職の兼務は1行にまとめ、会社名を並べる
+        grouped = {}
+        for key, r in sorted(pr['roles'], key=lambda kr: ROLE_COMPANY_ORDER.index(kr[0])):
+            grouped.setdefault(r, []).append(COMPANY_NAMES[key][1 if lang == 'en' else 0])
+        roles = ''.join(f'<li><span class="officer-role">{esc(r)}</span><span class="officer-co">{esc(" ／ ".join(cs))}</span></li>' for r, cs in grouped.items())
+        cards.append(f'<div class="officer officer-merged">{img}<div class="officer-body"><strong class="officer-name">{esc(name)}</strong><ul class="officer-roles">{roles}</ul></div></div>')
     return f'<div class="officers officers-list">{"".join(cards)}</div>'
 
 
@@ -154,7 +166,9 @@ def fill_tokens(body, root, lang='ja'):
     body = body.replace('{{ceo_sns}}', ceo_sns_html(lang))
     body = body.replace('{{note}}', note_html(root, lang))
     return body
-NEWS_CATS = ['グループ', 'Nowhere Group', 'VESTPORT', 'CLEANX9', 'Family Stay', 'プレスリリース', 'メディア掲載', '受賞・認定']
+# ニュースの記事種別（一覧の絞り込み）。発信会社は記事 meta の company に別ラベルとして書く
+NEWS_CATS = ['お知らせ', '施設・プロジェクト', 'プレスリリース', 'メディア掲載', '受賞・認定']
+NEWS_COMPANIES = ['Nowhere Group', 'VESTPORT', 'CLEANX9', 'Family Stay']
 COLORS = {'orange': '#C94A1A', 'blue': '#2F6FD6', 'purple': '#7A5BD9', 'green': '#1B7F5A',
           'pink': '#E0689E', 'yellow': '#FFD84A'}
 
@@ -233,19 +247,20 @@ T = {
         'site': SITE, 'tagline': '旅を起点に、人々の心にアナザースカイを創る。', 'skip': '本文へスキップ',
         'logo_label': 'Nowhere Group トップへ', 'menu_label': 'メインメニュー',
         'cta_text': 'グループ各社へのお問い合わせは、こちらで一括して承ります。', 'cta_btn': 'お問い合わせフォーム',
-        'address': '〒169-0075 東京都新宿区高田馬場3-12-2 OCビル4階',
+        'address': '〒169-0075 東京都新宿区高田馬場3丁目12-2 高田馬場OCビル4階',
         'privacy': 'プライバシーポリシー', 'x_label': 'X（旧Twitter）', 'switch': ('EN', 'English'),
     },
     'en': {
         'site': 'Nowhere Group Inc.', 'tagline': 'Travel as the starting point for another sky in every heart', 'skip': 'Skip to content',
         'logo_label': 'Nowhere Group home', 'menu_label': 'Main menu',
         'cta_text': 'Inquiries for every group company are handled here, in one place.', 'cta_btn': 'Contact Form',
-        'address': 'OC Bldg. 4F, 3-12-2 Takadanobaba, Shinjuku-ku, Tokyo 169-0075, Japan',
+        'address': 'Takadanobaba OC Bldg. 4F, 3-12-2 Takadanobaba, Shinjuku-ku, Tokyo 169-0075, Japan',
         'privacy': 'Privacy Policy', 'x_label': 'X (formerly Twitter)', 'switch': ('JP', '日本語'),
     },
 }
 NAV_EN = [('company', 'About', 'en/company/'), ('service', 'Business', 'en/service/'),
-          ('group', 'Group', 'en/service/#group'), ('brand', 'Brands', 'en/service/regional-brand-creation/')]
+          ('brand', 'Brands & Works', 'en/service/regional-brand-creation/#brands'), ('news', 'News', 'news/'),
+          ('recruit', 'Careers', 'recruit/')]
 PAGE_DIRS = set()  # build_pages で埋める（言語切替リンクの対応ページ判定用）
 
 
@@ -264,10 +279,10 @@ def layout(meta, body, root, canonical):
     home = root + ('en/' if lang == 'en' else '')
     current = meta.get('nav', '')
     cur = lambda key: ' aria-current="page"' if key == current else ''
-    nav = ''.join(f'<a href="{root}{href}"{cur(key)}>{label}</a>'
+    # 英語版のお知らせ・採用は日本語ページへのリンクなので lang="ja" を付ける
+    ja_attr = lambda href: ' lang="ja"' if lang == 'en' and not href.startswith('en/') else ''
+    nav = ''.join(f'<a href="{root}{href}"{cur(key)}{ja_attr(href)}>{label}</a>'
                   for key, label, href in (NAV_EN if lang == 'en' else NAV))
-    nav += (f'<a href="{root}recruit/"{cur("recruit")}>採用情報</a>' if lang == 'ja'
-            else f'<a href="{root}recruit/" lang="ja">Recruit</a>')
     other = counterpart(canonical)
     sw, sw_label = t['switch']
     nav += (f'<a href="{root}{other}" lang="{"ja" if lang == "en" else "en"}" hreflang="{"ja" if lang == "en" else "en"}" '
@@ -300,10 +315,9 @@ def layout(meta, body, root, canonical):
         foot_links = f"""<li><a href="{home}">Home</a></li>
 <li><a href="{home}company/">About</a></li>
 <li><a href="{home}service/">Business</a></li>
-<li><a href="{home}service/#group">Group</a></li>
-<li><a href="{home}service/regional-brand-creation/">Brands</a></li>
+<li><a href="{home}service/regional-brand-creation/#brands">Brands &amp; Works</a></li>
 <li><a href="{root}news/" lang="ja">News (JP)</a></li>
-<li><a href="{root}recruit/">Recruit</a></li>
+<li><a href="{root}recruit/" lang="ja">Careers (JP)</a></li>
 <li><a href="{home}contact/">Contact</a></li>
 <li><a href="{home}privacy/">Privacy Policy</a></li>
 <li><a href="{root}" lang="ja">日本語</a></li>"""
@@ -311,8 +325,7 @@ def layout(meta, body, root, canonical):
         foot_links = f"""<li><a href="{root}">ホーム</a></li>
 <li><a href="{root}company/">私たちについて</a></li>
 <li><a href="{root}service/">事業紹介</a></li>
-<li><a href="{root}service/#group">グループ会社</a></li>
-<li><a href="{root}service/regional-brand-creation/">ブランド・実績</a></li>
+<li><a href="{root}service/regional-brand-creation/#brands">ブランド・実績</a></li>
 <li><a href="{root}news/">お知らせ</a></li>
 <li><a href="{root}recruit/">採用情報</a></li>
 <li><a href="{root}contact/">お問い合わせ</a></li>
@@ -327,7 +340,7 @@ def layout(meta, body, root, canonical):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(full_title)}</title>
 <meta name="description" content="{esc(desc)}">
-<meta property="og:type" content="{'article' if meta.get('article') else 'website'}">
+{'<meta name="robots" content="noindex">' + chr(10) if meta.get('noindex') else ''}<meta property="og:type" content="{'article' if meta.get('article') else 'website'}">
 <meta property="og:title" content="{esc(full_title)}">
 <meta property="og:description" content="{esc(desc)}">
 <meta property="og:site_name" content="{t['site']}">
@@ -359,7 +372,7 @@ def layout(meta, body, root, canonical):
 <div class="wrap">
 <div class="ft-top">
 <div>
-<a class="ft-logo" href="{home}">NOW<br>HERE<br>GROUP</a>
+<a class="ft-logo" href="{home}"><img src="{root}images/logo/nowhere-group-logo.png" alt="Nowhere Group" width="800" height="157" loading="lazy"></a>
 <p class="ft-co">{t['site']}<br>{t['address']}<br>TEL 03-6454-7875</p>
 </div>
 <div>
@@ -384,7 +397,12 @@ def layout(meta, body, root, canonical):
 """
 
 
+WRITTEN = []  # 生成したページ（sitemap.xml 用）
+
+
 def write(rel_dir, content):
+    if 'name="robots" content="noindex' not in content:
+        WRITTEN.append(rel_dir)
     out_dir = os.path.join(BASE, rel_dir)
     os.makedirs(out_dir, exist_ok=True)
     with open(os.path.join(out_dir, 'index.html'), 'w', encoding='utf-8') as f:
@@ -439,6 +457,14 @@ def plain(s, n=110):
     return t[:n] + ('…' if len(t) > n else '')
 
 
+def labels_html(a):
+    """記事種別と発信会社のラベル（発信会社は種別と別のラベルにする）"""
+    out = f'<span class="tag">{esc(a["category"])}</span>' if a.get('category') else ''
+    if a.get('company'):
+        out += f'<span class="tag tag-line">{esc(a["company"])}</span>'
+    return out
+
+
 def thumb_html(a, root, cls='thumb'):
     if a.get('thumb'):
         src = a['thumb'].replace('{{root}}', root)
@@ -464,7 +490,7 @@ def build_articles(kind, label_en, label_ja, color):
         root = root_for(rel_dir)
         newer = arts[i - 1] if i > 0 else None
         older = arts[i + 1] if i + 1 < len(arts) else None
-        cat = f'<span class="tag">{esc(a["category"])}</span>' if a.get('category') else ''
+        cat = labels_html(a)
         thumb = ''
         if a.get('thumb'):
             thumb = (f'<div class="art-thumb"><img src="{a["thumb"].replace("{{root}}", root)}" '
@@ -502,27 +528,26 @@ def build_articles(kind, label_en, label_ja, color):
     root = root_for(rel_dir)
     rows = []
     for a in arts:
-        cat = f'<span class="tag">{esc(a["category"])}</span>' if a.get('category') else ''
+        cat = labels_html(a)
         rows.append(f'''<li data-cat-item="{esc(a.get("category", ""))}"><a href="{root}{kind}/{a["id"]}/">
 {thumb_html(a, root)}
 <span class="meta"><time datetime="{a["date"].replace(".", "-")}">{a["date"]}</time>{cat}<span class="t">{esc(a["title"])}</span></span>
 <span class="go" aria-hidden="true">→</span>
 </a></li>''')
-    filt = note = ''
+    filt = ''
     if kind == 'news':
-        used = {a.get('category') for a in arts}
+        unknown = {a.get('category') for a in arts} - set(NEWS_CATS)
+        if unknown:
+            raise SystemExit(f'ニュースの category は NEWS_CATS から選んでください: {unknown}')
         btns = '<button type="button" data-cat="all" aria-pressed="true">すべて</button>' + ''.join(
-            f'<button type="button" data-cat="{esc(c)}" aria-pressed="false">{esc(c)}</button>' for c in NEWS_CATS if c in used)
-        filt = f'<div class="filter" role="group" aria-label="カテゴリで絞り込み">{btns}</div>'
-        if NOTE_URL:
-            note = f'<div class="btn-row" style="margin-top:32px"><a class="btn" href="{NOTE_URL}" target="_blank" rel="noopener">公式noteを見る <span class="arr">↗</span></a></div>'
+            f'<button type="button" data-cat="{esc(c)}" aria-pressed="false">{esc(c)}</button>' for c in NEWS_CATS)
+        filt = f'<div class="filter" role="group" aria-label="記事種別で絞り込み">{btns}</div>'
     body = f'''<section class="sec">
 <div class="wrap">
 {filt}
 <ul class="nlist-rows">
 {chr(10).join(rows)}
 </ul>
-{note}
 </div>
 </section>'''
     desc = {'news': 'Nowhere Groupからのお知らせ。グループ各社（Nowhere Group・VESTPORT・CLEANX9・Family Stay）のプレスリリース、メディア掲載、受賞・認定などの最新情報をお届けします。',
@@ -551,7 +576,8 @@ def update_top(news, columns):
 
     def news_row(a):
         return (f'<a href="news/{a["id"]}/" class="li-row li-news"><span class="li-badge">N</span>'
-                f'<span class="li-body"><span class="li-date">{a["date"]}</span>'
+                f'<span class="li-body"><span class="li-date">{a["date"]}<span class="li-tag">{esc(a["category"])}</span>'
+                f'<span class="li-tag li-co">{esc(a["company"])}</span></span>'
                 f'<span class="li-title">{esc(a.get("short") or short_title(a["title"]))}</span></span></a>')
 
     for key, items in (('column', [col_row(a) for a in columns[:3]]), ('news', [news_row(a) for a in news[:3]])):
@@ -566,10 +592,12 @@ def update_top(news, columns):
 # ---------------------------------------------------------------- 採用情報
 APPLY_FORM = 'https://nowhere-group.notion.site/2da88671208580b2b482f7e55475e194'
 OPEN_FORM = 'https://nowhere-group.notion.site/326886712085803fb9d8e91ca3812749'
-BRANDS = [('nowhere', 'Nowhere Group株式会社', '企画・プロデュース・運営・SUPPLY'),
-          ('vestport', 'VESTPORT株式会社', '不動産・工事・建物管理・資産活用・案件創出'),
-          ('cleanx9', 'CLEANX9株式会社', '清掃・現地オペレーション'),
-          ('familystay', '株式会社Family Stay', '販売・集客・顧客接点・Travel Tech')]
+# 採用の会社別求人ページ（key, 会社名, 事業領域, /recruit/jobs/<slug>/）
+BRANDS = [('nowhere', 'Nowhere Group株式会社', '宿泊施設のプロデュース・運営', 'nowhere'),
+          ('vestport', 'VESTPORT株式会社', '不動産・工事・建物管理', 'vestport'),
+          ('cleanx9', 'CLEANX9株式会社', '清掃', 'cleanx9'),
+          ('familystay', '株式会社Family Stay', 'OTA・リテールメディア【開発準備中】', 'family-stay')]
+CASUAL_FORM = ''  # カジュアル面談の申込先（採用専用で実際に受信できるもの）。空の間は申込ボタンを出さない
 # 採用ページで紹介する公式 note の記事。key は記事 URL（note.com/nowhere_group/n/<key>）の末尾
 # 追加するときは見出し画像を images/uploads/note/<key>.jpg（幅800px）に保存する
 NOTE_WORK = [  # 仕事と人を知る：お仕事図鑑
@@ -595,44 +623,93 @@ ENVIRONMENT = ['評価制度', 'キャリア', '研修', '福利厚生', '働き
 
 def build_recruit():
     d = os.path.join(SRC, 'recruit')
-    jobs = []
+    all_jobs = []
     for fn in sorted(os.listdir(d)):
         if fn.endswith('.html') and not fn.startswith('_'):
             meta, body = read_meta(os.path.join(d, fn))
             meta['slug'] = fn[:-5]
             meta['body'] = body.strip()
-            jobs.append(meta)
-    jobs.sort(key=lambda j: j['order'])
+            all_jobs.append(meta)
+    all_jobs.sort(key=lambda j: j['order'])
+    jobs = [j for j in all_jobs if not j.get('closed')]  # 募集終了（closed）の求人は一覧・件数に含めない
     crumb_top = ('採用情報', 'recruit/')
+    slug_of = {key: slug for key, _, _, slug in BRANDS}
+    name_of = {key: name for key, name, _, _ in BRANDS}
 
     def job_tags(j):
-        return (f'<span class="tag">{esc(j["brand"])}</span>'
+        return (f'<span class="tag">{esc(name_of[j["company"]])}</span>'
                 f'<span class="tag tag-line">{esc(j["employment"] or j["type"])}</span>')
 
+    def job_meta(j):
+        """雇用主と配属先（就業場所）は別の項目として出す"""
+        return (f'<dl class="job-meta"><div><dt>雇用主</dt><dd>{esc(name_of[j["company"]])}</dd></div>'
+                f'<div><dt>配属先・就業場所</dt><dd>{esc(j["place"])}</dd></div>'
+                f'<div><dt>{"報酬" if "業務委託" in j["employment"] else "賃金"}</dt><dd>{esc(j["salary"])}</dd></div></dl>')
+
     # 求人詳細
-    for i, j in enumerate(jobs):
+    for j in all_jobs:
         rel_dir = f'recruit/{j["slug"]}/'
         root = root_for(rel_dir)
+        list_href = f'{root}recruit/jobs/{slug_of[j["company"]]}/'
+        if j.get('closed'):
+            apply = '<p class="job-closed">この求人の募集は終了しました。新規のご応募は受け付けていません。</p>'
+        else:
+            apply = f'<div class="btn-row" style="margin-top:8px"><a class="btn btn-dark" href="{APPLY_FORM}" target="_blank" rel="noopener">この求人に応募する <span class="arr">↗</span></a></div>'
         body = f"""<div class="ph-simple"></div>
 <article class="sec" style="padding-top:0">
 <div class="wrap">
 <div class="art">
 <header class="art-head">
-{crumbs_html([crumb_top, (j['title'], '')], root)}
+{crumbs_html([crumb_top, (name_of[j['company']], f'recruit/jobs/{slug_of[j["company"]]}/'), (j['title'], '')], root)}
 <div class="row">{job_tags(j)}</div>
 <h1>{esc(j['title'])}</h1>
 <p class="job-lead">{esc(j['summary'])}</p>
-<div class="btn-row" style="margin-top:8px"><a class="btn btn-dark" href="{APPLY_FORM}" target="_blank" rel="noopener">この求人に応募する <span class="arr">↗</span></a></div>
+{job_meta(j)}
+{apply}
 </header>
 <div class="prose job">
 {j['body']}
 </div>
-<nav class="art-nav" aria-label="求人の移動"><a class="btn" href="{root}recruit/#jobs"><span class="arr">←</span> 求人一覧へ戻る</a><a class="btn" href="{root}recruit/open-position/">オープンポジション <span class="arr">→</span></a></nav>
+<nav class="art-nav" aria-label="求人の移動"><a class="btn" href="{list_href}"><span class="arr">←</span> {esc(name_of[j['company']])}の求人一覧へ</a><a class="btn" href="{root}recruit/open-position/">オープンポジション <span class="arr">→</span></a></nav>
 </div>
 </div>
 </article>"""
-        meta = {'title': f'{j["title"]}（{j["type"]}）｜採用情報', 'description': f'{j["full"]}の求人。{j["summary"]}',
-                'nav': 'recruit', 'accent': 'c-orange' if j['company'] == 'nowhere' else 'c-blue'}
+        meta = {'title': f'{j["title"]}（{j["type"]}）｜採用情報', 'description': f'{name_of[j["company"]]}の求人。{j["summary"]}',
+                'nav': 'recruit', 'accent': 'c-orange' if j['company'] == 'nowhere' else 'c-blue',
+                'noindex': bool(j.get('closed'))}
+        write(rel_dir, layout(meta, body, root, rel_dir))
+
+    # 会社別の求人一覧
+    for key, name, desc, slug in BRANDS:
+        rel_dir = f'recruit/jobs/{slug}/'
+        root = root_for(rel_dir)
+        mine = [j for j in jobs if j['company'] == key]
+        cards = [f"""<a class="card job-card" href="{root}recruit/{j['slug']}/">
+<div class="row">{job_tags(j)}</div>
+<h3>{esc(j['title'])}</h3>
+<p>{esc(j['summary'])}</p>
+{job_meta(j)}
+<span class="card-more">詳しくみる →</span>
+</a>""" for j in mine]
+        if not cards:
+            cards.append(f'<div class="card"><p>現在、募集中の求人はありません。ご興味のある方は<a href="{root}recruit/open-position/">オープンポジション</a>からご応募ください。</p></div>')
+        body = f"""<div class="ph-simple"></div>
+<section class="sec" style="padding-top:0">
+<div class="wrap">
+<header class="art-head">
+{crumbs_html([crumb_top, (name, '')], root)}
+<p class="ph-en" style="font-family:var(--f-en);font-weight:600;color:var(--accent)">Jobs</p>
+<h1>{esc(name)}の求人</h1>
+<p class="job-lead">{esc(desc)}・募集中 {len(mine)}件</p>
+</header>
+<div class="grid g3" data-rv>
+{chr(10).join(cards)}
+</div>
+<nav class="art-nav" aria-label="ページの移動"><a class="btn" href="{root}recruit/#jobs"><span class="arr">←</span> 会社別の求人へ戻る</a></nav>
+</div>
+</section>"""
+        meta = {'title': f'{name}の求人｜採用情報', 'description': f'{name}（{desc}）の募集中の求人一覧です。',
+                'nav': 'recruit', 'accent': 'c-orange'}
         write(rel_dir, layout(meta, body, root, rel_dir))
 
     # オープンポジション・採用プライバシーポリシー
@@ -664,54 +741,30 @@ def build_recruit():
     # 採用トップ
     rel_dir = 'recruit/'
     root = root_for(rel_dir)
-    groups = []
-    for key, name, desc in BRANDS:
-        cards = []
-        for j in [x for x in jobs if x['company'] == key]:
-            cards.append(f"""<a class="card job-card" href="{root}recruit/{j['slug']}/">
-<div class="row">{job_tags(j)}</div>
-<h3>{esc(j['title'])}</h3>
-<p>{esc(j['summary'])}</p>
-<dl class="job-meta"><div><dt>就業場所</dt><dd>{esc(j['place'])}</dd></div><div><dt>{'報酬' if '業務委託' in j['employment'] else '賃金'}</dt><dd>{esc(j['salary'])}</dd></div></dl>
-<span class="card-more">詳しくみる →</span>
+    company_cards = []
+    for key, name, desc, slug in BRANDS:
+        n = len([j for j in jobs if j['company'] == key])
+        company_cards.append(f"""<a class="card job-card" href="{root}recruit/jobs/{slug}/">
+<span class="tag">{'募集中 ' + str(n) + '件' if n else '現在募集なし'}</span>
+<h3>{esc(name)}</h3>
+<p>{esc(desc)}</p>
+<span class="card-more">求人一覧を見る →</span>
 </a>""")
-        if not cards:
-            cards.append(f"""<div class="card"><p>現在、募集中の求人はありません。ご興味のある方は<a href="{root}recruit/open-position/">オープンポジション</a>からご応募ください。</p></div>""")
-        groups.append(f"""<div class="job-group">
-<h3 class="job-brand">{esc(name)}<small>{esc(desc)}・{len([x for x in jobs if x['company'] == key])}件</small></h3>
-<div class="grid g3" data-rv>
-{chr(10).join(cards)}
-</div>
-</div>""")
-    body = f"""<section class="sec">
+    if CASUAL_FORM:
+        casual_cta = f'<div class="btn-row" style="margin-top:4px"><a class="btn btn-dark" href="{CASUAL_FORM}" target="_blank" rel="noopener">カジュアル面談について相談する <span class="arr">↗</span></a></div>'
+    else:
+        casual_cta = ''  # 実際に受信できる申込先が決まるまでボタンは出さない（ダミー URL は置かない）
+    body = f"""<section class="sec" id="why">
 <div class="wrap">
+<div class="sec-head"><h2><span class="num">01</span>Why Nowhere Group</h2><p>Nowhere Groupで働くということ</p></div>
 <div class="outline" data-rv>
 <p class="lead">まだない宿泊の未来を、<br>一緒につくる。</p>
 <div>
-<p class="text" style="font-weight:700">Nowhere Groupで働くということ</p>
-<p class="text">不動産だけでもない。<br>ホテル運営だけでもない。<br>清掃だけでも、テクノロジーだけでもない。</p>
-<p class="text">異なる専門性を持つメンバーが、会社や部署の境界を越えて一つの宿泊事業をつくる。<br>それがNowhere Groupの仕事です。</p>
+<p class="text">旅の満足度を高める仕事は、一つの職種だけでは完結しません。不動産の可能性を見つけ、宿泊施設をプロデュースし、運営・清掃の現場で品質を磨く。そこで生まれた気づきを、次の施設づくりへ生かす。</p>
+<p class="text" style="margin-top:12px">Nowhere Groupでは、異なる専門性を持つ仲間が会社や部署の枠を越えて協力し、一つひとつの宿泊事業を形にしています。私たちが大切にしているのは、目の前の課題を自分ごととして考え、学び、改善し、チームで前に進めること。</p>
+<p class="text" style="margin-top:12px;font-weight:700">旅する人の記憶に残る場所を、日本中に。そんな仕事に、あなたの力を生かしてみませんか。</p>
 </div>
 </div>
-</div>
-</section>
-
-<section class="sec" id="future">
-<div class="wrap">
-<div class="sec-head"><h2><span class="num">01</span>Our Future</h2><p>私たちが目指す未来</p></div>
-<div class="grid g2" data-rv>
-<div class="card">
-<span class="tag">Group Mission</span>
-<h3>旅を起点に、<br>人々の心にアナザースカイを創る。</h3>
-<p>旅には、日常では出会えない景色、人、文化、時間があります。私たちは宿泊を起点に、新しい体験と出会いを生み出し、人々の心にもうひとつの大切な場所を創っていきます。</p>
-</div>
-<div class="card">
-<span class="tag">Group Vision</span>
-<h3>2030年までに、<br>旅行の満足度で選ばれる宿泊グループになる。</h3>
-<p>施設をつくることだけが、私たちの仕事ではありません。旅をする人、宿を持つ人、地域で暮らす人、宿泊を支える人。それぞれに価値が生まれる宿泊事業をつくり、日本の宿泊産業をより豊かなものにしていきます。</p>
-</div>
-</div>
-<div class="btn-row" style="margin-top:28px"><a class="btn" href="{root}company/#philosophy">経営理念・グループ共通指針を見る <span class="arr">→</span></a></div>
 </div>
 </section>
 
@@ -737,7 +790,7 @@ def build_recruit():
 <div class="outline" data-rv style="margin-bottom:clamp(28px,4vw,48px)">
 <p class="lead">宿泊施設プロデュースの<br>裏側。</p>
 <div>
-<p class="text">空き家、相続した土地、中古別荘、お寺。眠っていた不動産が、選ばれる宿に生まれ変わるまでには、企画からプロデュース、運営、清掃、地域連携まで、会社や部署の境界を越えた多くのメンバーが関わっています。</p>
+<p class="text">空き家、相続した土地、中古別荘、お寺。眠っていた不動産が、選ばれる宿に生まれ変わるまでには、宿泊施設プロデュース、運営、清掃、地域連携まで、会社や部署の境界を越えた多くのメンバーが関わっています。</p>
 <p class="text" style="margin-top:12px">施設ごとのプロデュースの裏側を、公式noteで公開しています。</p>
 </div>
 </div>
@@ -748,7 +801,7 @@ def build_recruit():
 
 <section class="sec sec-alt" id="environment">
 <div class="wrap">
-<div class="sec-head"><h2><span class="num">05</span>Environment</h2><p>働く環境・制度</p></div>
+<div class="sec-head"><h2><span class="num">04</span>Environment</h2><p>働く環境・制度</p></div>
 <div class="grid g4" data-rv>
 {chr(10).join(f'<div class="card" style="gap:6px"><span class="tag">{i + 1:02}</span><h3>{esc(t)}</h3></div>' for i, t in enumerate(ENVIRONMENT))}
 </div>
@@ -758,14 +811,16 @@ def build_recruit():
 
 <section class="sec" id="jobs">
 <div class="wrap">
-<div class="sec-head"><h2><span class="num">06</span>Jobs</h2><p>募集職種（会社別）・{len(jobs)}件</p></div>
-{chr(10).join(groups)}
+<div class="sec-head"><h2><span class="num">05</span>Jobs</h2><p>会社別の求人・募集中 {len(jobs)}件</p></div>
+<div class="grid g4" data-rv>
+{chr(10).join(company_cards)}
+</div>
 </div>
 </section>
 
-<section class="sec sec-alt">
+<section class="sec sec-alt" id="open-position">
 <div class="wrap">
-<div class="sec-head"><h2><span class="num">07</span>Open Position</h2><p>応募先に迷ったら</p></div>
+<div class="sec-head"><h2><span class="num">06</span>Open Position</h2><p>応募先に迷ったら</p></div>
 <div class="card" style="gap:18px">
 <h3 style="font-size:clamp(20px,2.4vw,26px)">応募先に迷ったら、オープンポジションから。</h3>
 <p>経験や志向に合ったポジションをご提案するオープンポジションを設けています。ご応募内容をもとに、現在募集中のポジション、または募集準備中のポジションの中から、マッチの可能性があるものをご案内します。</p>
@@ -774,15 +829,24 @@ def build_recruit():
 </div>
 </section>
 
-<section class="sec">
+<section class="sec" id="casual">
+<div class="wrap">
+<div class="sec-head"><h2><span class="num">07</span>Casual Interview</h2><p>カジュアル面談</p></div>
+<div class="card" style="gap:18px">
+<h3 style="font-size:clamp(20px,2.4vw,26px)">まずは、お互いを知るところから。</h3>
+<p>仕事内容やチームの雰囲気、これから取り組む事業について、気になることを気軽にお話しできるカジュアル面談の機会を設けています。応募を決める前に話を聞いてみたい方、どの職種が合うか相談したい方も歓迎します。ご希望の内容と募集状況を確認のうえ、ご案内します。</p>
+{casual_cta}
+</div>
+</div>
+</section>
+
+<section class="sec sec-alt" id="privacy">
 <div class="wrap">
 <div class="sec-head"><h2><span class="num">08</span>Privacy</h2><p>応募者の個人情報の取り扱い</p></div>
-<p class="text">採用活動で取得する個人情報の取り扱いについては、<a href="{root}recruit/privacy/">採用プライバシーポリシー</a>をご確認ください。</p>
+<p class="text">ご応募いただいた個人情報は、求人ごとの雇用主となるグループ会社が、採用選考とご連絡のためにのみ利用します。グループ内での共同利用、保存、外部への委託、お問い合わせ窓口については、<a href="{root}recruit/privacy/">採用プライバシーポリシー</a>をご確認ください。応募の受付は一般のお問い合わせとは別の窓口で管理しています。</p>
 </div>
 </section>"""
-    counter = iter(range(1, 20))
-    body = re.sub(r'<span class="num">\d+</span>', lambda m: f'<span class="num">{next(counter):02}</span>', body)
-    meta = {'title': '採用情報', 'description': 'Nowhere Groupの採用情報。まだない宿泊の未来を、一緒につくる。私たちが目指す未来、仕事を知る、会社別の募集職種、オープンポジションをまとめています。',
+    meta = {'title': '採用情報', 'description': 'Nowhere Groupの採用情報。まだない宿泊の未来を、一緒につくる。仕事と人、プロジェクト、働く環境、会社別の求人、オープンポジション、カジュアル面談をご紹介します。',
             'nav': 'recruit', 'accent': 'c-orange',
             'hero': {'type': 'illust', 'en': 'Recruit', 'ja': '採用情報', 'color': 'orange', 'img': 'bg-company.jpg'},
             'crumbs': [('採用情報', '')]}
@@ -799,15 +863,15 @@ EN_TOP = [
     ('<title>Nowhere Group株式会社｜旅を起点に、人々の心にアナザースカイを創る。</title>',
      '<title>Nowhere Group Inc. | Travel as the starting point for another sky in every heart</title>'),
     ('content="Nowhere Groupは、宿泊を起点に、不動産、企画・開発、運営、清掃、販売・集客までをグループで展開する宿泊事業グループです。"',
-     'content="Nowhere Group is a lodging business group that starts from accommodation and covers real estate, planning and development, operation, cleaning, sales and marketing across its group companies."'),
+     'content="Nowhere Group is a lodging business group that connects the expertise of its group companies, from real estate and accommodation development to operations, cleaning, sales and the next use of each asset."'),
     ('<link rel="canonical" href="https://nowhere.group/">',
      '<link rel="canonical" href="https://nowhere.group/en/">'),
     ('aria-label="メインメニュー"',
      'aria-label="Main menu"'),
     ('<a class="hd-logo" href="./" aria-label="Nowhere Group トップへ">',
      '<a class="hd-logo" href="./" aria-label="Nowhere Group home">'),
-    ('<a href="company/">私たちについて</a>\n<a href="service/">事業紹介</a>\n<a href="service/#group">グループ会社</a>\n<a href="service/regional-brand-creation/">ブランド・実績</a>\n<a href="news/">お知らせ</a>\n<a href="recruit/">採用情報</a>\n',
-     '<a href="company/">About</a>\n<a href="service/">Business</a>\n<a href="service/#group">Group</a>\n<a href="service/regional-brand-creation/">Brands</a>\n<a href="recruit/">Recruit</a>\n'),
+    ('<a href="company/">私たちについて</a>\n<a href="service/">事業紹介</a>\n<a href="service/regional-brand-creation/#brands">ブランド・実績</a>\n<a href="news/">お知らせ</a>\n<a href="recruit/">採用情報</a>\n',
+     '<a href="company/">About</a>\n<a href="service/">Business</a>\n<a href="service/regional-brand-creation/#brands">Brands &amp; Works</a>\n<a href="news/" lang="ja">News</a>\n<a href="recruit/" lang="ja">Careers</a>\n'),
     ('<a href="en/" lang="en" hreflang="en" aria-label="English">EN</a>',
      '<a href="../" lang="ja" hreflang="ja" aria-label="日本語">JP</a>'),
     ('<a href="contact/" class="nav-contact">お問い合わせ</a>',
@@ -818,233 +882,174 @@ EN_TOP = [
      'alt="Illustration of travelers enjoying hot spring inns, seaside towns, mountains, festivals and local food"'),
     ('旅を起点に、人々の心にアナザースカイを創る。 ─ Create for people all over the world.',
      'Travel as the starting point for another sky in every heart ─ Create for people all over the world.'),
+    ('<p>グループ理念</p>',
+     '<p>Our group philosophy</p>'),
+    ('<h3>旅を起点に、<br>人々の心にアナザースカイを創る。</h3>',
+     '<h3>Travel as the starting point<br>for another sky in every heart.</h3>'),
+    ('<h3>2030年までに、<br>旅行の満足度で選ばれる宿泊グループになる。</h3>',
+     '<h3>By 2030, become the lodging group<br>chosen for travel satisfaction.</h3>'),
     ('alt="古民家の宿で旅人を迎えるスタッフのイラスト"',
      'alt="Illustration of staff welcoming a traveler at a traditional house inn"'),
-    ('Nowhere Groupは、宿泊を起点に、<br>不動産、企画・開発、運営、清掃、販売・集客<br>までをグループで展開する宿泊事業グループです。',
-     'Nowhere Group is a lodging business group that starts from accommodation and covers real estate, planning and development, operation, cleaning, sales and marketing across its group companies.'),
-    ('宿泊事業に必要な機能をグループ内に持ち、<br>現場で得た知見を次の企画・開発へ還元する<br>ことで、施設の価値を継続的に高めていきます。',
-     'We keep every function a lodging business needs within the group, and feed what we learn on site back into the next project to keep raising the value of each property.'),
-    ('宿泊施設の「入口から出口まで」を、グループで。',
-     'From entrance to exit of a lodging facility, as one group.'),
-    ('>Nowhere Groupについて<',
-     '>About Nowhere Group<'),
+    ('<p>不動産の活用から宿泊施設プロデュース、運営・清掃、販売・集客、資産の次の活用まで。グループ各社の専門性をつなぐ宿泊事業グループです。</p>',
+     '<p>From real estate utilization to accommodation development, operations and cleaning, sales and marketing, and the next use of each asset: a lodging business group that connects the expertise of its group companies.</p>'),
+    ('<p>現場で得た知見を次の施設づくりへ生かし、宿の価値を継続して育てていきます。</p>',
+     '<p>We feed what we learn on site into the next property, and keep growing the value of every stay.</p>'),
+    ('>会社の想いと、宿泊事業における強みを見る<',
+     '>Our story and our strengths in lodging<'),
     ('alt="虹と海辺の町、設計図やスマホ、地域のマルシェを囲む旅人のイラスト"',
      'alt="Illustration of travelers around a rainbow, a seaside town, blueprints, a smartphone and a local market"'),
-    ('</svg>宿泊施設の価値を、企画から運営までつくる。</h3>',
-     '</svg>Creating the value of lodging facilities, from planning to operation.</h3>'),
-    ('宿泊施設の企画・プロデュース、開業支援、運営、ホテルSUPPLYを担う、Nowhere Groupの中核会社。宿泊プロデュース／宿泊施設運営／ホテルSUPPLY',
-     'The core company of Nowhere Group, responsible for planning and producing lodging facilities, opening support, operation and hotel supply. Produce / Operation / Hotel Supply'),
-    ('</svg>宿泊投資を、もっと身近に。</h3>',
-     '</svg>Making lodging investment more accessible.</h3>'),
-    ('宿泊不動産の仕入れ・販売・流通から、工事、建物管理、資産活用、売却・出口戦略までを担う宿泊不動産会社。不動産／工事／プロパティマネジメント／再流通・出口支援',
-     'A lodging real estate company covering sourcing, sales and distribution of lodging properties, construction, building management, asset utilization, sale and exit strategy. Real estate / Construction / Property management / Resale and exit support'),
-    ('</svg>宿泊体験の品質を、現場から支える。</h3>',
-     '</svg>Supporting the quality of every stay, from the field.</h3>'),
-    ('ホテル・民泊清掃を中心に、リネン配送、ハウスクリーニング、現地設営、各種現地対応など、宿泊施設の現地オペレーションを支える会社。',
-     'A company supporting on-site operations of lodging facilities: hotel and vacation rental cleaning, linen delivery, house cleaning, on-site setup and other local services.'),
-    ('</svg>旅する人と、旅を支える人をつなぐ。</h3>',
-     '</svg>Connecting travelers with the people who support travel.</h3>'),
-    ('AI・SNS・OTAを融合し、旅行者には新しい旅行発見・予約体験を、宿泊事業者には販売・集客・広告・顧客獲得の仕組みを提供するTravel Tech企業。',
-     'A travel tech company combining AI, social media and OTAs to give travelers a new way to discover and book trips, and to give lodging operators tools for sales, marketing, advertising and customer acquisition.'),
+    ('<p>不動産から宿泊施設のプロデュース・運営、清掃、ホテルSUPPLY、そして新たな旅行販売の仕組みづくりまで。専門性の異なるグループ4社が連携し、宿泊の価値を生み出しています。</p>',
+     '<p>From real estate to accommodation development and operations, cleaning, hotel supply and new ways of selling travel, four group companies with different expertise work together to create value in lodging.</p>'),
+    ('<span class="en">OUR GROUP</span>グループ各社の専門領域',
+     '<span class="en">OUR GROUP</span>What each group company does'),
+    ('</svg>宿泊施設のプロデュース・運営</h3>',
+     '</svg>Hotel development &amp; operations</h3>'),
+    ('<p><span class="sv-co">Nowhere Group株式会社</span>宿泊施設プロデュース、宿泊施設運営、ホテルSUPPLYを中核に、宿の価値をつくり、育てる。</p>',
+     '<p><span class="sv-co">Nowhere Group Inc.</span>Creating and growing the value of each stay through hotel development &amp; production, hotel operations and hotel supply.</p>'),
+    ('</svg>不動産・工事・建物管理</h3>',
+     '</svg>Real estate, construction &amp; property management</h3>'),
+    ('<p><span class="sv-co">VESTPORT株式会社</span>不動産・資産活用の相談から工事・改修、建物管理まで、宿泊事業の不動産領域を支える。</p>',
+     '<p><span class="sv-co">VESTPORT Inc.</span>Supporting the real estate side of lodging, from property and asset consultation to construction, renovation and property management.</p>'),
+    ('</svg>清掃</h3>',
+     '</svg>Cleaning</h3>'),
+    ('<p><span class="sv-co">CLEANX9株式会社</span>清掃とリネン・現地対応を通じ、宿泊施設の品質を現場から支える。</p>',
+     '<p><span class="sv-co">CLEANX9 Inc.</span>Supporting the quality of every property on site through cleaning, linen and local support.</p>'),
+    ('</svg>OTA・リテールメディア【開発準備中】</h3>',
+     '</svg>OTA &amp; retail media [in development]</h3>'),
+    ('<p><span class="sv-co">株式会社Family Stay</span>家族旅行に特化したOTA・リテールメディアの事業開発を進める。</p>',
+     '<p><span class="sv-co">Family Stay Inc.</span>Developing an OTA and retail media business specialized in family travel.</p>'),
     ('>詳しく見る<',
      '>Read More<'),
-    ('>宿泊事業のご相談<',
-     '>Consult us on your lodging business<'),
-    ('宿泊施設の企画・運営から、不動産、清掃、SUPPLY、販売・集客まで。お問い合わせはグループ窓口でまとめて承ります。',
-     'From planning and operation of lodging facilities to real estate, cleaning, supply, sales and marketing: one contact point for the whole group.'),
-    ('class="pill pill-ghost">お問い合わせ</a>',
-     'class="pill pill-ghost">Contact</a>'),
+    ('<span class="en">NOWHERE GROUP SERVICES</span>Nowhere Group株式会社の主なサービス',
+     '<span class="en">NOWHERE GROUP SERVICES</span>Main services of Nowhere Group Inc.'),
+    ('<strong>宿泊施設プロデュース</strong><span class="txt">施設の可能性を見極め、事業性と宿泊体験を一体で設計する。</span>',
+     '<strong>Hotel development &amp; production</strong><span class="txt">Assessing each property\'s potential and designing business viability and guest experience as one.</span>'),
+    ('<strong>宿泊施設運営</strong><span class="txt">既存OTAの販売管理からゲスト対応、現地オペレーションまで、開業後の価値を育てる。</span>',
+     '<strong>Hotel operations</strong><span class="txt">Growing value after opening, from sales management on existing OTAs to guest service and on-site operations.</span>'),
+    ('<strong>ホテルSUPPLY</strong><span class="txt">開業準備の一括調達から、運営中の備品・消耗品の継続補充まで。</span>',
+     '<strong>Hotel supply</strong><span class="txt">From bulk procurement before opening to ongoing replenishment of equipment and consumables.</span>'),
+    ('<span class="more">詳しく見る →</span>',
+     '<span class="more">Read more →</span>'),
+    ('>グループ4社の体制を見る →<',
+     '>See our four group companies →<'),
+    ('<p>宿泊バリューチェーン</p>',
+     '<p>The lodging value chain</p>'),
+    ('<h3>不動産・資産活用</h3>',
+     '<h3>Real estate &amp; asset use</h3>'),
+    ('<h3>宿泊施設プロデュース</h3>',
+     '<h3>Hotel development &amp; production</h3>'),
+    ('<h3>開業・運営・清掃</h3>',
+     '<h3>Opening, operations &amp; cleaning</h3>'),
+    ('<h3>資産の次の活用</h3>',
+     '<h3>The next use of the asset</h3>'),
+    ('>詳しい宿泊バリューチェーンを見る →<',
+     '>See the full value chain →<'),
+    ('<p>Nowhere Groupの強み</p>',
+     '<p>What makes Nowhere Group different</p>'),
+    ('<p class="tp-lead">当社の強みは、清掃・宿泊運営の現場から得られる課題や知見を、次の施設の宿泊施設プロデュースに反映できることです。</p>',
+     '<p class="tp-lead">Our strength is that we feed the issues and insights from cleaning and hotel operations directly into the development of the next property.</p>'),
     ('alt="提灯と祭り、夜の温泉街のイラスト"',
      'alt="Illustration of lanterns, a festival and a hot spring town at night"'),
-    ('alt="宿から旅立つ旅人と、灯台のある海辺の町のイラスト"',
-     'alt="Illustration of a traveler leaving an inn and a seaside town with a lighthouse"'),
+    ('<p>ブランド・宿泊施設・お知らせ</p>',
+     '<p>Brands, hotels &amp; stays, and news (news in Japanese)</p>'),
+    ('<small>365日、日本のお祭りを体験できる宿。</small><em class="st">営業中</em>',
+     '<small>Experience Japanese festivals 365 days a year.</small><em class="st">Open</em>'),
+    ('<small>家族みんなが主役の、思い出をつくるホテル。</small><em class="st">開業準備中</em>',
+     '<small>A hotel where every family member is the star.</small><em class="st">Opening soon</em>'),
+    ('alt="墨武"', 'alt="BOKUBU"'),
+    ('<span>墨武</span><small>墨で描かれた武士の世界に泊まる。</small><em class="st">開業準備中</em>',
+     '<span>BOKUBU</span><small>Stay in a samurai world drawn in ink.</small><em class="st">Opening soon</em>'),
+    ('alt="由楽"', 'alt="YURA"'),
+    ('<span>由楽</span><small>人目を気にせず、自由にくつろぐ。</small>',
+     '<span>YURA</span><small>Relax freely, away from prying eyes.</small>'),
+    ('>すべてのブランドを見る<',
+     '>See all brands<'),
+    ('alt="ZEN &amp; BED 望月庵"', 'alt="ZEN &amp; BED Bougetsuan"'),
+    ('<strong>ZEN &amp; BED 望月庵</strong><small>山梨｜体験型ホテル（寺泊）</small>',
+     '<strong>ZEN &amp; BED Bougetsuan</strong><small>Yamanashi | Experience hotel (temple stay)</small>'),
+    ('<small>千葉｜ヴィラ型無人ホテル</small>',
+     '<small>Chiba | Unstaffed villa hotel</small>'),
+    ('<small>静岡｜アパートメント型無人ホテル</small>',
+     '<small>Shizuoka | Unstaffed apartment hotel</small>'),
+    ('>主な宿泊施設を見る<',
+     '>See our main properties<'),
+    ('>すべてのお知らせを見る<',
+     '>See all news<'),
+    ('<p>パートナー・アライアンス</p>',
+     '<p>Partners and alliances</p>'),
+    ('<p class="catch">Airbnb公式パートナープログラムに参画</p>',
+     '<p class="catch">Member of the official Airbnb partner program</p>'),
+    ('alt="JTB「地域未来にぎわい工房」"', 'alt="JTB Chiiki Mirai Nigiwai Kobo"'),
+    ('<h3>JTB「地域未来にぎわい工房」</h3><p class="catch">地域資源を、新しい宿泊体験へ。</p>',
+     '<h3>JTB Chiiki Mirai Nigiwai Kobo</h3><p class="catch">Turning regional resources into new lodging experiences.</p>'),
+    ('<p>その他の取り組み</p>',
+     '<p>Other works</p>'),
+    ('<h3>タイムトリップ OTOWA</h3><p class="catch">空き家 × 昭和レトロ</p><p>使われなくなった建物を、昭和の体験を楽しめる宿へ。</p>',
+     '<h3>Time Trip OTOWA</h3><p class="catch">Vacant house × Showa retro</p><p>Turning an unused building into a stay where guests enjoy the Showa era.</p>'),
+    ('<h3>Azure Palace 伊豆高原</h3><p class="catch">中古別荘 × 大人の遊び場</p><p>既存別荘に、温泉・サウナ・エンタメを組み合わせた滞在価値を。</p>',
+     '<h3>Azure Palace Izu-Kogen</h3><p class="catch">Used villa × Adult playground</p><p>Adding hot springs, a sauna and entertainment to an existing villa.</p>'),
+    ('>その他の取り組みを見る →<',
+     '>See other works →<'),
+    ('<p>受賞・認定・公的指定</p>',
+     '<p>Awards, certifications and public designations</p>'),
+    ('<span class="lbl">［受賞］</span>',
+     '<span class="lbl">[Award]</span>'),
+    ('<p class="catch">総合グランプリ</p>',
+     '<p class="catch">Grand Prix</p>'),
+    ('<span class="lbl">［公的指定］</span><h3>東京都「東京観光案内窓口」</h3><p>OMATSURI BASE 中野新橋 1階</p>',
+     '<span class="lbl">[Public designation]</span><h3>Tokyo Metropolitan Government "Tokyo Tourist Information Center"</h3><p>OMATSURI BASE Nakano-shimbashi, 1F</p>'),
+    ('>受賞・認定・公的指定を見る →<',
+     '>See awards and designations →<'),
+    ('<p>数字で見るNowhere Group</p>',
+     '<p>Nowhere Group in numbers</p>'),
+    ('<strong>100<small>施設以上</small></strong><span>宿泊施設の累計プロデュース実績</span>',
+     '<strong>100<small>+ properties</small></strong><span>Accommodation properties developed</span>'),
+    ('<strong>30<small>エリア以上</small></strong><span>全国展開エリア</span>',
+     '<strong>30<small>+ areas</small></strong><span>Areas across Japan</span>'),
+    ('<strong>80,000<small>件以上</small></strong><span>宿泊施設の累計清掃件数</span>',
+     '<strong>80,000<small>+ cleanings</small></strong><span>Total accommodation cleanings</span>'),
+    ('<p>代表メッセージ</p>',
+     '<p>Message from the CEO</p>'),
+    ('alt="代表取締役 CEO 竹内 剛"',
+     'alt="Go Takeuchi, CEO"'),
+    ('<h3>旅の記憶から、<br>人生に新しい景色を。</h3>',
+     '<h3>From the memories of travel,<br>a new view on life.</h3>'),
+    ('<p>旅先での出会いや体験が、人生の記憶に残り、いつかまた帰りたいと思える場所になる。私たちは、そんな一人ひとりの「アナザースカイ」を、日本中につくりたいと考えています。</p>',
+     '<p>The people you meet and the things you experience on a trip stay with you, and become a place you want to return to someday. We want to create that "another sky" for each person, all across Japan.</p>'),
+    ('<p>Nowhere Groupは、清掃・宿泊運営の現場から事業を学び、そこで培った知見を宿泊施設プロデュースへとつなげてきました。一つひとつの宿から、日本の宿泊産業の未来をつくっていきます。</p>',
+     '<p>Nowhere Group learned this business from the field of cleaning and hotel operations, and has carried that knowledge into accommodation development. One stay at a time, we are building the future of Japan\'s lodging industry.</p>'),
+    ('<p class="name"><small>Nowhere Group株式会社 代表取締役 CEO</small>竹内 剛</p>',
+     '<p class="name"><small>CEO, Nowhere Group Inc.</small>Go Takeuchi</p>'),
+    ('<span>代表のSNS</span>',
+     '<span>Follow the CEO</span>'),
+    ('>代表メッセージを見る →<',
+     '>Read the full message →<'),
+    ('<p>採用情報</p>',
+     '<p>Careers (in Japanese)</p>'),
+    ('<p class="tp-lead">まだない宿泊の未来を、<br>一緒につくる。</p>',
+     '<p class="tp-lead">Let\'s build a future of lodging<br>that doesn\'t exist yet.</p>'),
+    ('<p class="tp-text">旅の満足度を高める仕事は、一つの職種だけでは完結しません。不動産の可能性を見つけ、宿泊施設をプロデュースし、運営・清掃の現場で品質を磨く。そこで生まれた気づきを、次の施設づくりへ生かす。</p>',
+     '<p class="tp-text">Raising travel satisfaction takes more than one kind of job. We find the potential in real estate, develop accommodation, polish quality in operations and cleaning, and bring what we learn into the next property.</p>'),
+    ('<p class="tp-text">異なる専門性を持つ仲間が、会社や部署の枠を越えて協力し、一つひとつの宿泊事業を形にしています。</p>',
+     '<p class="tp-text">Colleagues with different expertise work across companies and departments to bring each lodging business to life.</p>'),
+    ('>採用情報を見る →<',
+     '>See open positions →<'),
     ('<span class="ft-co">Nowhere Group株式会社</span>',
      '<span class="ft-co">Nowhere Group Inc.</span>'),
     ('グループ各社へのお問い合わせは、こちらで一括して承ります。',
      'Inquiries for every group company are handled here, in one place.'),
     ('>お問い合わせフォーム<',
      '>Contact Form<'),
+    ('aria-label="フッターメニュー"><a href="company/">私たちについて</a><a href="service/">事業紹介</a><a href="service/regional-brand-creation/#brands">ブランド・実績</a><a href="news/">お知らせ</a><a href="recruit/">採用情報</a><a href="contact/">お問い合わせ</a>',
+     'aria-label="Footer menu"><a href="company/">About</a><a href="service/">Business</a><a href="service/regional-brand-creation/#brands">Brands &amp; Works</a><a href="news/" lang="ja">News (JP)</a><a href="recruit/" lang="ja">Careers (JP)</a><a href="contact/">Contact</a>'),
     ('aria-label="X（旧Twitter）"',
      'aria-label="X (formerly Twitter)"'),
     ('Copyright © 2025 Nowhere Group株式会社',
      'Copyright © 2025 Nowhere Group Inc.'),
     ('>プライバシーポリシー</a><a href="en/" lang="en">English</a>',
      '>Privacy Policy</a><a href="../" lang="ja">日本語</a>'),
-    ('>経営理念<',
-     '>Our philosophy<'),
-    ('<h3>旅を起点に、<br>人々の心にアナザースカイを創る。</h3>',
-     '<h3>Travel as the starting point for another sky in every heart.</h3>'),
-    ('旅には、日常では出会えない景色、人、文化、時間があります。',
-     'Travel brings scenery, people, culture and time you never meet in everyday life.'),
-    ('私たちは宿泊を起点に、新しい体験と出会いを生み出し、人々の心にもうひとつの大切な場所を創っていきます。',
-     "Starting from accommodation, we create new experiences and encounters, and build one more cherished place in people's hearts."),
-    ('<h3>2030年までに、<br>旅行の満足度で選ばれる宿泊グループになる。</h3>',
-     '<h3>By 2030, become the lodging group chosen for travel satisfaction.</h3>'),
-    ('施設をつくることだけが、私たちの仕事ではありません。',
-     'Building facilities is not all we do.'),
-    ('旅をする人、宿を持つ人、地域で暮らす人、宿泊を支える人。それぞれに価値が生まれる宿泊事業をつくり、日本の宿泊産業をより豊かなものにしていきます。',
-     "Travelers, property owners, local residents and the people who support lodging: we build a lodging business that creates value for each of them, and make Japan's lodging industry richer."),
-    ('>経営理念を見る →<',
-     '>Our philosophy →<'),
-    ('<p>それぞれの専門性をつなぎ、<br>宿泊の価値を最大化する。</p>',
-     "<p>Connecting each company's expertise<br>to maximize the value of lodging.</p>"),
-    ('>宿泊バリューチェーン<',
-     '>The lodging value chain<'),
-    ('<p class="tp-lead">宿泊施設の入口から出口まで。</p>',
-     '<p class="tp-lead">From the entrance to the exit of a lodging facility.</p>'),
-    ('<h3>物件を見つける・取得する</h3>',
-     '<h3>Find and acquire the property</h3>'),
-    ('<p>物件仕入れ／売買／賃貸／事業承継</p>',
-     '<p>Property sourcing / Sales / Leasing / Business succession</p>'),
-    ('<h3>事業を企画する</h3>',
-     '<h3>Plan the business</h3>'),
-    ('<p>市場調査／事業性判断／収支計画／事業スキーム／コンセプト</p>',
-     '<p>Market research / Feasibility / Business plan / Business scheme / Concept</p>'),
-    ('<h3>宿泊施設をつくる</h3>',
-     '<h3>Build the facility</h3>'),
-    ('<p>宿泊プロデュース／ブランド・コンセプト設計／空間・デザイン／工事／許認可支援／開業準備</p>',
-     '<p>Lodging production / Brand and concept design / Space and design / Construction / Licensing support / Opening preparation</p>'),
-    ('<h3>宿泊施設を運営する</h3>',
-     '<h3>Operate the facility</h3>'),
-    ('<p>宿泊施設運営／ゲスト対応／価格・在庫管理／清掃／現地オペレーション／建物管理／緊急対応</p>',
-     '<p>Hotel operation / Guest service / Pricing and inventory / Cleaning / On-site operations / Building management / Emergency response</p>'),
-    ('<h3>施設に必要なものを届ける</h3>',
-     '<h3>Deliver what the facility needs</h3>'),
-    ('<span class="who">Nowhere Group / SUPPLY事業部</span>',
-     '<span class="who">Nowhere Group / Supply Division</span>'),
-    ('<p>家具／家電／寝具／備品／アメニティ／消耗品／清掃用品</p>',
-     '<p>Furniture / Appliances / Bedding / Equipment / Amenities / Consumables / Cleaning supplies</p>'),
-    ('<h3>旅行者へ届ける</h3>',
-     '<h3>Reach travelers</h3>'),
-    ('<p>宿泊販売／集客／マーケティング／AI／OTA／顧客接点</p>',
-     '<p>Lodging sales / Marketing / AI / OTA / Customer touchpoints</p>'),
-    ('<h3>売る・引き継ぐ</h3>',
-     '<h3>Sell and hand over</h3>'),
-    ('<p>売却／事業承継／再流通／出口支援</p>',
-     '<p>Sale / Business succession / Resale / Exit support</p>'),
-    ('<p class="tp-center">現場で得た知見を、<br>次の施設づくりへ。</p>',
-     '<p class="tp-center">Knowledge from the field,<br>into the next facility.</p>'),
-    ('>Nowhere Group株式会社の事業紹介<',
-     '>Business of Nowhere Group Inc.<'),
-    ('<span class="lbl">宿泊事業部</span>',
-     '<span class="lbl">Lodging Division</span>'),
-    ('<span class="lbl">SUPPLY事業部</span>',
-     '<span class="lbl">Supply Division</span>'),
-    ('<h3>宿泊プロデュース</h3>',
-     '<h3>Lodging production</h3>'),
-    ('<p class="catch">事業として成立する宿泊施設を、企画から形にする。</p>',
-     '<p class="catch">Turning a viable lodging business into reality, from the plan.</p>'),
-    ('市場、競合、立地、物件特性を分析し、ターゲット、収支計画、コンセプト、空間、宿泊体験までを設計します。企画だけで終わらず、実際の運営・清掃現場で蓄積した知見を施設づくりへ反映することで、ゲスト満足度、収益性、運営効率を両立した宿泊施設をつくります。',
-     'We analyze the market, competitors, location and property, then design the target, business plan, concept, space and guest experience. By feeding knowledge from our operation and cleaning teams into facility design, we build properties that balance guest satisfaction, profitability and operational efficiency.'),
-    ('<h3>宿泊施設運営</h3>',
-     '<h3>Hotel operation</h3>'),
-    ('<p class="catch">開業した施設の価値を、育て続ける。</p>',
-     '<p class="catch">Growing the value of a property after opening.</p>'),
-    ('ホテル、民泊、一棟貸しなどの宿泊施設について、販売、予約管理、価格調整、ゲスト対応、現地オペレーションまで、日々の施設運営を総合的に支援します。売上、レビュー、ゲスト対応、清掃現場などから得られる情報を分析し、継続的な施設改善へつなげます。',
-     'For hotels, vacation rentals and whole-house rentals, we support daily operation from sales, reservation management and pricing to guest service and on-site operations. We analyze revenue, reviews, guest service and cleaning data to drive continuous improvement.'),
-    ('<h3>ホテルSUPPLYサービス</h3>',
-     '<h3>Hotel supply service</h3>'),
-    ('<p class="catch">宿泊施設に必要なものを、まとめて届ける。</p>',
-     '<p class="catch">Delivering everything a lodging facility needs, in one package.</p>'),
-    ('Nowhere Groupが宿泊施設の開発・運営を通じて培ってきたノウハウと調達ネットワークを活用し、宿泊施設に必要な商品を提供します。開業時の一括調達から、運営開始後の補充・継続供給まで対応します。',
-     'We use the know-how and procurement network built through developing and operating lodging facilities to supply the products they need, from bulk procurement at opening to replenishment after launch.'),
-    ('>Nowhere Groupの強み<',
-     '>What makes Nowhere Group different<'),
-    ('<p class="tp-lead">現場から、宿をつくる。</p>',
-     '<p class="tp-lead">Building hotels from the field.</p>'),
-    ('<h3>清掃</h3><p>施設が実際にどう使われるのかを知る。汚れ方、動線、備品の消耗、清掃時間などを現場で知る。</p>',
-     '<h3>Cleaning</h3><p>Knowing how facilities are actually used: wear patterns, traffic flow, consumption of supplies and cleaning time, learned on site.</p>'),
-    ('<h3>運営</h3><p>ゲストが何に満足し、何に困るのかを知る。問い合わせ、レビュー、トラブル、予約動向から体験価値を理解する。</p>',
-     '<h3>Operation</h3><p>Knowing what satisfies guests and what troubles them, through inquiries, reviews, incidents and booking trends.</p>'),
-    ('<h3>プロデュース</h3><p>現場で起きる問題を、企画・設計段階で解決する。</p>',
-     '<h3>Production</h3><p>Solving the problems that arise on site at the planning and design stage.</p>'),
-    ('<h3>不動産</h3><p>事業性と出口から、物件を判断する。</p>',
-     '<h3>Real estate</h3><p>Judging properties by business viability and exit.</p>'),
-    ('清掃しにくい施設をつくらない。<br>ゲストが迷う施設をつくらない。<br>運営しにくい施設をつくらない。<br><span class="sub">現場を知っているからこそ、施設づくりの段階から解決できる。</span>',
-     'We don\'t build facilities that are hard to clean.<br>We don\'t build facilities where guests get lost.<br>We don\'t build facilities that are hard to operate.<br><span class="sub">Because we know the field, we can solve problems at the design stage.</span>'),
-    ('>ホテルブランド・実績・お知らせ<',
-     '>Hotel brands, works and news (news in Japanese)<'),
-    ('<p class="nw-lead">宿泊すること自体が、旅の目的になる場所をつくる。</p>',
-     '<p class="nw-lead">Creating places where the stay itself is the purpose of the trip.</p>'),
-    ('<small>365日、日本のお祭りを体験できる宿。</small>',
-     '<small>Experience Japanese festivals 365 days a year.</small>'),
-    ('<small>家族の「また来たい」をつくる宿。</small>',
-     '<small>A stay that makes families want to come back.</small>'),
-    ('<span>由楽</span><small>今後展開予定</small>',
-     '<span>Yuraku</span><small>Coming soon</small>'),
-    ('<span>墨武 -BOKUBU-</span><small>今後展開予定</small>',
-     '<span>BOKUBU</span><small>Coming soon</small>'),
-    ('<p class="nw-lead">宿泊施設に、そこに泊まる理由をつくる。</p>',
-     '<p class="nw-lead">Giving every lodging facility a reason to stay there.</p>'),
-    ('<span class="li-date">家族 × 遊び</span>',
-     '<span class="li-date">Family × Play</span>'),
-    ('<span class="li-title">タイムトリップOTOWA</span><span class="li-date">空き家 × 昭和レトロ</span>',
-     '<span class="li-title">Time Trip OTOWA</span><span class="li-date">Vacant house × Showa retro</span>'),
-    ('<span class="li-title">ZEN &amp; BED 望月庵</span><span class="li-date">寺 × 日本文化</span>',
-     '<span class="li-title">ZEN &amp; BED Bougetsuan</span><span class="li-date">Temple × Japanese culture</span>'),
-    ('<span class="li-title">Azure Palace 伊豆高原</span><span class="li-date">中古別荘 × 大人の遊び場</span>',
-     '<span class="li-title">Azure Palace IZUKOGEN</span><span class="li-date">Used villa × Adult playground</span>'),
-    ('alt="地域未来にぎわい工房"', 'alt="Chiiki Mirai Nigiwai Kobo"'),
-    ('>パートナー・アライアンス<',
-     '>Partners and alliances<'),
-    ('<p class="tp-lead">一社ではできないことを、<br>共につくる。</p>',
-     '<p class="tp-lead">Creating together<br>what no single company can.</p>'),
-    ('Nowhere Groupは、旅行・観光・地域・不動産など、さまざまな企業・団体と連携しながら、新しい宿泊体験と事業機会を生み出しています。',
-     'Nowhere Group works with companies and organizations in travel, tourism, regional development and real estate to create new lodging experiences and business opportunities.'),
-    ('<p class="catch">Airbnb公式パートナープログラムに参画</p>',
-     '<p class="catch">Member of the official Airbnb partner program</p>'),
-    ('宿泊施設の企画・開発から運営、集客、収益改善まで、Nowhere Groupが蓄積してきた宿泊事業の知見を生かし、宿泊事業者を支援します。',
-     'We support lodging operators with the knowledge Nowhere Group has built across planning, development, operation, marketing and revenue improvement.'),
-    ('<h3>地域未来にぎわい工房</h3><p class="catch">地域資源を、新しい宿泊体験へ。</p>',
-     '<h3>Chiiki Mirai Nigiwai Kobo</h3><p class="catch">Turning regional resources into new lodging experiences.</p>'),
-    ('地域が持つ文化、食、自然、人などの資源を、宿泊施設や旅行体験とつなげ、新しい地域価値を生み出す取り組みを推進しています。',
-     'A JTB-led initiative connecting the culture, food, nature and people of each region with lodging facilities and travel experiences to create new regional value.'),
-    ('>評価・受賞・公的指定<',
-     '>Awards and public designations<'),
-    ('<p class="tp-lead">私たちの取り組みへの評価</p>',
-     '<p class="tp-lead">Recognition of our work</p>'),
-    ('<p class="catch">総合グランプリ</p>',
-     '<p class="catch">Grand Prix</p>'),
-    ('<h3>東京都</h3><p class="catch">東京観光案内窓口 指定</p><p>OMATSURI BASE 中野新橋</p>',
-     '<h3>Tokyo Metropolitan Government</h3><p class="catch">Designated Tokyo tourist information center</p><p>OMATSURI BASE Nakanoshimbashi</p>'),
-    ('>数字で見るNowhere Group<',
-     '>Nowhere Group in numbers<'),
-    ('<strong>100<small>施設以上</small></strong><span>宿泊プロデュース実績</span>',
-     '<strong>100<small>+ facilities</small></strong><span>Lodging facilities produced</span>'),
-    ('<strong>30<small>エリア以上</small></strong><span>展開エリア</span>',
-     '<strong>30<small>+ areas</small></strong><span>Areas</span>'),
-    ('<strong>50,000<small>件超</small></strong><span>CLEANX9 累計清掃件数</span>',
-     '<strong>50,000<small>+ cleanings</small></strong><span>CLEANX9 total cleanings</span>'),
-    ('<strong>150<small>施設</small></strong><span>SUPPLY 累計導入施設</span>',
-     '<strong>150<small> facilities</small></strong><span>Facilities supplied</span>'),
-    ('<strong>4<small>社</small></strong><span>グループ会社</span>',
-     '<strong>4<small> companies</small></strong><span>Group companies</span>'),
-    ('>代表メッセージ<',
-     '>Message from the CEO<'),
-    ('alt="代表取締役 CEO 竹内 剛"',
-     'alt="Go Takeuchi, CEO"'),
-    ('<h3>現場から積み上げた知見で、<br>宿泊産業の未来をつくる。</h3>',
-     '<h3>Building the future of the lodging industry<br>on knowledge earned in the field.</h3>'),
-    ('<p>私たちは、清掃や運営といった現場から宿泊事業を学んできました。</p>',
-     '<p>We learned the lodging business from the ground up, through cleaning and operation.</p>'),
-    ('<p>現場で生まれる課題を企画へ戻し、不動産、施設づくり、運営、清掃、販売までをつなげる。</p>',
-     '<p>We bring the issues that arise on site back into planning, and connect real estate, facility development, operation, cleaning and sales.</p>'),
-    ('<p>宿泊を起点に、旅する人、地域、事業者に新しい価値を生み出し続けます。</p>',
-     '<p>Starting from accommodation, we keep creating new value for travelers, regions and operators.</p>'),
-    ('<p class="name"><small>Nowhere Group株式会社 代表取締役 CEO</small>竹内 剛</p>',
-     '<p class="name"><small>CEO, Nowhere Group Inc.</small>Go Takeuchi</p>'),
-    ('>代表メッセージを見る →<',
-     '>Read the full message →<'),
-    ('>採用情報<',
-     '>Careers (Japanese)<'),
-    ('<p class="tp-lead">まだない宿泊の未来を、<br>一緒につくる。</p>',
-     '<p class="tp-lead">Let\'s build a future of lodging<br>that doesn\'t exist yet.</p>'),
-    ('不動産だけでもない。ホテル運営だけでもない。清掃だけでも、テクノロジーだけでもない。',
-     'Not just real estate. Not just hotel operation. Not just cleaning, and not just technology.'),
-    ('異なる専門性を持つメンバーが、会社や部署の境界を越えて一つの宿泊事業をつくる。それがNowhere Groupの仕事です。',
-     'Members with different expertise cross company and department lines to build one lodging business. That is the work of Nowhere Group.'),
-    ('>採用情報を見る →<',
-     '>See open positions →<'),
+    ('alt="宿から旅立つ旅人と、灯台のある海辺の町のイラスト"',
+     'alt="Illustration of a traveler leaving an inn and a seaside town with a lighthouse"'),
 ]
 EN_PAGES = ('company', 'service', 'contact', 'privacy')
 
@@ -1075,6 +1080,16 @@ def build_en_top():
     return left
 
 
+def build_sitemap():
+    """sitemap.xml（トップ・英語トップと、このスクリプトが生成したページ）"""
+    urls = ['', 'en/'] + sorted(set(WRITTEN))
+    body = ''.join(f'<url><loc>https://nowhere.group/{u}</loc></url>\n' for u in urls)
+    with open(os.path.join(BASE, 'sitemap.xml'), 'w', encoding='utf-8') as f:
+        f.write('<?xml version="1.0" encoding="UTF-8"?>\n'
+                f'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{body}</urlset>\n')
+    return len(urls)
+
+
 def main():
     n = build_pages()
     news = build_articles('news', 'News', 'お知らせ', 'pink')
@@ -1082,6 +1097,7 @@ def main():
     jobs = build_recruit()
     update_top(news, columns)
     left = build_en_top()
+    build_sitemap()
     print(f'pages: {n}, news: {len(news)}, column: {len(columns)}, recruit: {len(jobs)}, en top: ok')
     if left:
         print('  英語トップに日本語の文言が残っています（ニュース・コラムの記事タイトル以外）:')
