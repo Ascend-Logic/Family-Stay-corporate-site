@@ -1,6 +1,7 @@
 /* ==========================================================
    Nowhere Group トップページ
-   - PC（901px以上）: 1440px 幅のデザインを画面幅に合わせて拡大縮小（--page-zoom）
+   - PC（901px以上）: 1440px 幅のデザインを画面幅に合わせて拡大縮小（--page-zoom）。
+     1440px より広い画面では、背景イラストは拡大し、文章やカードなどの中身は拡大を打ち消して等倍に保つ（--cz）
    - スマホ（900px以下）: 拡大縮小をやめ、1列のレイアウトに組み替える
    ========================================================== */
 html{background:#F5F1E4;scroll-behavior:smooth}
@@ -44,7 +45,7 @@ h1,h2,h3,p{margin:0}
 /* ---------- 2. Company ---------- */
 .co{position:relative;height:720px;background:#F4EFDE;overflow:hidden}
 .co .bg-img{top:0;height:720px}
-.co-text{position:absolute;left:500px;top:130px;width:440px;display:flex;flex-direction:column;align-items:center;gap:26px;text-align:center}
+.co-text{position:absolute;scale:var(--cz,1);transform-origin:50% 0;left:500px;top:130px;width:440px;display:flex;flex-direction:column;align-items:center;gap:26px;text-align:center}
 .co-text h2{display:flex;align-items:center;gap:12px;font-family:'Outfit',sans-serif;font-weight:600;font-size:40px}
 .co-text p{font-size:17px;line-height:2;font-weight:700}
 .co-catch{margin-top:8px;display:flex;flex-direction:column;gap:6px}
@@ -54,12 +55,12 @@ h1,h2,h3,p{margin:0}
 /* ---------- 3. Service ---------- */
 .sv{position:relative;height:1920px;background:linear-gradient(to bottom,#F4EFDE 0,#9CE4FD 300px);overflow:hidden}
 .sv .bg-img{top:0;height:1920px}
-.sv-head{position:absolute;left:860px;top:120px;width:500px;display:flex;flex-direction:column;align-items:center;gap:18px}
+.sv-head{position:absolute;scale:var(--cz,1);transform-origin:50% 0;left:860px;top:120px;width:500px;display:flex;flex-direction:column;align-items:center;gap:18px}
 .sv-head h2{font-family:'Outfit',sans-serif;font-weight:600;font-size:80px;line-height:1.02;text-align:center;letter-spacing:-.01em}
 .sv-head .tilde{color:#C94A1A;font-size:60px}
 .sv-head .star{color:#7A5BD9}
 .sv-head p{font-size:17px;font-weight:700}
-.sv-cards{position:absolute;left:80px;top:640px;width:1280px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+.sv-cards{position:absolute;scale:var(--cz,1);transform-origin:50% 0;left:80px;top:640px;width:1280px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
 .sv-card{display:flex;flex-direction:column;gap:22px;padding:30px 26px 34px;border-radius:28px;color:#FFFFFF;transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s}
 .sv-card:hover{transform:translateY(-10px) rotate(-.6deg);box-shadow:0 24px 40px rgba(26,26,26,.18)}
 .sv-card h3{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700}
@@ -71,7 +72,7 @@ h1,h2,h3,p{margin:0}
 .sv-card p{font-size:14px;line-height:1.9;font-weight:700}
 .sv-card .pill{align-self:flex-start;margin-top:auto}
 .c-orange{background:#C94A1A}.c-blue{background:#2F6FD6}.c-purple{background:#7A5BD9}.c-green{background:#1B7F5A}
-.sv-cta{position:absolute;left:270px;top:1270px;width:900px;box-sizing:border-box;padding:24px 36px;background:#FFFFFF;border-radius:28px;display:flex;align-items:center;gap:28px}
+.sv-cta{position:absolute;scale:var(--cz,1);transform-origin:50% 0;left:270px;top:1270px;width:900px;box-sizing:border-box;padding:24px 36px;background:#FFFFFF;border-radius:28px;display:flex;align-items:center;gap:28px}
 .sv-cta-lbl{display:flex;flex-direction:column;gap:4px;flex-shrink:0}
 .sv-cta-lbl span:first-child{font-size:13px;font-weight:700;color:#5E5E5E}
 .sv-cta-lbl .en{font-size:30px}
@@ -88,14 +89,14 @@ h1,h2,h3,p{margin:0}
 @keyframes sway{from{transform:translateX(-40px)}to{transform:translateX(40px)}}
 .nw-inner{position:absolute;left:0;top:0;width:1440px;height:1360px;background:#252525;overflow:hidden}
 .nw .bg-img{top:0;height:810px}
-.nw-head{position:absolute;left:110px;top:270px;display:flex;align-items:flex-end;gap:60px}
+.nw-head{position:absolute;scale:var(--cz,1);transform-origin:0 100%;left:110px;top:270px;display:flex;align-items:flex-end;gap:60px}
 .nw-head h2{font-family:'Outfit',sans-serif;font-weight:600;font-size:96px;line-height:1;color:#FFFFFF;letter-spacing:-.01em}
 .nw-head .ind1{padding-left:70px}
 .nw-head .ind2{padding-left:40px}
 .nw-head .tilde{color:#F2A7C8}
 .nw-head .star{color:#FFD84A}
 .nw-head p{margin-bottom:18px;font-size:17px;font-weight:700;color:#FFFFFF}
-.nw-cards{position:absolute;left:80px;top:640px;width:1280px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
+.nw-cards{position:absolute;scale:var(--cz,1);transform-origin:50% 0;left:80px;top:640px;width:1280px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
 .nw-card{min-height:590px;box-sizing:border-box;padding:40px 34px;background:#F5F1E4;border-radius:30px;display:flex;flex-direction:column;gap:22px;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
 .nw-card:hover{transform:translateY(-8px)}
 .nw-card h3{display:flex;align-items:center;gap:12px;font-family:'Outfit',sans-serif;font-weight:600;font-size:34px}
@@ -114,11 +115,13 @@ h1,h2,h3,p{margin:0}
 .li-title{font-size:15px;font-weight:700;line-height:1.6}
 .li-news .li-title{font-size:14px}
 .li-date{font-family:'Outfit',sans-serif;font-size:13px;color:#5E5E5E}
+.li-tag{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:999px;background:#1A1A1A;color:#FFFFFF;font-family:'Zen Kaku Gothic New',sans-serif;font-size:11px;font-weight:700;line-height:1.6;vertical-align:1px}
+.li-tag.li-co{background:transparent;color:#1A1A1A;border:1px solid #1A1A1A}
 
 /* ---------- 5. フッター ---------- */
 .ft{position:relative;height:820px;background:#F3EEDB;overflow:hidden}
 .ft .bg-img{top:100px;height:720px}
-.ft-inner{position:absolute;left:520px;top:110px;width:400px;display:flex;flex-direction:column;align-items:center;gap:26px}
+.ft-inner{position:absolute;scale:var(--cz,1);transform-origin:50% 0;left:520px;top:110px;width:400px;display:flex;flex-direction:column;align-items:center;gap:26px}
 .ft-co{font-size:17px;font-weight:700}
 .ft-logo{font-family:'Bagel Fat One',sans-serif;font-size:118px;line-height:.86;text-align:center;color:#1A1A1A}
 .ft-logo small{font-size:88px}
@@ -132,29 +135,32 @@ h1,h2,h3,p{margin:0}
 
 
 /* ---------- 追加セクション（経営理念 / バリューチェーン / 事業紹介 / 強み / パートナー / 数字 / 代表メッセージ / 採用） ---------- */
-.tp{position:relative;z-index:1;width:1440px;box-sizing:border-box;padding:110px 80px 120px}
+/* 拡大を打ち消して等倍で組む（幅は画面いっぱい、中身は最大1120px） */
+.tp{position:relative;z-index:1;zoom:var(--cz,1);width:calc(1440px / var(--cz,1));box-sizing:border-box;padding:96px max(160px,calc((1440px / var(--cz,1) - 1120px) / 2)) 104px}
 .tp-alt{background:#F4EFDE}
-#strength{padding-bottom:240px}
-.tp-head{display:flex;align-items:flex-end;gap:26px;margin-bottom:44px}
+#strength{padding-bottom:40px}
+.tp-pr{padding-top:40px;padding-bottom:240px}
+.tp-banner{display:block;width:100%;max-width:760px;height:auto;margin:0 auto;border-radius:16px}
+.tp-head{display:flex;align-items:flex-end;gap:22px;margin-bottom:36px}
 .tp-head-sub{margin-top:90px}
-.tp-head h2{display:flex;align-items:center;gap:14px;font-family:'Outfit',sans-serif;font-weight:600;font-size:60px;line-height:1}
-.tp-head p{padding-bottom:8px;font-size:17px;font-weight:700}
-.tp-lead{margin-bottom:36px;font-size:36px;line-height:1.5;font-weight:700}
-.tp-text{max-width:900px;font-size:16px;line-height:2;font-weight:500}
+.tp-head h2{display:flex;align-items:center;gap:14px;font-family:'Outfit',sans-serif;font-weight:600;font-size:48px;line-height:1}
+.tp-head p{padding-bottom:6px;font-size:15px;font-weight:700}
+.tp-lead{margin-bottom:28px;font-size:28px;line-height:1.5;font-weight:700}
+.tp-text{max-width:900px;font-size:15px;line-height:2;font-weight:500}
 .tp-text + .tp-grid,.tp-text + .tp-text{margin-top:16px}
 .tp-text + .tp-grid{margin-top:44px}
 .tp-grid{display:grid;gap:24px}
 .tp-grid.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
 .tp-grid.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
-.tp-card{display:flex;flex-direction:column;gap:14px;padding:38px 36px 40px;background:#FFFFFF;border:2px solid #1A1A1A;border-radius:30px}
+.tp-card{display:flex;flex-direction:column;gap:12px;padding:30px 30px 32px;background:#FFFFFF;border:2px solid #1A1A1A;border-radius:30px}
 .tp-card .lbl{font-family:'Outfit',sans-serif;font-weight:600;font-size:15px;color:#C94A1A}
-.tp-card h3{font-size:24px;line-height:1.5;font-weight:700}
-.tp-card .catch{font-size:17px;font-weight:700;line-height:1.7}
-.tp-card p{font-size:15px;line-height:1.95}
+.tp-card h3{font-size:20px;line-height:1.5;font-weight:700}
+.tp-card .catch{font-size:16px;font-weight:700;line-height:1.7}
+.tp-card p{font-size:14px;line-height:1.95}
 .tp-card .pill{align-self:flex-start;margin-top:auto}
 .tp-card p + .pill{margin-top:14px}
 .tp-cta{display:flex;justify-content:center;margin-top:44px}
-.tp-logo{display:flex;align-items:center;justify-content:center;height:170px;padding:16px;box-sizing:border-box;border-radius:20px;background:#FFFFFF;border:2px solid #1A1A1A;overflow:hidden}
+.tp-logo{display:flex;align-items:center;justify-content:center;height:140px;padding:16px;box-sizing:border-box;border-radius:20px;background:#FFFFFF;border:2px solid #1A1A1A;overflow:hidden}
 .tp-logo img{height:100%;width:auto;max-width:100%;object-fit:contain}
 .tp-chain{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:14px;margin:0;padding:0;list-style:none}
 .tp-chain4{grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
@@ -165,19 +171,19 @@ h1,h2,h3,p{margin:0}
 .tp-chain .who{display:inline-block;align-self:flex-start;padding:4px 10px;border-radius:999px;background:#1A1A1A;color:#FFFFFF;font-family:'Outfit',sans-serif;font-weight:600;font-size:11px;line-height:1.4}
 .tp-chain p{font-size:12.5px;line-height:1.8;color:#5E5E5E;font-weight:500}
 .tp-chain4 p{font-size:14px;color:#1A1A1A}
-.tp-center{margin-top:48px;text-align:center;font-size:30px;line-height:1.6;font-weight:700}
+.tp-center{margin-top:40px;text-align:center;font-size:24px;line-height:1.6;font-weight:700}
 .tp-center .sub{display:block;margin-top:14px;font-size:15px;font-weight:500}
 .tp-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px}
-.tp-stat{display:flex;flex-direction:column;align-items:center;gap:10px;padding:36px 16px 32px;background:#FFFFFF;border:2px solid #1A1A1A;border-radius:28px;text-align:center}
-.tp-stat strong{font-family:'Outfit',sans-serif;font-weight:700;font-size:56px;line-height:1;color:#C94A1A}
+.tp-stat{display:flex;flex-direction:column;align-items:center;gap:10px;padding:28px 12px 26px;background:#FFFFFF;border:2px solid #1A1A1A;border-radius:28px;text-align:center}
+.tp-stat strong{font-family:'Outfit',sans-serif;font-weight:700;font-size:44px;line-height:1;color:#C94A1A}
 .tp-stat small{display:block;margin-top:8px;font-family:'Zen Kaku Gothic New',sans-serif;font-size:14px;font-weight:700;color:#1A1A1A}
 .tp-stat span{font-size:14px;font-weight:700}
-.tp-ceo{display:grid;grid-template-columns:360px minmax(0,1fr);gap:64px;align-items:center}
+.tp-ceo{display:grid;grid-template-columns:300px minmax(0,1fr);gap:56px;align-items:center}
 .tp-ceo-photo{border-radius:30px;overflow:hidden;border:2px solid #1A1A1A;aspect-ratio:4/5}
 .tp-ceo-photo img{width:100%;height:100%;object-fit:cover}
 .tp-ceo-body{display:flex;flex-direction:column;gap:16px}
-.tp-ceo-body h3{margin-bottom:8px;font-size:34px;line-height:1.5;font-weight:700}
-.tp-ceo-body p{font-size:16px;line-height:2}
+.tp-ceo-body h3{margin-bottom:8px;font-size:26px;line-height:1.5;font-weight:700}
+.tp-ceo-body p{font-size:15px;line-height:2}
 .tp-ceo-body .name{margin-top:8px;font-size:22px;font-weight:700}
 .tp-ceo-body .name small{display:block;margin-bottom:4px;font-size:13px;font-weight:500;color:#5E5E5E}
 .tp-ceo-body .pill{align-self:flex-start;margin-top:8px}
@@ -186,6 +192,51 @@ h1,h2,h3,p{margin:0}
 .tp-recruit .pill{margin-top:24px}
 .nw-lead{font-size:14px;font-weight:700;line-height:1.7}
 .hotel-grid small{font-size:12px;font-weight:500;line-height:1.6;color:#5E5E5E}
+
+/* ---------- BUSINESS（上段：グループ4社／下段：本体3サービス） ---------- */
+.anchor{display:block;height:0;scroll-margin-top:96px}
+.sv{height:2000px}
+.sv .bg-img{height:2000px}
+.sv-tier{grid-column:1 / -1;display:flex;align-items:baseline;gap:18px;margin:0 0 4px;font-size:17px;font-weight:700}
+.sv-tier .en{font-size:30px;line-height:1.1}
+.sv-co{display:block;margin-bottom:6px;font-size:13px;opacity:.92}
+.sv-svc{position:absolute;scale:var(--cz,1);transform-origin:50% 0;z-index:1;left:80px;top:1400px;width:1280px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.sv-svc-card{display:flex;flex-direction:column;gap:12px;padding:28px 28px 30px;background:#FFFFFF;border:2px solid #1A1A1A;border-radius:28px;text-decoration:none;color:#1A1A1A;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.sv-svc-card:hover{transform:translateY(-6px);color:#1A1A1A}
+.sv-svc-card .lbl{font-family:'Outfit',sans-serif;font-weight:700;font-size:22px;color:#C94A1A}
+.sv-svc-card strong{font-size:21px;line-height:1.4}
+.sv-svc-card .txt{font-size:14px;line-height:1.9;font-weight:700}
+.sv-svc-card .more{margin-top:auto;font-size:13px;font-weight:700}
+.sv-svc-cta{grid-column:1 / -1;display:flex;justify-content:center;margin-top:16px}
+/* ブランド（ロゴは切り抜かず、ロゴの背景色の上に収める）・宿泊施設 */
+.brand-grid .ht{background:var(--logo-bg,#FFFFFF)}
+.brand-grid img{object-fit:contain}
+.hotel-grid .st{align-self:flex-start;padding:1px 8px;border-radius:999px;border:1px solid #1A1A1A;font-style:normal;font-size:11px;font-weight:700}
+.stay-list{display:flex;flex-direction:column}
+.stay-list a{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:2px dotted #1A1A1A;text-decoration:none;color:#1A1A1A}
+.st-img{flex:0 0 120px;height:84px;border-radius:12px;overflow:hidden;background:#E6DFCB}
+.st-img img{width:100%;height:100%;object-fit:cover}
+.st-img.noimg{display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-weight:700;font-size:12px;letter-spacing:.1em;color:#8C8572}
+.st-body{display:flex;flex-direction:column;gap:4px}
+.st-body strong{font-size:15px;line-height:1.5}
+.st-body small{font-size:12.5px;color:#5E5E5E;font-weight:700}
+/* バリューチェーン（4概念の短縮フロー） */
+.tp-flow li{align-items:center;justify-content:center;text-align:center;padding:26px 16px}
+.tp-flow li:not(:last-child)::after{content:'→';position:absolute;right:-21px;top:50%;transform:translateY(-50%);font-family:'Outfit',sans-serif;font-weight:700;font-size:20px}
+/* その他の取り組み・受賞 */
+.tp-works{gap:48px}
+.tp-list{display:flex;flex-direction:column;gap:16px}
+.tp-works .tp-cta{justify-content:flex-start;margin-top:24px}
+.tp-stats3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.tp-sns{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.tp-sns span{font-size:13px;font-weight:700;color:#5E5E5E}
+.tp-sns a{display:inline-flex;align-items:center;min-height:38px;padding:0 16px;border:1.5px solid #1A1A1A;border-radius:999px;background:#FFFFFF;font-size:13px;font-weight:700;text-decoration:none}
+/* フッター（正式ロゴ・メニュー） */
+/* イラスト中央の空白（鳩と点線の下）に収まるよう下げる */
+.ft-inner{left:420px;top:250px;width:600px;gap:20px}
+.ft-logo-img{width:320px;height:auto}
+.ft-menu{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px;max-width:400px}
+.ft-menu a{font-size:14px;font-weight:700;text-decoration:none}
 
 /* ---------- 演出（JS有効時のみ） ---------- */
 .js:not(.go) .hero-title,.js:not(.go) .hero-sub,.js:not(.go) .hero-img{opacity:0}
@@ -281,6 +332,9 @@ h1,h2,h3,p{margin:0}
   .tp-card h3{font-size:20px}
   .tp-chain,.tp-chain4{grid-template-columns:minmax(0,1fr);gap:12px}
   .tp-center{margin-top:32px;font-size:22px}
+  #strength{padding-bottom:24px}
+  .tp-pr{padding-top:24px;padding-bottom:120px}
+  .tp-banner{border-radius:12px}
   .tp-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
   .tp-stat{padding:26px 12px 24px}
   .tp-stat strong{font-size:40px}
@@ -288,6 +342,19 @@ h1,h2,h3,p{margin:0}
   .tp-ceo-photo{max-width:260px}
   .tp-ceo-body h3{font-size:24px}
   .tp-recruit{grid-template-columns:minmax(0,1fr);gap:20px}
+
+  /* BUSINESS・追加分 */
+  .sv{height:auto}
+  .sv .bg-img{height:auto}
+  .sv-tier{flex-direction:column;gap:2px}
+  .sv-tier .en{font-size:24px}
+  .sv-svc{position:relative;left:auto;top:auto;width:auto;margin:40px 16px 0;grid-template-columns:minmax(0,1fr);gap:16px}
+  .tp-flow li:not(:last-child)::after{content:'↓';right:auto;left:50%;top:auto;bottom:-19px;transform:translateX(-50%)}
+  .tp-flow{gap:22px}
+  .tp-works{gap:0}
+  .tp-stats3{grid-template-columns:minmax(0,1fr)}
+  .ft-inner{width:auto}
+  .ft-logo-img{width:min(280px,70vw)}
 
   /* 5. フッター */
   .ft{height:auto;padding-top:56px}
@@ -300,6 +367,7 @@ h1,h2,h3,p{margin:0}
 @media (min-width:601px) and (max-width:900px){
   .tp-chain,.tp-grid.g2,.tp-grid.g3{grid-template-columns:repeat(2,minmax(0,1fr))}
   .sv-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sv-svc{grid-template-columns:repeat(2,minmax(0,1fr))}
   .nw-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
   .nw-cards .nw-card:first-child{grid-column:1 / -1}
 }

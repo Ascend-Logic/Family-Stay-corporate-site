@@ -1,10 +1,13 @@
-<!--meta {"title":"Contact","description":"Contact Nowhere Group. Inquiries about lodging planning and production, hotel operation, real estate, cleaning, supply, Family Stay, partnerships, recruiting and media are handled in one place for the whole group.","nav":"contact","accent":"c-orange","cta":false,"hero":{"type":"illust","en":"Contact","ja":"Get in touch","color":"orange","img":"bg-footer.jpg"},"crumbs":[["Contact",""]]} -->
+<!--meta {"title":"Contact","description":"Contact Nowhere Group. From accommodation development and operations to real estate, construction and property management, cleaning, hotel supply and business partnerships, we welcome your inquiries through our shared group contact desk.","nav":"contact","accent":"c-orange","cta":false,"hero":{"type":"illust","en":"Contact","ja":"Get in touch","color":"orange","img":"bg-footer.jpg"},"crumbs":[["Contact",""]]} -->
 <section class="sec">
 <div class="wrap">
 <div style="margin-bottom:clamp(32px,4vw,56px)">
-<p class="lead" style="font-size:clamp(18px,2.2vw,24px);text-align:center">From planning and operation of lodging facilities to real estate, cleaning, supply,<br class="pc-br">sales and marketing: inquiries for every group company<br class="pc-br">are handled here, in one place.</p>
+<p class="lead" style="font-size:clamp(18px,2.2vw,24px);text-align:center">From accommodation development and operations to real estate, construction and property management, cleaning, hotel supply, and business partnerships, Nowhere Group welcomes your inquiries through our shared group contact desk. The appropriate group company or team will respond according to your inquiry.</p>
 </div>
-<!-- The form action is not set yet. Set the URL of Formspree / Google Forms / your own API as the form action. -->
+<!--
+  The form action is not set yet. Set the same receiving endpoint URL as the Japanese form (_build/pages/contact.html).
+  While action="#", the form does not send and shows a "not available yet" message (not publishable).
+-->
 <form class="form" data-contact action="#" method="post" novalidate>
 <p class="note">Fields marked <span class="req" style="margin:0 4px">Required</span> must be filled in.</p>
 <div class="field">
@@ -16,31 +19,43 @@
 <input id="f-mail" type="email" name="email" autocomplete="email" inputmode="email" placeholder="info@example.com" required>
 </div>
 <div class="field">
-<label for="f-tel">Phone number<span class="req">Required</span></label>
-<input id="f-tel" type="tel" name="tel" autocomplete="tel" inputmode="tel" placeholder="+81-3-1234-5678" required>
+<label for="f-tel">Phone number<span class="opt">Optional</span></label>
+<input id="f-tel" type="tel" name="tel" autocomplete="tel" inputmode="tel" placeholder="+81-3-1234-5678">
+</div>
+<div class="field">
+<label for="f-company">Company<span class="opt">Optional</span></label>
+<input id="f-company" type="text" name="company" autocomplete="organization" placeholder="Company name">
 </div>
 <div class="field">
 <label for="f-type">Inquiry type<span class="req">Required</span></label>
-<select id="f-type" name="type" required>
+<select id="f-type" name="type" required aria-describedby="f-type-hint">
 <option value="">Please select</option>
-<option>Lodging planning and production</option>
-<option>Hotel operation</option>
-<option>Real estate and properties</option>
-<option>Cleaning</option>
-<option>Supply</option>
-<option>Family Stay</option>
-<option>Partnership and collaboration</option>
-<option>Recruiting</option>
-<option>Press and media</option>
-<option>Other</option>
+<option value="produce" data-route="Nowhere Group 宿泊事業部" data-facility data-hint="Our Lodging Division (Nowhere Group) will respond to inquiries about accommodation development and production.">Hotel Development &amp; Production</option>
+<option value="operation" data-route="Nowhere Group 宿泊事業部" data-facility data-hint="Our Lodging Division (Nowhere Group) will respond to inquiries about accommodation operations.">Hotel &amp; Accommodation Operations</option>
+<option value="real-estate" data-route="VESTPORT" data-hint="VESTPORT Inc. will respond to inquiries about real estate, construction and property management.">Real Estate, Construction &amp; Property Management</option>
+<option value="cleaning" data-route="CLEANX9" data-hint="CLEANX9 Inc. will respond to inquiries about cleaning.">Cleaning Services</option>
+<option value="supply" data-route="Nowhere Group SUPPLY事業部" data-hint="Our Supply Division (Nowhere Group) will respond to inquiries about hotel supply.">Hotel Supply</option>
+<option value="brand" data-route="グループ事業企画部・営業担当" data-hint="Our Group Business Planning and sales team will respond to inquiries about hotel brands and joint development.">Hotel Brands &amp; Joint Development</option>
+<option value="family-stay" data-route="Family Stay 事業開発窓口" data-hint="Family Stay's OTA and retail media for family travel are currently in development. Our business development desk will respond.">Family Stay (OTA &amp; Retail Media)</option>
+<option value="partnership" data-route="グループ営業部／社長室" data-hint="Received by the group contact desk and forwarded internally to the appropriate team.">Partnerships &amp; Business Alliances</option>
+<option value="reservation" data-route="各施設ゲスト専用窓口" data-facility data-hint="For bookings and questions during your stay, the guest desk of each property (e.g. the messaging on your booking site) can help you fastest. If you send this form, please enter the property name.">Reservations &amp; Guest Inquiries</option>
+<option value="recruit" data-route="社長室・採用窓口" data-block data-hint="Please apply for jobs and casual interviews from our recruit page (Japanese). This form does not accept them.">Recruitment &amp; Casual Interviews</option>
+<option value="media" data-route="PR担当" data-hint="Received by the group contact desk and forwarded internally to our PR team.">Media &amp; Public Relations</option>
+<option value="other" data-route="コーポレート本部" data-hint="Received by the group contact desk and forwarded internally to the appropriate team.">Other Inquiries</option>
 </select>
+<p class="note type-hint" id="f-type-hint" aria-live="polite" hidden></p>
+<p class="type-block" data-block-msg hidden><a class="btn" href="{{root}}recruit/" lang="ja">Recruit page (Japanese) <span class="arr">→</span></a></p>
+</div>
+<div class="field" data-facility-field hidden>
+<label for="f-facility">Property name<span class="opt">Optional</span></label>
+<input id="f-facility" type="text" name="facility" placeholder="e.g. OMATSURI BASE Nakanoshimbashi">
 </div>
 <div class="field">
 <label for="f-msg">Inquiry details<span class="req">Required</span></label>
 <textarea id="f-msg" name="message" placeholder="Please enter your inquiry" required></textarea>
 </div>
 <div class="hp" aria-hidden="true"><label for="f-hp">Leave this field empty</label><input id="f-hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off"></div>
-<p class="note">Please fill out the form above and we will get back to you by email within 2-3 business days.</p>
+<p class="note">After reviewing your inquiry, the appropriate group company or team will contact you by email or phone.</p>
 <label class="agree"><input type="checkbox" name="agree" required><span>I have read and agree to the <a href="{{home}}privacy/" target="_blank">Privacy Policy</a>.</span></label>
 <p class="form-msg" role="status" tabindex="-1"></p>
 <button class="btn btn-dark submit" type="submit">Send <span class="arr">→</span></button>

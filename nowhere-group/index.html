@@ -12,12 +12,12 @@
 <link rel="icon" href="images/logo/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="images/logo/apple-touch-icon.png">
 <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&amp;family=Outfit:wght@500;600;700&amp;family=Zen+Kaku+Gothic+New:wght@500;700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/header.css?v=5038954b">
-<link rel="stylesheet" href="assets/css/top.css?v=5038954b">
-<script src="assets/js/header.js?v=5038954b" defer></script>
+<link rel="stylesheet" href="assets/css/header.css?v=95b6fa1a">
+<link rel="stylesheet" href="assets/css/top.css?v=95b6fa1a">
+<script src="assets/js/header.js?v=95b6fa1a" defer></script>
 <script>
 // PC: 1440px のデザインを画面幅に合わせて拡大縮小（900px 以下は top.css の1列レイアウトに切り替わる）
-(function(){function fit(){var z=document.documentElement.clientWidth/1440;document.documentElement.style.setProperty('--page-zoom',z);}fit();window.addEventListener('resize',fit);})();
+(function(){function fit(){var r=document.documentElement,z=r.clientWidth/1440;r.style.setProperty('--page-zoom',z);r.style.setProperty('--cz',Math.min(1,1/z));}fit();window.addEventListener('resize',fit);})();
 document.documentElement.classList.add('js');
 document.addEventListener('DOMContentLoaded',function(){
   // ヒーロー見出しを1文字ずつ分割
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded',function(){
   // 装飾記号をゆっくり回転
   document.querySelectorAll('.page h2 .star').forEach(function(el){el.classList.add('spin');});
   // スクロールで順番にふわっと表示
-  var groups=['.co-text > *','.sv-head > *','.sv-card','.sv-cta','.nw-head h2','.nw-head p','.nw-card','.ft-inner > *','.tp-head','.tp-lead','.tp-text','.tp-card','.tp-chain > li','.tp-stat','.tp-ceo > *','.tp-recruit > *','.tp-center','.tp-cta'];
+  var groups=['.co-text > *','.sv-head > *','.sv-tier','.sv-card','.sv-svc-card','.sv-svc-cta','.nw-head h2','.nw-head p','.nw-card','.ft-inner > *','.tp-head','.tp-lead','.tp-text','.tp-card','.tp-chain > li','.tp-stat','.tp-ceo > *','.tp-recruit > *','.tp-cta','.stay-list > a'];
   groups.forEach(function(sel){document.querySelectorAll(sel).forEach(function(el,idx){el.classList.add('rv');el.style.setProperty('--d',(Math.min(idx,6)*0.09)+'s');});});
   if('IntersectionObserver' in window){
     var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -10% 0px'});
@@ -47,8 +47,7 @@ document.addEventListener('DOMContentLoaded',function(){
 <nav id="gnav" class="site-nav" aria-label="メインメニュー">
 <a href="company/">私たちについて</a>
 <a href="service/">事業紹介</a>
-<a href="service/#group">グループ会社</a>
-<a href="service/regional-brand-creation/">ブランド・実績</a>
+<a href="service/regional-brand-creation/#brands">ブランド・実績</a>
 <a href="news/">お知らせ</a>
 <a href="recruit/">採用情報</a>
 <a href="en/" lang="en" hreflang="en" aria-label="English">EN</a>
@@ -60,9 +59,6 @@ document.addEventListener('DOMContentLoaded',function(){
 <!-- ===== 左の固定タブ（PCのみ） ===== -->
 <div class="side-tab">
 <a href="contact/" class="side-contact">お問い合わせ</a>
-<a href="https://www.instagram.com/nowhere_group/" class="side-ig" aria-label="Instagram" target="_blank" rel="noopener">
-<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C94A1A" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1" fill="#C94A1A"></circle></svg>
-</a>
 </div>
 
 <!-- ===== 1. FIRST VIEW ===== -->
@@ -74,146 +70,96 @@ document.addEventListener('DOMContentLoaded',function(){
 <img class="bg-img hero-img" src="images/hero.jpg" alt="温泉旅館、海辺の町、山、祭り、地域の食を旅する人々のイラスト" style="--ft:60px;--fb:150px" width="1774" height="887">
 </section>
 
-<!-- ===== 1b. 経営理念 ===== -->
+<!-- ===== 1b. グループ理念 ===== -->
 <section id="philosophy" class="tp">
-<div class="tp-head"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#C94A1A" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Philosophy</h2><p>経営理念</p></div>
+<div class="tp-head"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#C94A1A" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Group Philosophy</h2><p>グループ理念</p></div>
 <div class="tp-grid g2">
 <div class="tp-card">
 <span class="lbl">Group Mission</span>
 <h3>旅を起点に、<br>人々の心にアナザースカイを創る。</h3>
-<p>旅には、日常では出会えない景色、人、文化、時間があります。</p>
-<p>私たちは宿泊を起点に、新しい体験と出会いを生み出し、人々の心にもうひとつの大切な場所を創っていきます。</p>
 </div>
 <div class="tp-card">
 <span class="lbl">Group Vision</span>
 <h3>2030年までに、<br>旅行の満足度で選ばれる宿泊グループになる。</h3>
-<p>施設をつくることだけが、私たちの仕事ではありません。</p>
-<p>旅をする人、宿を持つ人、地域で暮らす人、宿泊を支える人。それぞれに価値が生まれる宿泊事業をつくり、日本の宿泊産業をより豊かなものにしていきます。</p>
 </div>
 </div>
-<div class="tp-cta"><a href="company/#philosophy" class="pill pill-lg">経営理念を見る →</a></div>
 </section>
 
 <!-- ===== 2. COMPANY ===== -->
 <section id="company" class="co">
 <div class="co-text">
 <h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#2F6FD6" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Company</h2>
-<p>Nowhere Groupは、宿泊を起点に、<br>不動産、企画・開発、運営、清掃、販売・集客<br>までをグループで展開する宿泊事業グループです。</p>
-<p>宿泊事業に必要な機能をグループ内に持ち、<br>現場で得た知見を次の企画・開発へ還元する<br>ことで、施設の価値を継続的に高めていきます。</p>
-<div class="co-catch">
-<span class="en">Make it happen together</span>
-<span>宿泊施設の「入口から出口まで」を、グループで。</span>
-</div>
-<a href="company/" class="pill pill-lg">Nowhere Groupについて</a>
+<p>不動産の活用から宿泊施設プロデュース、運営・清掃、販売・集客、資産の次の活用まで。グループ各社の専門性をつなぐ宿泊事業グループです。</p>
+<p>現場で得た知見を次の施設づくりへ生かし、宿の価値を継続して育てていきます。</p>
+<a href="company/#about" class="pill pill-lg">会社の想いと、宿泊事業における強みを見る</a>
 </div>
 <img class="bg-img" src="images/bg-company.jpg" alt="古民家の宿で旅人を迎えるスタッフのイラスト" style="--ft:80px;--fb:140px" width="1774" height="887" loading="lazy">
 </section>
 
-<!-- ===== 3. SERVICE ===== -->
-<section id="service" class="sv">
+<!-- ===== 3. BUSINESS（上段：グループ4社／下段：Nowhere Group株式会社の3サービス） ===== -->
+<!-- 旧 #service（Our Service）・旧 #business の着地点。2つの id は別々の空要素で保持する -->
+<span id="service" class="anchor" aria-hidden="true"></span><span id="business" class="anchor" aria-hidden="true"></span>
+<section class="sv" aria-labelledby="business-title">
 <img class="bg-img" src="images/bg-service.jpg" alt="虹と海辺の町、設計図やスマホ、地域のマルシェを囲む旅人のイラスト" style="--ft:300px" width="1086" height="1448" loading="lazy">
 <div class="sv-head">
-<h2>Our <span class="star">✺</span><br><span class="tilde">~</span> Service<br>NOWHERE</h2>
-<p>それぞれの専門性をつなぎ、<br>宿泊の価値を最大化する。</p>
+<h2 id="business-title">Our <span class="star">✺</span><br><span class="tilde">~</span> Business<br>NOWHERE</h2>
+<p>不動産から宿泊施設のプロデュース・運営、清掃、ホテルSUPPLY、そして新たな旅行販売の仕組みづくりまで。専門性の異なるグループ4社が連携し、宿泊の価値を生み出しています。</p>
 </div>
 <div class="sv-cards">
+<h3 class="sv-tier"><span class="en">OUR GROUP</span>グループ各社の専門領域</h3>
 <article class="sv-card c-orange">
-<h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 L12 4 L21 11 V20 H3 Z"></path><path d="M9 20 V14 H15 V20"></path></svg>宿泊施設の価値を、企画から運営までつくる。</h3>
+<h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 L12 4 L21 11 V20 H3 Z"></path><path d="M9 20 V14 H15 V20"></path></svg>宿泊施設のプロデュース・運営</h3>
 <div class="sv-thumb sv-logo"><img src="images/logo/nowhere-group-logo.png" alt="Nowhere Group" width="800" height="157" loading="lazy"></div>
 <div class="en">Nowhere Group</div>
-<p>宿泊施設の企画・プロデュース、開業支援、運営、ホテルSUPPLYを担う、Nowhere Groupの中核会社。宿泊プロデュース／宿泊施設運営／ホテルSUPPLY</p>
+<p><span class="sv-co">Nowhere Group株式会社</span>宿泊施設プロデュース、宿泊施設運営、ホテルSUPPLYを中核に、宿の価値をつくり、育てる。</p>
 <a href="service/hotel/" class="pill pill-white">詳しく見る</a>
 </article>
 <article class="sv-card c-blue">
-<h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M3 18 V9 H21 V18"></path><path d="M3 14 H21"></path><path d="M3 18 V21 M21 18 V21"></path><rect x="5" y="10.5" width="5" height="3.5" rx="1"></rect></svg>宿泊投資を、もっと身近に。</h3>
+<h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M3 18 V9 H21 V18"></path><path d="M3 14 H21"></path><path d="M3 18 V21 M21 18 V21"></path><rect x="5" y="10.5" width="5" height="3.5" rx="1"></rect></svg>不動産・工事・建物管理</h3>
 <div class="sv-thumb sv-logo"><img src="images/logo/vestport-logo.png" alt="VESTPORT" width="935" height="173" loading="lazy"></div>
 <div class="en">VESTPORT</div>
-<p>宿泊不動産の仕入れ・販売・流通から、工事、建物管理、資産活用、売却・出口戦略までを担う宿泊不動産会社。不動産／工事／プロパティマネジメント／再流通・出口支援</p>
+<p><span class="sv-co">VESTPORT株式会社</span>不動産・資産活用の相談から工事・改修、建物管理まで、宿泊事業の不動産領域を支える。</p>
 <a href="service/profitable-real-estate/" class="pill pill-white">詳しく見る</a>
 </article>
 <article class="sv-card c-purple">
-<h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M12 21 C7 15 5 12 5 9 A7 7 0 0 1 19 9 C19 12 17 15 12 21 Z"></path><circle cx="12" cy="9" r="2.5"></circle></svg>宿泊体験の品質を、現場から支える。</h3>
+<h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M12 21 C7 15 5 12 5 9 A7 7 0 0 1 19 9 C19 12 17 15 12 21 Z"></path><circle cx="12" cy="9" r="2.5"></circle></svg>清掃</h3>
 <div class="sv-thumb sv-logo"><img src="images/logo/cleanx9-logo.png" alt="CLEANX9" width="889" height="192" loading="lazy"></div>
 <div class="en">CLEANX9</div>
-<p>ホテル・民泊清掃を中心に、リネン配送、ハウスクリーニング、現地設営、各種現地対応など、宿泊施設の現地オペレーションを支える会社。</p>
+<p><span class="sv-co">CLEANX9株式会社</span>清掃とリネン・現地対応を通じ、宿泊施設の品質を現場から支える。</p>
 <a href="service/hotel/cleanx9/" class="pill pill-white">詳しく見る</a>
 </article>
 <article class="sv-card c-green">
-<h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"></rect><path d="M8 21 H16 M12 17 V21"></path></svg>旅する人と、旅を支える人をつなぐ。</h3>
+<h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"></rect><path d="M8 21 H16 M12 17 V21"></path></svg>OTA・リテールメディア【開発準備中】</h3>
 <div class="sv-thumb sv-logo"><img src="images/logo/family-stay-logo.png" alt="Family Stay" width="931" height="175" loading="lazy"></div>
 <div class="en">Family Stay</div>
-<p>AI・SNS・OTAを融合し、旅行者には新しい旅行発見・予約体験を、宿泊事業者には販売・集客・広告・顧客獲得の仕組みを提供するTravel Tech企業。</p>
+<p><span class="sv-co">株式会社Family Stay</span>家族旅行に特化したOTA・リテールメディアの事業開発を進める。</p>
 <a href="service/platform/" class="pill pill-white">詳しく見る</a>
 </article>
 </div>
-<div class="sv-cta">
-<div class="sv-cta-lbl">
-<span>宿泊事業のご相談</span>
-<span class="en">Make it happen</span>
-</div>
-<p>宿泊施設の企画・運営から、不動産、清掃、SUPPLY、販売・集客まで。お問い合わせはグループ窓口でまとめて承ります。</p>
-<a href="contact/" class="pill pill-ghost">お問い合わせ</a>
+<div class="sv-svc">
+<h3 class="sv-tier"><span class="en">NOWHERE GROUP SERVICES</span>Nowhere Group株式会社の主なサービス</h3>
+<a class="sv-svc-card" href="service/hotel/#produce"><span class="lbl">01</span><strong>宿泊施設プロデュース</strong><span class="txt">施設の可能性を見極め、事業性と宿泊体験を一体で設計する。</span><span class="more">詳しく見る →</span></a>
+<a class="sv-svc-card" href="service/hotel/hotel/"><span class="lbl">02</span><strong>宿泊施設運営</strong><span class="txt">既存OTAの販売管理からゲスト対応、現地オペレーションまで、開業後の価値を育てる。</span><span class="more">詳しく見る →</span></a>
+<a class="sv-svc-card" href="service/hotel/#supply"><span class="lbl">03</span><strong>ホテルSUPPLY</strong><span class="txt">開業準備の一括調達から、運営中の備品・消耗品の継続補充まで。</span><span class="more">詳しく見る →</span></a>
+<div class="sv-svc-cta"><a href="company/#group" class="pill pill-lg">グループ4社の体制を見る →</a></div>
 </div>
 </section>
 
-<!-- ===== 3b. 宿泊バリューチェーン ===== -->
+<!-- ===== 3b. バリューチェーン／強み ===== -->
 <section id="value-chain" class="tp tp-alt">
 <div class="tp-head"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#2F6FD6" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Value Chain</h2><p>宿泊バリューチェーン</p></div>
-<p class="tp-lead">宿泊施設の入口から出口まで。</p>
-<ol class="tp-chain">
-<li><span class="num">01</span><h3>物件を見つける・取得する</h3><span class="who">VESTPORT</span><p>物件仕入れ／売買／賃貸／事業承継</p></li>
-<li><span class="num">02</span><h3>事業を企画する</h3><span class="who">Nowhere Group</span><p>市場調査／事業性判断／収支計画／事業スキーム／コンセプト</p></li>
-<li><span class="num">03</span><h3>宿泊施設をつくる</h3><span class="who">Nowhere Group × VESTPORT</span><p>宿泊プロデュース／ブランド・コンセプト設計／空間・デザイン／工事／許認可支援／開業準備</p></li>
-<li><span class="num">04</span><h3>宿泊施設を運営する</h3><span class="who">Nowhere Group × CLEANX9 × VESTPORT</span><p>宿泊施設運営／ゲスト対応／価格・在庫管理／清掃／現地オペレーション／建物管理／緊急対応</p></li>
-<li><span class="num">05</span><h3>施設に必要なものを届ける</h3><span class="who">Nowhere Group / SUPPLY事業部</span><p>家具／家電／寝具／備品／アメニティ／消耗品／清掃用品</p></li>
-<li><span class="num">06</span><h3>旅行者へ届ける</h3><span class="who">Family Stay</span><p>宿泊販売／集客／マーケティング／AI／OTA／顧客接点</p></li>
-<li><span class="num">07</span><h3>売る・引き継ぐ</h3><span class="who">VESTPORT</span><p>売却／事業承継／再流通／出口支援</p></li>
+<ol class="tp-chain tp-chain4 tp-flow">
+<li><span class="num">01</span><h3>不動産・資産活用</h3></li>
+<li><span class="num">02</span><h3>宿泊施設プロデュース</h3></li>
+<li><span class="num">03</span><h3>開業・運営・清掃</h3></li>
+<li><span class="num">04</span><h3>資産の次の活用</h3></li>
 </ol>
-<p class="tp-center">現場で得た知見を、<br>次の施設づくりへ。</p>
+<div class="tp-cta"><a href="service/#value-chain" class="pill pill-lg">詳しい宿泊バリューチェーンを見る →</a></div>
+<div id="strength" class="tp-head tp-head-sub"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#7A5BD9" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Strength</h2><p>Nowhere Groupの強み</p></div>
+<p class="tp-lead">当社の強みは、清掃・宿泊運営の現場から得られる課題や知見を、次の施設の宿泊施設プロデュースに反映できることです。</p>
 </section>
 
-<!-- ===== 3c. 事業紹介 ===== -->
-<section id="business" class="tp">
-<div class="tp-head"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#1B7F5A" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Business</h2><p>Nowhere Group株式会社の事業紹介</p></div>
-<div class="tp-grid g3">
-<div class="tp-card">
-<span class="lbl">宿泊事業部</span>
-<h3>宿泊プロデュース</h3>
-<p class="catch">事業として成立する宿泊施設を、企画から形にする。</p>
-<p>市場、競合、立地、物件特性を分析し、ターゲット、収支計画、コンセプト、空間、宿泊体験までを設計します。企画だけで終わらず、実際の運営・清掃現場で蓄積した知見を施設づくりへ反映することで、ゲスト満足度、収益性、運営効率を両立した宿泊施設をつくります。</p>
-<a href="service/hotel/#produce" class="pill">詳しく見る</a>
-</div>
-<div class="tp-card">
-<span class="lbl">宿泊事業部</span>
-<h3>宿泊施設運営</h3>
-<p class="catch">開業した施設の価値を、育て続ける。</p>
-<p>ホテル、民泊、一棟貸しなどの宿泊施設について、販売、予約管理、価格調整、ゲスト対応、現地オペレーションまで、日々の施設運営を総合的に支援します。売上、レビュー、ゲスト対応、清掃現場などから得られる情報を分析し、継続的な施設改善へつなげます。</p>
-<a href="service/hotel/hotel/" class="pill">詳しく見る</a>
-</div>
-<div class="tp-card">
-<span class="lbl">SUPPLY事業部</span>
-<h3>ホテルSUPPLYサービス</h3>
-<p class="catch">宿泊施設に必要なものを、まとめて届ける。</p>
-<p>Nowhere Groupが宿泊施設の開発・運営を通じて培ってきたノウハウと調達ネットワークを活用し、宿泊施設に必要な商品を提供します。開業時の一括調達から、運営開始後の補充・継続供給まで対応します。</p>
-<a href="service/hotel/#supply" class="pill">詳しく見る</a>
-</div>
-</div>
-</section>
-
-<!-- ===== 3d. 強み ===== -->
-<section id="strength" class="tp tp-alt">
-<div class="tp-head"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#7A5BD9" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Strength</h2><p>Nowhere Groupの強み</p></div>
-<p class="tp-lead">現場から、宿をつくる。</p>
-<ol class="tp-chain tp-chain4">
-<li><span class="num">01</span><h3>清掃</h3><p>施設が実際にどう使われるのかを知る。汚れ方、動線、備品の消耗、清掃時間などを現場で知る。</p></li>
-<li><span class="num">02</span><h3>運営</h3><p>ゲストが何に満足し、何に困るのかを知る。問い合わせ、レビュー、トラブル、予約動向から体験価値を理解する。</p></li>
-<li><span class="num">03</span><h3>プロデュース</h3><p>現場で起きる問題を、企画・設計段階で解決する。</p></li>
-<li><span class="num">04</span><h3>不動産</h3><p>事業性と出口から、物件を判断する。</p></li>
-</ol>
-<p class="tp-center">清掃しにくい施設をつくらない。<br>ゲストが迷う施設をつくらない。<br>運営しにくい施設をつくらない。<br><span class="sub">現場を知っているからこそ、施設づくりの段階から解決できる。</span></p>
-</section>
-
-<!-- ===== 4. Hotel / Column / News ===== -->
+<!-- ===== 4. Brands / Hotels & Stays / News ===== -->
 <section id="news" class="nw">
 <svg class="wave wave-top" viewBox="0 0 1600 160" preserveAspectRatio="none" aria-hidden="true">
 <path class="w-back" fill="#8F6A85" d="M0 160V78C110 40 220 30 340 58S560 118 700 92 930 20 1070 34 1300 104 1440 84 1560 44 1600 50V160Z"/>
@@ -223,42 +169,39 @@ document.addEventListener('DOMContentLoaded',function(){
 <div class="nw-inner">
 <img class="bg-img" src="images/bg-news.jpg" alt="提灯と祭り、夜の温泉街のイラスト" style="--ft:70px;--fb:120px" width="1672" height="941" loading="lazy">
 <div class="nw-head">
-<h2>Hotel<br><span class="ind1"><span class="tilde">~</span> Works</span><br><span class="ind2">News</span> <span class="star">✸</span></h2>
-<p>ホテルブランド・実績・お知らせ</p>
+<h2>Brands<br><span class="ind1"><span class="tilde">~</span> Hotels</span><br><span class="ind2">News</span> <span class="star">✸</span></h2>
+<p>ブランド・宿泊施設・お知らせ</p>
 </div>
 <div class="nw-cards">
 <div class="nw-card">
-<h3><svg width="28" height="24" viewBox="0 0 30 26" fill="none" stroke="#2F6FD6" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Hotel Brands</h3>
-<p class="nw-lead">宿泊すること自体が、旅の目的になる場所をつくる。</p>
-<div class="hotel-grid">
-<a href="service/regional-brand-creation/#brands"><div class="ht"><img src="images/brands/omatsuri-base.jpg" alt="OMATSURI BASE" loading="lazy"></div><span>OMATSURI BASE</span><small>365日、日本のお祭りを体験できる宿。</small></a>
-<a href="service/regional-brand-creation/#brands"><div class="ht"><img src="images/site/service/hotel/hotel_result_37.jpg" alt="" loading="lazy"></div><span>Family BASE</span><small>家族の「また来たい」をつくる宿。</small></a>
-<a href="service/regional-brand-creation/#brands"><div class="ht"><img src="images/site/service/hotel/hotel_result_9.jpg" alt="" loading="lazy"></div><span>由楽</span><small>今後展開予定</small></a>
-<a href="service/regional-brand-creation/#brands"><div class="ht"><img src="images/site/visual/visual_12.jpg" alt="" loading="lazy"></div><span>墨武 -BOKUBU-</span><small>今後展開予定</small></a>
+<h3><svg width="28" height="24" viewBox="0 0 30 26" fill="none" stroke="#2F6FD6" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Brands</h3>
+<div class="hotel-grid brand-grid">
+<a href="service/regional-brand-creation/#brand-omatsuri"><div class="ht" style="--logo-bg:#FFFFFF"><img src="images/brands/omatsuri-base.jpg" alt="OMATSURI BASE" width="1200" height="1125" loading="lazy"></div><span>OMATSURI BASE</span><small>365日、日本のお祭りを体験できる宿。</small><em class="st">営業中</em></a>
+<a href="service/regional-brand-creation/#brand-family-base"><div class="ht" style="--logo-bg:#FDFCF7"><img src="images/brands/family-base.webp" alt="FAMILY BASE" width="1350" height="1400" loading="lazy"></div><span>FAMILY BASE</span><small>家族みんなが主役の、思い出をつくるホテル。</small><em class="st">開業準備中</em></a>
+<a href="service/regional-brand-creation/#brand-bokubu"><div class="ht" style="--logo-bg:#000000"><img src="images/brands/bokubu.webp" alt="墨武" width="1536" height="1024" loading="lazy"></div><span>墨武</span><small>墨で描かれた武士の世界に泊まる。</small><em class="st">開業準備中</em></a>
+<a href="service/regional-brand-creation/#brand-yura"><div class="ht" style="--logo-bg:#6E6D6D"><img src="images/brands/yura.webp" alt="由楽" width="2000" height="2000" loading="lazy"></div><span>由楽</span><small>人目を気にせず、自由にくつろぐ。</small></a>
 </div>
-<a href="service/regional-brand-creation/#brands" class="pill">View More</a>
+<a href="service/regional-brand-creation/#brands" class="pill">すべてのブランドを見る</a>
 </div>
 <div class="nw-card">
-<h3><svg width="28" height="24" viewBox="0 0 30 26" fill="none" stroke="#7A5BD9" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Works</h3>
-<p class="nw-lead">宿泊施設に、そこに泊まる理由をつくる。</p>
-<div class="li-list">
-<a href="service/regional-brand-creation/#projects" class="li-row li-col"><span class="li-badge">W</span><span class="li-body"><span class="li-title">Kids' Play Villa</span><span class="li-date">家族 × 遊び</span></span></a>
-<a href="service/regional-brand-creation/#projects" class="li-row li-col"><span class="li-badge">W</span><span class="li-body"><span class="li-title">タイムトリップOTOWA</span><span class="li-date">空き家 × 昭和レトロ</span></span></a>
-<a href="service/regional-brand-creation/#projects" class="li-row li-col"><span class="li-badge">W</span><span class="li-body"><span class="li-title">ZEN &amp; BED 望月庵</span><span class="li-date">寺 × 日本文化</span></span></a>
-<a href="service/regional-brand-creation/#projects" class="li-row li-col"><span class="li-badge">W</span><span class="li-body"><span class="li-title">Azure Palace 伊豆高原</span><span class="li-date">中古別荘 × 大人の遊び場</span></span></a>
+<h3><svg width="28" height="24" viewBox="0 0 30 26" fill="none" stroke="#7A5BD9" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Hotels &amp; Stays</h3>
+<div class="stay-list">
+<a href="https://zenandbed.com/" target="_blank" rel="noopener"><span class="st-img"><img src="images/site/service/hotel/hotel_result_19.jpg" alt="ZEN &amp; BED 望月庵" loading="lazy"></span><span class="st-body"><strong>ZEN &amp; BED 望月庵</strong><small>山梨｜体験型ホテル（寺泊）</small></span></a>
+<a href="https://kidsplayvilla.com/" target="_blank" rel="noopener"><span class="st-img"><img src="images/site/service/hotel/hotel_result_37.jpg" alt="Kids’ Play Villa" loading="lazy"></span><span class="st-body"><strong>Kids’ Play Villa</strong><small>千葉｜ヴィラ型無人ホテル</small></span></a>
+<a href="https://villa-piesta.com/" target="_blank" rel="noopener"><span class="st-img noimg" aria-hidden="true">NOWHERE</span><span class="st-body"><strong>Villa Piesta</strong><small>静岡｜アパートメント型無人ホテル</small></span></a>
 </div>
-<a href="service/regional-brand-creation/#projects" class="pill">View More</a>
+<a href="service/hotel/#hotel" class="pill">主な宿泊施設を見る</a>
 </div>
 <div class="nw-card">
 <h3><svg width="28" height="24" viewBox="0 0 30 26" fill="none" stroke="#E0689E" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>News</h3>
 <div class="li-list">
 <!-- build:news -->
-<a href="news/2313/" class="li-row li-news"><span class="li-badge">N</span><span class="li-body"><span class="li-date">2026.06.05</span><span class="li-title">JTBによる共創プロジェクト「地域未来にぎわい工房」へ参画</span></span></a>
-<a href="news/2309/" class="li-row li-news"><span class="li-badge">N</span><span class="li-body"><span class="li-date">2026.05.28</span><span class="li-title">テレビ朝日「ミラクル９」にて OMATSURI BASE Nakanoshimbashi が出題</span></span></a>
-<a href="news/1901/" class="li-row li-news"><span class="li-badge">N</span><span class="li-body"><span class="li-date">2026.03.14</span><span class="li-title">「BEST OF MINPAKU 2026」グランプリ受賞</span></span></a>
+<a href="news/2313/" class="li-row li-news"><span class="li-badge">N</span><span class="li-body"><span class="li-date">2026.06.05<span class="li-tag">プレスリリース</span><span class="li-tag li-co">Nowhere Group</span></span><span class="li-title">JTBによる共創プロジェクト「地域未来にぎわい工房」へ参画</span></span></a>
+<a href="news/2309/" class="li-row li-news"><span class="li-badge">N</span><span class="li-body"><span class="li-date">2026.05.28<span class="li-tag">メディア掲載</span><span class="li-tag li-co">Nowhere Group</span></span><span class="li-title">テレビ朝日「ミラクル９」にて OMATSURI BASE Nakanoshimbashi が出題</span></span></a>
+<a href="news/1901/" class="li-row li-news"><span class="li-badge">N</span><span class="li-body"><span class="li-date">2026.03.14<span class="li-tag">受賞・認定</span><span class="li-tag li-co">Nowhere Group</span></span><span class="li-title">「BEST OF MINPAKU 2026」グランプリ受賞</span></span></a>
 <!-- /build:news -->
 </div>
-<a href="news/" class="pill">View More</a>
+<a href="news/" class="pill">すべてのお知らせを見る</a>
 </div>
 </div>
 </div>
@@ -269,46 +212,54 @@ document.addEventListener('DOMContentLoaded',function(){
 </svg>
 </section>
 
-<!-- ===== 4b. パートナー・評価 ===== -->
+<!-- ===== 4b. パートナー → その他の取り組み・受賞 ===== -->
 <section id="partners" class="tp">
 <div class="tp-head"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#E0689E" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Partners</h2><p>パートナー・アライアンス</p></div>
-<p class="tp-lead">一社ではできないことを、<br>共につくる。</p>
-<p class="tp-text">Nowhere Groupは、旅行・観光・地域・不動産など、さまざまな企業・団体と連携しながら、新しい宿泊体験と事業機会を生み出しています。</p>
 <div class="tp-grid g2">
-<div class="tp-card tp-card-logo"><span class="tp-logo"><img src="images/partners/airbnb-partners.png" alt="Airbnb Partners" width="860" height="480" loading="lazy"></span><span class="lbl">Official Partner</span><h3>Airbnb Partners</h3><p class="catch">Airbnb公式パートナープログラムに参画</p><p>宿泊施設の企画・開発から運営、集客、収益改善まで、Nowhere Groupが蓄積してきた宿泊事業の知見を生かし、宿泊事業者を支援します。</p></div>
-<div class="tp-card tp-card-logo"><span class="tp-logo"><img src="images/partners/chiiki-mirai.jpg" alt="地域未来にぎわい工房" width="1040" height="520" loading="lazy"></span><span class="lbl">Co-creation</span><h3>地域未来にぎわい工房</h3><p class="catch">地域資源を、新しい宿泊体験へ。</p><p>地域が持つ文化、食、自然、人などの資源を、宿泊施設や旅行体験とつなげ、新しい地域価値を生み出す取り組みを推進しています。</p></div>
+<div class="tp-card tp-card-logo"><span class="tp-logo"><img src="images/partners/airbnb-partners.png" alt="Airbnb Partners" width="860" height="480" loading="lazy"></span><span class="lbl">Official Partner</span><h3>Airbnb Partners</h3><p class="catch">Airbnb公式パートナープログラムに参画</p></div>
+<div class="tp-card tp-card-logo"><span class="tp-logo"><img src="images/partners/chiiki-mirai.jpg" alt="JTB「地域未来にぎわい工房」" width="1040" height="520" loading="lazy"></span><span class="lbl">Co-creation</span><h3>JTB「地域未来にぎわい工房」</h3><p class="catch">地域資源を、新しい宿泊体験へ。</p></div>
 </div>
-<div class="tp-head tp-head-sub"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#FFD84A" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Awards</h2><p>評価・受賞・公的指定</p></div>
-<p class="tp-lead">私たちの取り組みへの評価</p>
-<div class="tp-grid g2">
-<div class="tp-card"><span class="lbl">Award</span><h3>BEST OF MINPAKU 2026</h3><p class="catch">総合グランプリ</p><p>OMATSURI BASE</p></div>
-<div class="tp-card"><span class="lbl">Designation</span><h3>東京都</h3><p class="catch">東京観光案内窓口 指定</p><p>OMATSURI BASE 中野新橋</p></div>
+<div class="tp-grid g2 tp-works">
+<div>
+<div id="works" class="tp-head tp-head-sub"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#7A5BD9" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Other Works</h2><p>その他の取り組み</p></div>
+<div class="tp-list">
+<div class="tp-card"><h3>タイムトリップ OTOWA</h3><p class="catch">空き家 × 昭和レトロ</p><p>使われなくなった建物を、昭和の体験を楽しめる宿へ。</p></div>
+<div class="tp-card"><h3>Azure Palace 伊豆高原</h3><p class="catch">中古別荘 × 大人の遊び場</p><p>既存別荘に、温泉・サウナ・エンタメを組み合わせた滞在価値を。</p></div>
+</div>
+<div class="tp-cta"><a href="service/regional-brand-creation/#projects" class="pill">その他の取り組みを見る →</a></div>
+</div>
+<div>
+<div id="awards" class="tp-head tp-head-sub"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#FFD84A" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Awards</h2><p>受賞・認定・公的指定</p></div>
+<div class="tp-list">
+<div class="tp-card"><span class="lbl">［受賞］</span><h3>BEST OF MINPAKU 2026</h3><p class="catch">総合グランプリ</p><p>OMATSURI BASE</p></div>
+<div class="tp-card"><span class="lbl">［公的指定］</span><h3>東京都「東京観光案内窓口」</h3><p>OMATSURI BASE 中野新橋 1階</p></div>
+</div>
+<div class="tp-cta"><a href="service/regional-brand-creation/#awards" class="pill">受賞・認定・公的指定を見る →</a></div>
+</div>
 </div>
 </section>
 
 <!-- ===== 4c. 数字で見る ===== -->
 <section id="numbers" class="tp tp-alt">
 <div class="tp-head"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#2F6FD6" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Numbers</h2><p>数字で見るNowhere Group</p></div>
-<div class="tp-stats">
-<div class="tp-stat"><strong>100<small>施設以上</small></strong><span>宿泊プロデュース実績</span></div>
-<div class="tp-stat"><strong>30<small>エリア以上</small></strong><span>展開エリア</span></div>
-<div class="tp-stat"><strong>50,000<small>件超</small></strong><span>CLEANX9 累計清掃件数</span></div>
-<div class="tp-stat"><strong>150<small>施設</small></strong><span>SUPPLY 累計導入施設</span></div>
-<div class="tp-stat"><strong>4<small>社</small></strong><span>グループ会社</span></div>
+<div class="tp-stats tp-stats3">
+<div class="tp-stat"><strong>100<small>施設以上</small></strong><span>宿泊施設の累計プロデュース実績</span></div>
+<div class="tp-stat"><strong>30<small>エリア以上</small></strong><span>全国展開エリア</span></div>
+<div class="tp-stat"><strong>80,000<small>件以上</small></strong><span>宿泊施設の累計清掃件数</span></div>
 </div>
 </section>
 
 <!-- ===== 4d. 代表メッセージ ===== -->
 <section id="message" class="tp">
-<div class="tp-head"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#C94A1A" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>Message</h2><p>代表メッセージ</p></div>
+<div class="tp-head"><h2><svg width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#C94A1A" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M3 14 Q3 4 11 6 Q17 8 12 15 Q8 21 16 21 Q26 21 27 8"></path></svg>CEO Message</h2><p>代表メッセージ</p></div>
 <div class="tp-ceo">
 <div class="tp-ceo-photo"><img src="images/site/people/takeuchi.jpg" alt="代表取締役 CEO 竹内 剛" loading="lazy"></div>
 <div class="tp-ceo-body">
-<h3>現場から積み上げた知見で、<br>宿泊産業の未来をつくる。</h3>
-<p>私たちは、清掃や運営といった現場から宿泊事業を学んできました。</p>
-<p>現場で生まれる課題を企画へ戻し、不動産、施設づくり、運営、清掃、販売までをつなげる。</p>
-<p>宿泊を起点に、旅する人、地域、事業者に新しい価値を生み出し続けます。</p>
+<h3>旅の記憶から、<br>人生に新しい景色を。</h3>
+<p>旅先での出会いや体験が、人生の記憶に残り、いつかまた帰りたいと思える場所になる。私たちは、そんな一人ひとりの「アナザースカイ」を、日本中につくりたいと考えています。</p>
+<p>Nowhere Groupは、清掃・宿泊運営の現場から事業を学び、そこで培った知見を宿泊施設プロデュースへとつなげてきました。一つひとつの宿から、日本の宿泊産業の未来をつくっていきます。</p>
 <p class="name"><small>Nowhere Group株式会社 代表取締役 CEO</small>竹内 剛</p>
+<div class="tp-sns"><span>代表のSNS</span><a href="https://x.com/nowhere_take_" target="_blank" rel="noopener">X ↗</a><a href="https://www.instagram.com/takeuchi_nowhere/" target="_blank" rel="noopener">Instagram ↗</a><a href="https://www.youtube.com/@takeuchi-no-kaitaku" target="_blank" rel="noopener">YouTube ↗</a></div>
 <a href="company/#message" class="pill">代表メッセージを見る →</a>
 </div>
 </div>
@@ -320,8 +271,8 @@ document.addEventListener('DOMContentLoaded',function(){
 <div class="tp-recruit">
 <p class="tp-lead">まだない宿泊の未来を、<br>一緒につくる。</p>
 <div>
-<p class="tp-text">不動産だけでもない。ホテル運営だけでもない。清掃だけでも、テクノロジーだけでもない。</p>
-<p class="tp-text">異なる専門性を持つメンバーが、会社や部署の境界を越えて一つの宿泊事業をつくる。それがNowhere Groupの仕事です。</p>
+<p class="tp-text">旅の満足度を高める仕事は、一つの職種だけでは完結しません。不動産の可能性を見つけ、宿泊施設をプロデュースし、運営・清掃の現場で品質を磨く。そこで生まれた気づきを、次の施設づくりへ生かす。</p>
+<p class="tp-text">異なる専門性を持つ仲間が、会社や部署の枠を越えて協力し、一つひとつの宿泊事業を形にしています。</p>
 <a href="recruit/" class="pill pill-lg">採用情報を見る →</a>
 </div>
 </div>
@@ -331,9 +282,10 @@ document.addEventListener('DOMContentLoaded',function(){
 <footer id="contact" class="ft">
 <div class="ft-inner">
 <span class="ft-co">Nowhere Group株式会社</span>
-<div class="ft-logo">NOW<br>HERE<br><small>GROUP</small></div>
+<img class="ft-logo-img" src="images/logo/nowhere-group-logo.png" alt="Nowhere Group" width="800" height="157" loading="lazy">
 <p class="ft-msg">グループ各社へのお問い合わせは、こちらで一括して承ります。</p>
 <a href="contact/" class="pill pill-xl">お問い合わせフォーム</a>
+<nav class="ft-menu" aria-label="フッターメニュー"><a href="company/">私たちについて</a><a href="service/">事業紹介</a><a href="service/regional-brand-creation/#brands">ブランド・実績</a><a href="news/">お知らせ</a><a href="recruit/">採用情報</a><a href="contact/">お問い合わせ</a></nav>
 <div class="ft-sns">
 <a href="https://x.com/nowheregroup1" aria-label="X（旧Twitter）" target="_blank" rel="noopener">X</a>
 <a href="https://www.facebook.com/nowhere.group" class="fb" aria-label="Facebook" target="_blank" rel="noopener">f</a>
