@@ -91,8 +91,10 @@ def officers_html(keys, root, lang='ja'):
     return '\n'.join(out)
 
 
-# 経営陣カードで兼務先の社名を並べる順（カードの並び順は OFFICERS の会社順のまま）
+# 経営陣カードで兼務先の社名を並べる順
 ROLE_COMPANY_ORDER = ('nowhere', 'familystay', 'cleanx9', 'vestport')
+# 経営陣カードの並び順（ここにない人は末尾に OFFICERS の会社順で並ぶ）
+OFFICER_ORDER = ('竹内 剛', '山下 拓朗', '早乙女 琉真', '八木 洋平', '髙橋 悠汰')
 
 
 def officers_merged_html(root, lang='ja'):
@@ -109,6 +111,7 @@ def officers_merged_html(root, lang='ja'):
             if photo and not people[ja]['photo']:
                 people[ja]['photo'] = photo
             people[ja]['roles'].append((key, role_en if lang == 'en' else role_ja))
+    order.sort(key=lambda ja: OFFICER_ORDER.index(ja) if ja in OFFICER_ORDER else len(OFFICER_ORDER))
     cards = []
     for ja in order:
         pr = people[ja]
@@ -409,6 +412,24 @@ def write(rel_dir, content):
         f.write(content)
 
 
+def redirect_html(url):
+    """meta の "redirect" を指定したページ: 本文の代わりに指定 URL へ転送するだけのページを出す"""
+    u = esc(url)
+    return f"""<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex">
+<meta http-equiv="refresh" content="0; url={u}">
+<link rel="canonical" href="{u}">
+<title>Nowhere Group</title>
+<script>location.replace({json.dumps(url)})</script>
+</head>
+<body><p><a href="{u}">{u}</a></p></body>
+</html>
+"""
+
+
 def root_for(rel_dir):
     depth = len([p for p in rel_dir.strip('/').split('/') if p])
     return '../' * depth
@@ -431,7 +452,10 @@ def build_pages():
             rel = os.path.relpath(path, pages_dir)[:-5]  # company / service/hotel ...
             rel_dir = rel + '/'
             meta, body = read_meta(path)
-            write(rel_dir, layout(meta, body, root_for(rel_dir), rel_dir))
+            if meta.get('redirect'):
+                write(rel_dir, redirect_html(meta['redirect']))
+            else:
+                write(rel_dir, layout(meta, body, root_for(rel_dir), rel_dir))
             count += 1
     return count
 
